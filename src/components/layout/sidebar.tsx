@@ -1,24 +1,61 @@
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { createClient } from '@supabase/supabase-js';
 import ForgeLogo from '../ForgeLogo';
+import {
+  LayoutDashboard, Building2, Users, DollarSign,
+  Wrench, FileVideo, Settings, ChevronLeft, ChevronRight, LogOut, Briefcase
+} from 'lucide-react';
 
 const navItems = [
-  { name: 'Mission Control', path: '/', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
-  { name: 'Agent HQ', path: '/office', icon: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4' },
-  { name: 'Agents', path: '/agents', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z' },
-  { name: 'Revenue', path: '/revenue', icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 010 18z' },
-  { name: 'Tools', path: '/tools', icon: 'M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z' },
+  { name: 'Mission Control', path: '/',        icon: LayoutDashboard },
+  { name: 'Agent HQ',        path: '/office',   icon: Building2       },
+  { name: 'Agents',          path: '/agents',   icon: Users           },
+  { name: 'Revenue',         path: '/revenue',  icon: DollarSign      },
+  { name: 'Projects',        path: '/projects', icon: Briefcase       },
+  { name: 'Agency CRM',      path: '/crm',      icon: Users           },
+  { name: 'Content',         path: '/content',  icon: FileVideo       },
+  { name: 'Tools',           path: '/tools',    icon: Wrench          },
+  { name: 'Settings',        path: '/settings', icon: Settings        },
 ];
 
-const Sidebar = () => {
+export default function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const [collapsed, setCollapsed] = useState(false);
+
+  // Persist collapsed state
+  useEffect(() => {
+    const saved = localStorage.getItem('sidebar-collapsed');
+    if (saved === 'true') setCollapsed(true);
+  }, []);
+
+  function toggleCollapsed() {
+    const next = !collapsed;
+    setCollapsed(next);
+    localStorage.setItem('sidebar-collapsed', String(next));
+  }
+
+  async function handleLogout() {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (url && key) {
+      const sb = createClient(url, key);
+      await sb.auth.signOut();
+    }
+    router.push('/login');
+    router.refresh();
+  }
+
+  const w = collapsed ? '72px' : '260px';
 
   return (
     <aside style={{
-      width: '260px',
+      width: w,
+      minWidth: w,
       backgroundColor: '#ffffff',
       borderRight: '1px solid var(--color-brand-warm-gray)',
       display: 'flex',
@@ -28,78 +65,141 @@ const Sidebar = () => {
       top: 0,
       flexShrink: 0,
       boxShadow: '1px 0 12px rgba(0,0,0,0.04)',
+      transition: 'width 0.25s cubic-bezier(0.16, 1, 0.3, 1), min-width 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+      overflow: 'hidden',
     }}>
-      <div style={{ padding: '2rem' }}>
-        {/* Logo */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '2.5rem' }}>
-          <ForgeLogo className="w-10 h-10" />
-          <div>
-            <div className="forge-heading" style={{ fontSize: '1.1rem' }}>Forge OS</div>
-            <div style={{ fontSize: '0.55rem', fontFamily: 'var(--font-mono)', color: 'var(--color-brand-medium-gray)', textTransform: 'uppercase', letterSpacing: '0.2em' }}>Executive Terminal</div>
+      {/* Logo + Toggle */}
+      <div style={{ padding: collapsed ? '1.25rem 1rem' : '1.5rem 1.5rem 1rem', borderBottom: '1px solid var(--color-brand-warm-gray)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: collapsed ? 'center' : 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', overflow: 'hidden' }}>
+            <ForgeLogo className="w-8 h-8 shrink-0" />
+            {!collapsed && (
+              <div style={{ overflow: 'hidden' }}>
+                <div className="forge-heading" style={{ fontSize: '1rem', whiteSpace: 'nowrap' }}>Forge OS</div>
+                <div style={{ fontSize: '0.5rem', fontFamily: 'var(--font-mono)', color: 'var(--color-brand-medium-gray)', textTransform: 'uppercase', letterSpacing: '0.2em', whiteSpace: 'nowrap' }}>
+                  Executive Terminal
+                </div>
+              </div>
+            )}
           </div>
+          {!collapsed && (
+            <button
+              onClick={toggleCollapsed}
+              style={{ padding: '0.25rem', borderRadius: '0.5rem', border: '1px solid var(--color-brand-warm-gray)', color: 'var(--color-brand-medium-gray)', cursor: 'pointer', background: 'transparent', display: 'flex', alignItems: 'center' }}
+            >
+              <ChevronLeft style={{ width: '0.875rem', height: '0.875rem' }} />
+            </button>
+          )}
         </div>
 
-        {/* Nav */}
-        <nav>
-          <div style={{ fontSize: '0.55rem', fontWeight: 700, color: 'var(--color-brand-medium-gray)', textTransform: 'uppercase', letterSpacing: '0.3em', marginBottom: '1rem', marginLeft: '0.5rem' }}>
-            Navigation
-          </div>
-          {navItems.map((item) => {
-            const isActive = pathname === item.path;
-            return (
-              <Link
-                key={item.path}
-                href={item.path}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.75rem',
-                  padding: '0.75rem 1rem',
-                  borderRadius: '0.625rem',
-                  marginBottom: '0.25rem',
-                  position: 'relative',
-                  color: isActive ? 'var(--color-brand-ink)' : 'var(--color-brand-medium-gray)',
-                  backgroundColor: isActive ? 'var(--color-brand-parchment)' : 'transparent',
-                  textDecoration: 'none',
-                  transition: 'all 0.2s ease',
-                  borderLeft: isActive ? '2px solid var(--color-brand-gold)' : '2px solid transparent',
-                }}
-              >
-                <svg style={{ width: '1.1rem', height: '1.1rem', color: isActive ? 'var(--color-brand-gold)' : 'inherit', flexShrink: 0 }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={item.icon} />
-                </svg>
-                <span style={{ fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', fontStyle: isActive ? 'italic' : 'normal' }}>
-                  {item.name}
-                </span>
-                {isActive && (
-                  <div style={{ marginLeft: 'auto', width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--color-brand-gold)' }} />
-                )}
-              </Link>
-            );
-          })}
-        </nav>
+        {collapsed && (
+          <button
+            onClick={toggleCollapsed}
+            style={{ marginTop: '0.75rem', width: '100%', padding: '0.25rem', borderRadius: '0.5rem', border: '1px solid var(--color-brand-warm-gray)', color: 'var(--color-brand-medium-gray)', cursor: 'pointer', background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          >
+            <ChevronRight style={{ width: '0.875rem', height: '0.875rem' }} />
+          </button>
+        )}
       </div>
 
+      {/* Nav */}
+      <nav style={{ padding: collapsed ? '0.75rem 0.5rem' : '1rem 0.75rem', flex: 1, overflowY: 'auto' }}>
+        {!collapsed && (
+          <div style={{ fontSize: '0.5rem', fontWeight: 700, color: 'var(--color-brand-medium-gray)', textTransform: 'uppercase', letterSpacing: '0.3em', marginBottom: '0.75rem', marginLeft: '0.5rem' }}>
+            Navigation
+          </div>
+        )}
+        {navItems.map((item) => {
+          const isActive = pathname === item.path;
+          const Icon = item.icon;
+          return (
+            <Link
+              key={item.path}
+              href={item.path}
+              title={collapsed ? item.name : undefined}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: collapsed ? 'center' : 'flex-start',
+                gap: '0.625rem',
+                padding: collapsed ? '0.625rem' : '0.625rem 0.875rem',
+                borderRadius: '0.625rem',
+                marginBottom: '0.125rem',
+                color: isActive ? 'var(--color-brand-ink)' : 'var(--color-brand-medium-gray)',
+                backgroundColor: isActive ? 'var(--color-brand-parchment)' : 'transparent',
+                textDecoration: 'none',
+                transition: 'all 0.15s ease',
+                borderLeft: !collapsed && isActive ? '2px solid var(--color-brand-gold)' : '2px solid transparent',
+              }}
+            >
+              <Icon style={{ width: '1rem', height: '1rem', color: isActive ? 'var(--color-brand-gold)' : 'inherit', flexShrink: 0 }} />
+              {!collapsed && (
+                <span style={{ fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', fontStyle: isActive ? 'italic' : 'normal', whiteSpace: 'nowrap' }}>
+                  {item.name}
+                </span>
+              )}
+              {!collapsed && isActive && (
+                <div style={{ marginLeft: 'auto', width: '5px', height: '5px', borderRadius: '50%', backgroundColor: 'var(--color-brand-gold)' }} />
+              )}
+            </Link>
+          );
+        })}
+      </nav>
+
       {/* Footer */}
-      <div style={{ marginTop: 'auto', padding: '1.5rem', borderTop: '1px solid var(--color-brand-warm-gray)', backgroundColor: 'var(--color-brand-parchment)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
-          <div style={{ width: '2rem', height: '2rem', borderRadius: '0.5rem', backgroundColor: 'var(--color-brand-ivory)', border: '1px solid var(--color-brand-warm-gray)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.6rem', fontWeight: 700, color: 'var(--color-brand-ink)', fontStyle: 'italic' }}>
-            DV
+      <div style={{ padding: collapsed ? '0.75rem 0.5rem' : '1rem 0.75rem', borderTop: '1px solid var(--color-brand-warm-gray)', backgroundColor: 'var(--color-brand-parchment)' }}>
+        {!collapsed && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', marginBottom: '0.75rem' }}>
+            <div style={{ width: '2rem', height: '2rem', borderRadius: '0.5rem', backgroundColor: 'var(--color-brand-ivory)', border: '1px solid var(--color-brand-warm-gray)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.6rem', fontWeight: 700, color: 'var(--color-brand-ink)', fontStyle: 'italic', flexShrink: 0 }}>
+              DV
+            </div>
+            <div style={{ overflow: 'hidden' }}>
+              <div style={{ fontSize: '0.6rem', fontWeight: 700, color: 'var(--color-brand-ink)', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Devroux</div>
+              <div style={{ fontSize: '0.5rem', fontFamily: 'var(--font-mono)', color: '#16a34a', textTransform: 'uppercase', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>Active Session</div>
+            </div>
           </div>
-          <div>
-            <div style={{ fontSize: '0.6rem', fontWeight: 700, color: 'var(--color-brand-ink)', textTransform: 'uppercase' }}>Devroux</div>
-            <div style={{ fontSize: '0.5rem', fontFamily: 'var(--font-mono)', color: '#16a34a', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Active Session</div>
+        )}
+
+        {!collapsed && (
+          <div style={{ marginBottom: '0.5rem' }}>
+            <div style={{ height: '3px', width: '100%', backgroundColor: 'var(--color-brand-warm-gray)', borderRadius: '999px', overflow: 'hidden' }}>
+              <div style={{ height: '100%', width: '75%', backgroundColor: 'var(--color-brand-gold)' }} />
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.25rem', fontSize: '0.5rem', fontFamily: 'var(--font-mono)', color: 'var(--color-brand-medium-gray)', textTransform: 'uppercase' }}>
+              <span>Core Load</span><span>75%</span>
+            </div>
           </div>
-        </div>
-        <div style={{ height: '3px', width: '100%', backgroundColor: 'var(--color-brand-warm-gray)', borderRadius: '999px', overflow: 'hidden' }}>
-          <div style={{ height: '100%', width: '75%', backgroundColor: 'var(--color-brand-gold)' }}></div>
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.25rem', fontSize: '0.5rem', fontFamily: 'var(--font-mono)', color: 'var(--color-brand-medium-gray)', textTransform: 'uppercase' }}>
-          <span>Core Load</span><span>75%</span>
-        </div>
+        )}
+
+        {/* Logout */}
+        <button
+          onClick={handleLogout}
+          title={collapsed ? 'Logout' : undefined}
+          style={{
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: collapsed ? 'center' : 'flex-start',
+            gap: '0.5rem',
+            padding: collapsed ? '0.5rem' : '0.5rem 0.75rem',
+            borderRadius: '0.5rem',
+            border: '1px solid var(--color-brand-warm-gray)',
+            background: 'transparent',
+            color: 'var(--color-brand-medium-gray)',
+            cursor: 'pointer',
+            transition: 'all 0.15s ease',
+            fontSize: '0.6rem',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+          }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#ef4444'; (e.currentTarget as HTMLElement).style.borderColor = '#fca5a5'; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'var(--color-brand-medium-gray)'; (e.currentTarget as HTMLElement).style.borderColor = 'var(--color-brand-warm-gray)'; }}
+        >
+          <LogOut style={{ width: '0.75rem', height: '0.75rem', flexShrink: 0 }} />
+          {!collapsed && 'Logout'}
+        </button>
       </div>
     </aside>
   );
-};
-
-export default Sidebar;
+}

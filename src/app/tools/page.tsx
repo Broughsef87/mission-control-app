@@ -1,46 +1,40 @@
-"use client";
-
-import React from 'react';
 import { Cpu, Zap, Activity, Shield, GitBranch } from 'lucide-react';
+import TokenCostDashboard from '@/components/TokenCostDashboard';
 
-const ToolsPage = () => {
-  const tools = [
-    { name: 'Forge Engine', desc: 'Core agentic orchestration framework', icon: Cpu, status: 'Active', load: '12%' },
-    { name: 'Neural Link', desc: 'Cross-platform communication bridge', icon: Zap, status: 'Active', load: '4%' },
-    { name: 'Task Auditor', desc: 'Automated quality assurance & logging', icon: Activity, status: 'Standby', load: '0%' },
-    { name: 'Security Vault', desc: 'Encrypted credential & key management', icon: Shield, status: 'Active', load: '1%' },
-  ];
+const tools = [
+  { name: 'Forge Engine',  desc: 'Core agentic orchestration framework',      icon: Cpu,      status: 'Active',  load: '12%' },
+  { name: 'Neural Link',   desc: 'Cross-platform communication bridge',        icon: Zap,      status: 'Active',  load: '4%'  },
+  { name: 'Task Auditor',  desc: 'Automated quality assurance & logging',      icon: Activity, status: 'Standby', load: '0%'  },
+  { name: 'Security Vault',desc: 'Encrypted credential & key management',      icon: Shield,   status: 'Active',  load: '1%'  },
+];
 
-  const repos = [
-    { name: 'forge-os-kernel', branch: 'main', status: 'Healthy', commits: '142' },
-    { name: 'dad-strength-app', branch: 'dev', status: 'Syncing', commits: '89' },
-    { name: 'mission-control', branch: 'main', status: 'Healthy', commits: '45' },
-    { name: 'autonomous-content', branch: 'research', status: 'Active', commits: '12' },
-  ];
+const repos = [
+  { name: 'forge-os-kernel',    branch: 'main',     status: 'Healthy', commits: '142' },
+  { name: 'dad-strength-app',   branch: 'dev',      status: 'Syncing', commits: '89'  },
+  { name: 'mission-control',    branch: 'main',     status: 'Healthy', commits: '45'  },
+  { name: 'autonomous-content', branch: 'research', status: 'Active',  commits: '12'  },
+];
 
+export default function ToolsPage() {
   return (
     <div className="space-y-10">
       {/* Header */}
       <div data-reveal="0" className="flex justify-between items-end border-b border-brand-warm-gray pb-6">
         <div>
-          <h1 className="forge-heading text-3xl">
-            Agent <span className="text-brand-gold">Tools</span>
-          </h1>
+          <h1 className="forge-heading text-3xl">Agent <span className="text-brand-gold">Tools</span></h1>
           <p className="text-xs font-mono text-brand-medium-gray uppercase tracking-widest mt-1">
             Infrastructure & System Utilities // Forge OS Internal
           </p>
         </div>
-        <div className="flex gap-4">
-          <button className="bg-white border border-brand-warm-gray rounded-lg hover:border-brand-gold text-brand-ink font-black uppercase text-[10px] px-6 py-2 tracking-widest transition-all italic">
-            System Scan
-          </button>
-        </div>
+        <button className="bg-white border border-brand-warm-gray rounded-lg hover:border-brand-gold text-brand-ink font-black uppercase text-[10px] px-6 py-2 tracking-widest transition-all italic">
+          System Scan
+        </button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Active Tooling */}
-        <div data-reveal="1" className="space-y-6">
-          <h2 className="text-xs font-black uppercase tracking-[0.3em] text-brand-medium-gray mb-2">Core Services</h2>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Core Services */}
+        <div data-reveal="1" className="lg:col-span-2 space-y-6">
+          <h2 className="text-xs font-black uppercase tracking-[0.3em] text-brand-medium-gray">Core Services</h2>
           <div className="grid grid-cols-1 gap-4">
             {tools.map((tool) => (
               <div key={tool.name} className="bg-white border border-brand-warm-gray rounded-2xl p-5 hover:border-brand-gold/40 transition-all group" style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
@@ -51,12 +45,12 @@ const ToolsPage = () => {
                   <div className="flex-1">
                     <div className="flex justify-between items-start mb-1">
                       <h3 className="text-sm font-bold text-brand-ink uppercase tracking-tight">{tool.name}</h3>
-                      <span className="text-[8px] font-mono text-brand-gold uppercase font-bold tracking-widest">{tool.status}</span>
+                      <span className={`text-[8px] font-mono font-bold uppercase tracking-widest ${tool.status === 'Active' ? 'text-green-600' : 'text-brand-gold'}`}>{tool.status}</span>
                     </div>
                     <p className="text-xs text-brand-medium-gray mb-4">{tool.desc}</p>
                     <div className="flex items-center gap-4">
-                      <div className="flex-1 h-[2px] bg-brand-warm-gray overflow-hidden">
-                        <div className="h-full bg-brand-gold" style={{ width: tool.load }} />
+                      <div className="flex-1 h-[2px] bg-brand-warm-gray rounded-full overflow-hidden">
+                        <div className="h-full bg-brand-gold rounded-full" style={{ width: tool.load }} />
                       </div>
                       <span className="text-[9px] font-mono text-brand-medium-gray">CPU: {tool.load}</span>
                     </div>
@@ -65,13 +59,11 @@ const ToolsPage = () => {
               </div>
             ))}
           </div>
-        </div>
 
-        {/* Git & Infrastructure */}
-        <div data-reveal="2" className="space-y-8">
-          <div className="bg-white border border-brand-warm-gray rounded-2xl p-6 space-y-6" style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+          {/* Git Repos */}
+          <div data-reveal="2" className="bg-white border border-brand-warm-gray rounded-2xl p-6 space-y-5" style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
             <h2 className="text-xs font-black uppercase tracking-[0.3em] text-brand-medium-gray">Repository Health</h2>
-            <div className="space-y-4">
+            <div className="space-y-3">
               {repos.map((repo) => (
                 <div key={repo.name} className="flex items-center justify-between p-3 border border-brand-warm-gray rounded-xl hover:bg-brand-parchment transition-colors group">
                   <div className="flex items-center gap-4">
@@ -82,30 +74,34 @@ const ToolsPage = () => {
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className={`text-[9px] font-mono font-bold uppercase ${repo.status === 'Healthy' ? 'text-green-600' : 'text-brand-gold'}`}>
-                      {repo.status}
-                    </div>
-                    <div className="text-[8px] font-mono text-brand-medium-gray uppercase">{repo.commits} commits</div>
+                    <div className={`text-[9px] font-mono font-bold uppercase ${repo.status === 'Healthy' ? 'text-green-600' : 'text-brand-gold'}`}>{repo.status}</div>
+                    <div className="text-[8px] font-mono text-brand-medium-gray">{repo.commits} commits</div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
+          {/* Dev Console */}
           <div className="bg-white border border-brand-warm-gray rounded-2xl p-6" style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
-            <h2 className="text-xs font-black uppercase tracking-[0.3em] text-brand-medium-gray mb-6 italic">// Dev Console</h2>
-            <div className="bg-brand-charcoal rounded-xl p-4 font-mono text-[10px] space-y-2 h-[150px] overflow-auto text-brand-medium-gray">
+            <h2 className="text-xs font-black uppercase tracking-[0.3em] text-brand-medium-gray mb-4 italic">// Dev Console</h2>
+            <div className="bg-brand-charcoal rounded-xl p-4 font-mono text-[10px] space-y-2 h-[140px] overflow-auto text-brand-medium-gray">
               <div className="text-brand-gold">forge-os@andrew-pc:~$ status check</div>
               <div className="text-brand-ivory">Analyzing infrastructure... OK</div>
               <div className="text-brand-ivory">Checking neural bridges... OK</div>
               <div className="text-brand-ivory">Database connection... STABLE</div>
+              <div className="text-brand-ivory">Supabase realtime... CONNECTED</div>
+              <div className="text-brand-ivory">Auth layer... ACTIVE</div>
               <div className="text-brand-medium-gray animate-pulse">_</div>
             </div>
           </div>
         </div>
+
+        {/* Token Cost Dashboard */}
+        <div data-reveal="3" className="space-y-6">
+          <TokenCostDashboard />
+        </div>
       </div>
     </div>
   );
-};
-
-export default ToolsPage;
+}
