@@ -48,7 +48,7 @@ const ContentStudio = () => {
   return (
     <div className="space-y-12">
       {/* Header */}
-      <div className="flex justify-between items-end border-b border-brand-warm-gray pb-8">
+      <div data-reveal="0" className="flex justify-between items-end border-b border-brand-warm-gray pb-8">
         <div>
           <h1 className="forge-heading text-3xl">
             Content <span className="text-brand-gold">Pipeline</span>
@@ -58,21 +58,21 @@ const ContentStudio = () => {
           </p>
         </div>
         <div className="flex gap-2">
-          <button className="bg-white border border-brand-warm-gray hover:border-brand-gold text-brand-ink font-black uppercase text-[10px] px-6 py-2 tracking-widest transition-all">
+          <button className="bg-white border border-brand-warm-gray rounded-lg hover:border-brand-gold text-brand-ink font-black uppercase text-[10px] px-6 py-2 tracking-widest transition-all">
             Search Hub
           </button>
-          <button className="bg-brand-charcoal hover:bg-brand-ink text-white font-black uppercase text-[10px] px-6 py-2 tracking-widest transition-all italic">
+          <button className="bg-brand-charcoal hover:bg-brand-ink text-white font-black uppercase text-[10px] px-6 py-2 rounded-lg tracking-widest transition-all italic">
             New Project +
           </button>
         </div>
       </div>
 
       {/* Channel Hub */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div data-reveal="1" className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {channels.map((channel) => {
           const Icon = channel.icon;
           return (
-            <div key={channel.name} className="bg-white border border-brand-warm-gray p-4 hover:border-brand-gold/40 transition-all cursor-pointer group relative overflow-hidden">
+            <div key={channel.name} className="bg-white border border-brand-warm-gray rounded-2xl p-4 hover:border-brand-gold/40 transition-all cursor-pointer group relative overflow-hidden" style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
               <div className="absolute top-0 right-0 p-2 opacity-5 group-hover:opacity-10 transition-opacity">
                 <Icon className="w-12 h-12 text-brand-ink" />
               </div>
@@ -90,7 +90,7 @@ const ContentStudio = () => {
         })}
       </div>
 
-      <div className="space-y-6">
+      <div data-reveal="2" className="space-y-6">
         {/* View Switcher */}
         <div className="flex justify-between items-center border-b border-brand-warm-gray pb-4">
           <div className="flex gap-6">
@@ -131,7 +131,7 @@ const ContentStudio = () => {
 
               <div className="space-y-4">
                 {column.tasks.map((task) => (
-                  <div key={task.id} className="bg-white border border-brand-warm-gray p-5 hover:border-brand-gold/50 transition-all cursor-move group relative">
+                  <div key={task.id} className="bg-white border border-brand-warm-gray rounded-xl p-5 hover:border-brand-gold/50 transition-all cursor-move group relative" style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.05)' }}>
                     <div className="absolute top-0 left-0 w-[2px] h-0 group-hover:h-full bg-brand-gold transition-all duration-300" />
                     <div className="flex justify-between items-start mb-3">
                       <span className={`text-[8px] font-mono uppercase px-1.5 py-0.5 border ${

@@ -16,7 +16,7 @@ const SettingsPage = () => {
   return (
     <div className="space-y-10">
       {/* Header */}
-      <div className="flex justify-between items-end border-b border-brand-warm-gray pb-6">
+      <div data-reveal="0" className="flex justify-between items-end border-b border-brand-warm-gray pb-6">
         <div>
           <h1 className="forge-heading text-3xl">
             System <span className="text-brand-gold">Settings</span>
@@ -25,18 +25,18 @@ const SettingsPage = () => {
             Global Configuration // Mission Control 2.0
           </p>
         </div>
-        <button className="bg-brand-charcoal hover:bg-brand-ink text-white font-black uppercase text-[10px] px-8 py-2 tracking-widest transition-all italic flex items-center gap-2">
+        <button className="bg-brand-charcoal hover:bg-brand-ink text-white font-black uppercase text-[10px] px-8 py-2 rounded-lg tracking-widest transition-all italic flex items-center gap-2">
           <Save className="w-3 h-3" /> Save Changes
         </button>
       </div>
 
-      <div className="flex gap-10">
+      <div data-reveal="1" className="flex gap-10">
         {/* Settings Nav */}
         <div className="w-64 space-y-1">
           {sections.map((section) => (
             <button
               key={section.name}
-              className={`w-full flex items-center gap-4 px-4 py-3 border transition-all uppercase tracking-widest font-black text-[10px] ${
+              className={`w-full flex items-center gap-4 px-4 py-3 border rounded-xl transition-all uppercase tracking-widest font-black text-[10px] ${
                 section.active
                   ? 'bg-brand-gold/10 border-brand-gold/30 text-brand-ink italic'
                   : 'bg-white border-brand-warm-gray text-brand-medium-gray hover:text-brand-ink hover:border-brand-medium-gray'
@@ -50,7 +50,7 @@ const SettingsPage = () => {
 
         {/* Content */}
         <div className="flex-1 space-y-8 max-w-2xl">
-          <div className="bg-white border border-brand-warm-gray p-8 space-y-8">
+          <div className="bg-white border border-brand-warm-gray rounded-2xl p-8 space-y-8" style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
             <div className="space-y-6">
               <h2 className="text-xs font-black uppercase tracking-[0.3em] text-brand-medium-gray italic">User Profile</h2>
 
@@ -108,12 +108,12 @@ const SettingsPage = () => {
             </div>
           </div>
 
-          <div className="p-6 bg-red-50 border border-red-200 flex justify-between items-center group hover:bg-red-100 transition-all">
+          <div className="p-6 bg-red-50 border border-red-200 rounded-2xl flex justify-between items-center group hover:bg-red-100 transition-all">
             <div>
               <div className="text-[10px] font-black text-red-600 uppercase tracking-widest">Emergency Reset</div>
               <div className="text-[8px] font-mono text-red-400 uppercase mt-1">Wipe local cache and force re-authentication</div>
             </div>
-            <button className="bg-white border border-red-300 text-red-600 text-[10px] font-black uppercase px-6 py-2 tracking-widest hover:bg-red-600 hover:text-white transition-all">
+            <button className="bg-white border border-red-300 rounded-lg text-red-600 text-[10px] font-black uppercase px-6 py-2 tracking-widest hover:bg-red-600 hover:text-white transition-all">
               Initiate
             </button>
           </div>

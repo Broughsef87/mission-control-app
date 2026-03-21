@@ -27,6 +27,7 @@ const Sidebar = () => {
       position: 'sticky',
       top: 0,
       flexShrink: 0,
+      boxShadow: '1px 0 12px rgba(0,0,0,0.04)',
     }}>
       <div style={{ padding: '2rem' }}>
         {/* Logo */}
@@ -34,7 +35,7 @@ const Sidebar = () => {
           <ForgeLogo className="w-10 h-10" />
           <div>
             <div className="forge-heading" style={{ fontSize: '1.1rem' }}>Forge OS</div>
-            <div style={{ fontSize: '0.55rem', fontFamily: 'monospace', color: 'var(--color-brand-medium-gray)', textTransform: 'uppercase', letterSpacing: '0.2em' }}>Executive Terminal</div>
+            <div style={{ fontSize: '0.55rem', fontFamily: 'var(--font-mono)', color: 'var(--color-brand-medium-gray)', textTransform: 'uppercase', letterSpacing: '0.2em' }}>Executive Terminal</div>
           </div>
         </div>
 
@@ -54,7 +55,7 @@ const Sidebar = () => {
                   alignItems: 'center',
                   gap: '0.75rem',
                   padding: '0.75rem 1rem',
-                  borderRadius: '0.25rem',
+                  borderRadius: '0.625rem',
                   marginBottom: '0.25rem',
                   position: 'relative',
                   color: isActive ? 'var(--color-brand-ink)' : 'var(--color-brand-medium-gray)',
@@ -82,18 +83,18 @@ const Sidebar = () => {
       {/* Footer */}
       <div style={{ marginTop: 'auto', padding: '1.5rem', borderTop: '1px solid var(--color-brand-warm-gray)', backgroundColor: 'var(--color-brand-parchment)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
-          <div style={{ width: '2rem', height: '2rem', borderRadius: '0.25rem', backgroundColor: 'var(--color-brand-ivory)', border: '1px solid var(--color-brand-warm-gray)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.6rem', fontWeight: 700, color: 'var(--color-brand-ink)', fontStyle: 'italic' }}>
+          <div style={{ width: '2rem', height: '2rem', borderRadius: '0.5rem', backgroundColor: 'var(--color-brand-ivory)', border: '1px solid var(--color-brand-warm-gray)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.6rem', fontWeight: 700, color: 'var(--color-brand-ink)', fontStyle: 'italic' }}>
             DV
           </div>
           <div>
             <div style={{ fontSize: '0.6rem', fontWeight: 700, color: 'var(--color-brand-ink)', textTransform: 'uppercase' }}>Devroux</div>
-            <div style={{ fontSize: '0.5rem', fontFamily: 'monospace', color: '#16a34a', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Active Session</div>
+            <div style={{ fontSize: '0.5rem', fontFamily: 'var(--font-mono)', color: '#16a34a', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Active Session</div>
           </div>
         </div>
         <div style={{ height: '3px', width: '100%', backgroundColor: 'var(--color-brand-warm-gray)', borderRadius: '999px', overflow: 'hidden' }}>
           <div style={{ height: '100%', width: '75%', backgroundColor: 'var(--color-brand-gold)' }}></div>
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.25rem', fontSize: '0.5rem', fontFamily: 'monospace', color: 'var(--color-brand-medium-gray)', textTransform: 'uppercase' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.25rem', fontSize: '0.5rem', fontFamily: 'var(--font-mono)', color: 'var(--color-brand-medium-gray)', textTransform: 'uppercase' }}>
           <span>Core Load</span><span>75%</span>
         </div>
       </div>

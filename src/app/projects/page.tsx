@@ -13,7 +13,7 @@ const ProjectsPage = () => {
   return (
     <div className="space-y-10">
       {/* Header */}
-      <div className="flex justify-between items-end border-b border-brand-warm-gray pb-6">
+      <div data-reveal="0" className="flex justify-between items-end border-b border-brand-warm-gray pb-6">
         <div>
           <h1 className="forge-heading text-3xl">
             Project <span className="text-brand-gold">Pipeline</span>
@@ -23,20 +23,20 @@ const ProjectsPage = () => {
           </p>
         </div>
         <div className="flex gap-2">
-          <button className="p-2 border border-brand-warm-gray hover:border-brand-gold text-brand-medium-gray hover:text-brand-ink transition-all">
+          <button className="p-2 border border-brand-warm-gray rounded-lg hover:border-brand-gold text-brand-medium-gray hover:text-brand-ink transition-all">
             <LayoutGrid className="w-4 h-4" />
           </button>
-          <button className="p-2 border border-brand-warm-gray hover:border-brand-gold text-brand-medium-gray hover:text-brand-ink transition-all">
+          <button className="p-2 border border-brand-warm-gray rounded-lg hover:border-brand-gold text-brand-medium-gray hover:text-brand-ink transition-all">
             <List className="w-4 h-4" />
           </button>
-          <button className="bg-brand-charcoal hover:bg-brand-ink text-white font-black uppercase text-[10px] px-6 py-2 tracking-widest transition-all italic ml-4">
+          <button className="bg-brand-charcoal hover:bg-brand-ink text-white font-black uppercase text-[10px] px-6 py-2 rounded-lg tracking-widest transition-all italic ml-4">
             New Project +
           </button>
         </div>
       </div>
 
       {/* Filter Bar */}
-      <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-widest text-brand-medium-gray border-b border-brand-warm-gray pb-6">
+      <div data-reveal="1" className="flex items-center gap-6 text-[10px] font-black uppercase tracking-widest text-brand-medium-gray border-b border-brand-warm-gray pb-6">
         <button className="text-brand-gold border-b border-brand-gold pb-6 -mb-[25px]">All Projects</button>
         <button className="hover:text-brand-ink transition-colors">Internal</button>
         <button className="hover:text-brand-ink transition-colors">Client Work</button>
@@ -53,9 +53,9 @@ const ProjectsPage = () => {
       </div>
 
       {/* Project Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
+      <div data-reveal="2" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
         {projects.map((project) => (
-          <div key={project.name} className="bg-white border border-brand-warm-gray p-6 hover:border-brand-gold/60 transition-all group cursor-pointer relative overflow-hidden">
+          <div key={project.name} className="bg-white border border-brand-warm-gray rounded-2xl p-6 hover:border-brand-gold/60 transition-all group cursor-pointer relative overflow-hidden" style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
             <div className={`absolute top-0 right-0 w-2 h-full ${project.accentClass}`} />
 
             <div className="flex justify-between items-start mb-6">
@@ -80,7 +80,7 @@ const ProjectsPage = () => {
 
             <div className="flex justify-between items-center">
               <div className="text-lg font-black text-brand-ink italic">{project.budget}</div>
-              <button className="p-2 border border-brand-warm-gray hover:bg-brand-gold hover:text-white hover:border-brand-gold transition-all">
+              <button className="p-2 border border-brand-warm-gray rounded-lg hover:bg-brand-gold hover:text-white hover:border-brand-gold transition-all">
                 <ExternalLink className="w-4 h-4" />
               </button>
             </div>

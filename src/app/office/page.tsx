@@ -19,7 +19,7 @@ const OfficePage = () => {
   return (
     <div className="space-y-10">
       {/* Header */}
-      <div className="flex justify-between items-end border-b border-brand-warm-gray pb-6">
+      <div data-reveal="0" className="flex justify-between items-end border-b border-brand-warm-gray pb-6">
         <div>
           <h1 className="forge-heading text-3xl">
             Virtual <span className="text-brand-gold">Office</span>
@@ -42,7 +42,7 @@ const OfficePage = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Inbox / Comms */}
-        <div className="lg:col-span-2 space-y-6">
+        <div data-reveal="1" className="lg:col-span-2 space-y-6">
           <div className="flex items-center justify-between mb-2">
             <h2 className="text-xs font-black uppercase tracking-[0.3em] text-brand-slate flex items-center gap-3">
               <Mail className="w-3 h-3 text-brand-gold" /> Neural Inbox
@@ -52,7 +52,7 @@ const OfficePage = () => {
 
           <div className="space-y-3">
             {comms.map((msg, i) => (
-              <div key={i} className={`p-4 border flex items-center justify-between hover:border-brand-gold/40 transition-all cursor-pointer group ${msg.unread ? 'bg-brand-gold/5 border-brand-gold/20' : 'bg-white border-brand-warm-gray'}`}>
+              <div key={i} className={`p-4 border rounded-xl flex items-center justify-between hover:border-brand-gold/40 transition-all cursor-pointer group ${msg.unread ? 'bg-brand-gold/5 border-brand-gold/20' : 'bg-white border-brand-warm-gray'}`}>
                 <div className="flex items-center gap-4">
                   <div className={`w-1 h-8 ${msg.unread ? 'bg-brand-gold' : 'bg-brand-warm-gray group-hover:bg-brand-medium-gray'}`} />
                   <div>
@@ -73,7 +73,7 @@ const OfficePage = () => {
             </h2>
             <div className="grid grid-cols-1 gap-2">
               {tasks.map((task, i) => (
-                <div key={i} className="flex items-center gap-4 p-4 bg-white border border-brand-warm-gray group hover:border-brand-gold/40 transition-all">
+                <div key={i} className="flex items-center gap-4 p-4 bg-white border border-brand-warm-gray rounded-xl group hover:border-brand-gold/40 transition-all">
                   <div className={`text-[8px] font-black uppercase px-2 py-1 italic tracking-widest ${task.priority === 'High' ? 'bg-brand-gold text-white' : 'border border-brand-warm-gray text-brand-medium-gray'}`}>
                     {task.priority}
                   </div>
@@ -89,8 +89,8 @@ const OfficePage = () => {
         </div>
 
         {/* Calendar / Schedule */}
-        <div className="space-y-6">
-          <div className="bg-white border border-brand-warm-gray p-6 space-y-8 relative overflow-hidden">
+        <div data-reveal="2" className="space-y-6">
+          <div className="bg-white border border-brand-warm-gray rounded-2xl p-6 space-y-8 relative overflow-hidden" style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
             <h2 className="text-xs font-black uppercase tracking-[0.3em] text-brand-slate flex items-center gap-3">
               <Calendar className="w-3 h-3 text-brand-gold" /> Schedule
             </h2>
@@ -123,7 +123,7 @@ const OfficePage = () => {
             </button>
           </div>
 
-          <div className="bg-white border border-brand-warm-gray p-6 flex items-center justify-between group cursor-pointer hover:border-brand-gold/40 transition-all">
+          <div className="bg-white border border-brand-warm-gray rounded-2xl p-6 flex items-center justify-between group cursor-pointer hover:border-brand-gold/40 transition-all" style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
             <div className="flex items-center gap-4">
               <div className="p-2 bg-brand-parchment border border-brand-warm-gray text-brand-gold">
                 <FileText className="w-4 h-4" />

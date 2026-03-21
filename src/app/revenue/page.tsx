@@ -10,7 +10,7 @@ export default function RevenuePage() {
 
   return (
     <div className="space-y-8 max-w-7xl mx-auto">
-      <header className="border-b border-brand-warm-gray pb-8">
+      <header data-reveal="0" className="border-b border-brand-warm-gray pb-8">
         <h1 className="forge-heading text-4xl lg:text-6xl mb-2">
           Revenue <span className="text-brand-gold">Tracker</span>
         </h1>
@@ -20,11 +20,11 @@ export default function RevenuePage() {
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="forge-panel md:col-span-2">
+        <div data-reveal="1" className="forge-panel md:col-span-2">
           <h2 className="forge-heading text-xl mb-6">Transaction History</h2>
           <div className="space-y-4">
             {revenueData.map((item, idx) => (
-              <div key={idx} className="flex justify-between items-center p-4 bg-brand-parchment border border-brand-warm-gray rounded-sm">
+              <div key={idx} className="flex justify-between items-center p-4 bg-brand-parchment border border-brand-warm-gray rounded-xl">
                 <div>
                   <div className="text-xs font-bold text-brand-ink uppercase tracking-wider">{item.source}</div>
                   <div className="text-[10px] font-mono text-brand-medium-gray uppercase">{item.date}</div>
@@ -35,8 +35,8 @@ export default function RevenuePage() {
           </div>
         </div>
 
-        <div className="space-y-8">
-          <div className="forge-panel bg-brand-charcoal border-brand-charcoal text-white">
+        <div data-reveal="2" className="space-y-8">
+          <div className="forge-panel !rounded-2xl bg-brand-charcoal border-brand-charcoal text-white">
             <h3 className="text-xs font-bold uppercase tracking-widest mb-2 opacity-60">Total Revenue (MTD)</h3>
             <div className="text-4xl font-bold font-mono italic text-white">${totalRevenue.toLocaleString()}</div>
           </div>

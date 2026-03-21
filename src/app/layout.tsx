@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Chivo } from "next/font/google";
+import { Inter, Chivo, JetBrains_Mono } from "next/font/google";
 import Sidebar from "@/components/layout/sidebar";
 import "./globals.css";
 
@@ -11,6 +11,12 @@ const inter = Inter({
 
 const chivo = Chivo({
   variable: "--font-chivo",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
   display: "swap",
 });
@@ -27,7 +33,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${chivo.variable} bg-forge-grid`}>
+      <body className={`${inter.variable} ${chivo.variable} ${jetbrainsMono.variable} bg-forge-grid`}>
         <div style={{ display: "flex", height: "100vh", width: "100%" }}>
           <Sidebar />
           <main style={{ flex: 1, overflowY: "auto", padding: "2rem" }}>

@@ -12,7 +12,7 @@ const systemVitals = [
 export default function Home() {
   return (
     <div className="space-y-8 max-w-7xl mx-auto">
-      <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-brand-warm-gray pb-8">
+      <header data-reveal="0" className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-brand-warm-gray pb-8">
         <div>
           <h1 className="forge-heading text-4xl sm:text-5xl lg:text-6xl mb-2">
             Mission <span className="text-brand-gold">Control</span>
@@ -21,7 +21,7 @@ export default function Home() {
             Forge OS Command & Control Center // v2.4.0
           </p>
         </div>
-        <div className="flex items-center gap-3 bg-brand-parchment border border-brand-warm-gray px-4 py-2 rounded-sm self-start">
+        <div className="flex items-center gap-3 bg-brand-parchment border border-brand-warm-gray px-4 py-2 rounded-xl self-start">
           <div className="h-2 w-2 rounded-full bg-brand-gold animate-pulse"></div>
           <span className="text-[10px] text-brand-ink font-bold uppercase tracking-widest">Systems Nominal</span>
         </div>
@@ -30,7 +30,7 @@ export default function Home() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Left Column: Office & Projects */}
         <div className="lg:col-span-8 space-y-8">
-          <section className="forge-panel !p-0 overflow-hidden relative group">
+          <section data-reveal="1" className="forge-panel !p-0 overflow-hidden relative group">
             <div className="absolute top-4 left-4 z-10">
               <h2 className="forge-heading text-lg">Agent HQ</h2>
               <p className="text-[10px] text-brand-medium-gray font-mono uppercase tracking-widest">Real-time Visualization</p>
@@ -40,7 +40,7 @@ export default function Home() {
             </div>
           </section>
 
-          <section>
+          <section data-reveal="2">
             <div className="flex items-center justify-between mb-6">
               <h2 className="forge-heading text-2xl">Active Projects</h2>
               <button className="text-[10px] font-bold uppercase tracking-widest text-brand-gold hover:text-brand-ink transition-colors">
@@ -49,7 +49,7 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {projects.map(project => (
-                <div key={project.id} className="forge-panel group cursor-pointer relative overflow-hidden">
+                <div key={project.id} className="forge-panel group cursor-pointer relative overflow-hidden !rounded-2xl">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-brand-gold/5 blur-3xl -mr-16 -mt-16 group-hover:bg-brand-gold/10 transition-colors"></div>
                   <div className="relative z-10">
                     <div className="flex justify-between items-start mb-4">
@@ -83,7 +83,7 @@ export default function Home() {
         </div>
 
         {/* Right Column: Roster & Vitals */}
-        <div className="lg:col-span-4 space-y-8">
+        <div data-reveal="3" className="lg:col-span-4 space-y-8">
           <TeamRoster />
 
           <section className="forge-panel">
