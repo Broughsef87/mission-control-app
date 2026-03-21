@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { useRouter, useSearchParams } from 'next/navigation';
 import ForgeLogo from '@/components/ForgeLogo';
 
-export default function LoginPage() {
+function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -36,6 +36,54 @@ export default function LoginPage() {
   }
 
   return (
+    <form onSubmit={handleLogin} className="space-y-4">
+      <div className="space-y-1.5">
+        <label className="text-[10px] font-mono text-brand-medium-gray uppercase tracking-widest">
+          Email
+        </label>
+        <input
+          type="email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          required
+          placeholder="you@forge.com"
+          className="w-full bg-brand-parchment border border-brand-warm-gray rounded-lg p-3 text-sm text-brand-ink focus:outline-none focus:border-brand-gold transition-colors font-mono uppercase tracking-tight"
+        />
+      </div>
+
+      <div className="space-y-1.5">
+        <label className="text-[10px] font-mono text-brand-medium-gray uppercase tracking-widest">
+          Password
+        </label>
+        <input
+          type="password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          required
+          placeholder="••••••••"
+          className="w-full bg-brand-parchment border border-brand-warm-gray rounded-lg p-3 text-sm text-brand-ink focus:outline-none focus:border-brand-gold transition-colors font-mono"
+        />
+      </div>
+
+      {error && (
+        <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-[11px] font-mono text-red-600 uppercase">
+          {error}
+        </div>
+      )}
+
+      <button
+        type="submit"
+        disabled={loading}
+        className="forge-button disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {loading ? 'Authenticating...' : 'Enter Mission Control →'}
+      </button>
+    </form>
+  );
+}
+
+export default function LoginPage() {
+  return (
     <div className="min-h-screen bg-brand-parchment bg-forge-grid flex items-center justify-center p-6">
       <div data-reveal="0" className="w-full max-w-sm">
         {/* Logo */}
@@ -58,49 +106,9 @@ export default function LoginPage() {
             </p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div className="space-y-1.5">
-              <label className="text-[10px] font-mono text-brand-medium-gray uppercase tracking-widest">
-                Email
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                required
-                placeholder="you@forge.com"
-                className="w-full bg-brand-parchment border border-brand-warm-gray rounded-lg p-3 text-sm text-brand-ink focus:outline-none focus:border-brand-gold transition-colors font-mono uppercase tracking-tight"
-              />
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="text-[10px] font-mono text-brand-medium-gray uppercase tracking-widest">
-                Password
-              </label>
-              <input
-                type="password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                required
-                placeholder="••••••••"
-                className="w-full bg-brand-parchment border border-brand-warm-gray rounded-lg p-3 text-sm text-brand-ink focus:outline-none focus:border-brand-gold transition-colors font-mono"
-              />
-            </div>
-
-            {error && (
-              <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-[11px] font-mono text-red-600 uppercase">
-                {error}
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="forge-button disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? 'Authenticating...' : 'Enter Mission Control →'}
-            </button>
-          </form>
+          <Suspense fallback={<div className="h-40" />}>
+            <LoginForm />
+          </Suspense>
         </div>
 
         <p className="text-center text-[10px] font-mono text-brand-medium-gray uppercase tracking-widest mt-6">
