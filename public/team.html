@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission Control: Team Organization</title>
+    <style>
+        :root {
+            --bg-color: #F5F2ED;
+            --card-bg: #FFFFFF;
+            --text-primary: #1A1A1A;
+            --text-secondary: #6B6B6B;
+            --accent: #7A9E7E;
+            --accent-glow: rgba(122, 158, 126, 0.2);
+            --line-color: #D9D5CF;
+            --gold: #B8860B;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-weight: 300;
+            color: var(--text-primary);
+        }
+
+        .mission-badge {
+            background: linear-gradient(135deg, var(--accent) 0%, #5B8A60 100%);
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 60px;
+            box-shadow: 0 8px 20px -4px var(--accent-glow);
+            border: 1px solid rgba(122, 158, 126, 0.4);
+            text-align: center;
+            color: #FFFFFF;
+        }
+
+        .mission-sub {
+            display: block;
+            font-size: 0.85rem;
+            opacity: 0.88;
+            margin-top: 5px;
+            font-weight: normal;
+        }
+
+        /* Tree Layout */
+        .tree {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            width: 100%;
+        }
+
+        .level {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            position: relative;
+        }
+
+        /* Connector Lines */
+        .connector-vertical {
+            width: 2px;
+            background-color: var(--line-color);
+            height: 40px;
+            margin: -20px auto 20px;
+        }
+
+        /* Agent Card */
+        .agent-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--line-color);
+            border-radius: 16px;
+            padding: 20px;
+            width: 260px;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .agent-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 32px -8px rgba(0,0,0,0.12), 0 0 12px var(--accent-glow);
+            border-color: var(--accent);
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: var(--bg-color);
+            margin: 0 auto 15px;
+            border: 4px solid var(--card-bg);
+            box-shadow: 0 0 0 2px var(--line-color);
+            overflow: hidden;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .role {
+            color: var(--accent);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 0 0 10px;
+            color: var(--text-primary);
+        }
+
+        .desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        /* Special Styling for CEO */
+        .ceo-card {
+            border-color: var(--gold);
+            background: linear-gradient(180deg, #FFFEF9 0%, #FAF8F0 100%);
+        }
+        .ceo-card .role { color: var(--gold); }
+        .ceo-card .avatar { box-shadow: 0 0 0 2px var(--gold); }
+
+        /* Hierarchy Connector Logic */
+        .branch {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            width: 2px;
+            height: 20px;
+            background-color: var(--line-color);
+        }
+
+        /* Horizontal bar for children */
+        .crossbar {
+            position: absolute;
+            top: -20px;
+            height: 2px;
+            background-color: var(--line-color);
+            left: calc(130px + 20px);
+            right: calc(130px + 20px);
+        }
+
+        /* Individual stems */
+        .stem {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            height: 20px;
+            width: 2px;
+            background-color: var(--line-color);
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Mission Control</h1>
+
+    <div class="mission-badge">
+        "Mind, body, and spirit for dads."
+        <span class="mission-sub">Target: Financial Freedom ($1M/yr) | 24/7 Autonomous Business</span>
+    </div>
+
+    <div class="tree">
+        <!-- Level 1: CEO -->
+        <div class="level">
+            <div class="agent-card ceo-card">
+                <div class="avatar"><img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Andrew&hair=short02&facialHair=beardLight" alt="Andrew"></div>
+                <div class="role">Commander / CEO</div>
+                <div class="name">Andrew</div>
+                <div class="desc">Visionary. Final approver. Creator of content. The human in the loop.</div>
+            </div>
+        </div>
+
+        <!-- Connector -->
+        <div class="connector-vertical"></div>
+
+        <!-- Level 2: COO (Me) -->
+        <div class="level">
+            <div class="agent-card">
+                <div class="avatar"><img src="https://api.dicebear.com/9.x/bottts/svg?seed=Devroux&colors=blue" alt="Devroux"></div>
+                <div class="role">Chief of Staff / Ops</div>
+                <div class="name">Devroux</div>
+                <div class="desc">Execution. Coding. Organization. Managing the sub-agents and keeping the ship afloat.</div>
+            </div>
+        </div>
+
+        <!-- Connector -->
+        <div class="connector-vertical"></div>
+
+        <!-- Level 3: Specialist Agents -->
+        <div class="level" style="gap: 20px;">
+            <!-- Crossbar for branching -->
+            <div style="position: absolute; top: -20px; left: 140px; right: 140px; height: 2px; background: var(--line-color);"></div>
+
+            <!-- Agent 1 -->
+            <div class="agent-card">
+                <div class="stem"></div>
+                <div class="avatar"><img src="https://api.dicebear.com/9.x/bottts/svg?seed=Researcher&colors=green" alt="Researcher"></div>
+                <div class="role">Intelligence</div>
+                <div class="name">Junior Researcher</div>
+                <div class="desc">Trend hunting. YouTube analytics. Topic validation. Digs deep so we don't guess.</div>
+            </div>
+
+            <!-- Agent 2 -->
+            <div class="agent-card">
+                <div class="stem"></div>
+                <div class="avatar"><img src="https://api.dicebear.com/9.x/bottts/svg?seed=Producer&colors=purple" alt="Producer"></div>
+                <div class="role">Production</div>
+                <div class="name">The Producer</div>
+                <div class="desc">Script outlining. Packaging. Thumbnail concepts. Turns data into stories.</div>
+            </div>
+
+            <!-- Agent 3 -->
+            <div class="agent-card" style="display: flex; flex-direction: column; align-items: center;">
+                <div class="stem"></div>
+                <div class="avatar"><img src="https://api.dicebear.com/9.x/bottts/svg?seed=Engineer&colors=amber" alt="Engineer"></div>
+                <div class="role">Engineering</div>
+                <div class="name">Lead Engineer (Max)</div>
+                <div class="desc">Full-stack dev. Dad Strength App builder. Next.js & Supabase specialist.</div>
+
+                <!-- Sub-team Connector -->
+                <div style="width: 2px; background-color: var(--line-color); height: 40px; margin: 10px 0;"></div>
+
+                <!-- Junior Engineer -->
+                <div class="agent-card" style="width: 220px; border-style: dashed;">
+                    <div class="avatar" style="width: 70px; height: 70px;"><img src="https://api.dicebear.com/9.x/bottts/svg?seed=Oscar&colors=cyan" alt="Oscar"></div>
+                    <div class="role" style="font-size: 0.7rem;">Junior Engineer</div>
+                    <div class="name" style="font-size: 1rem;">Oscar</div>
+                    <div class="desc" style="font-size: 0.8rem;">Works under Max. Prototyping B2B tools and supporting app feature development.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

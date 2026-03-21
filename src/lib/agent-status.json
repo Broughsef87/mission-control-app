@@ -1,0 +1,9 @@
+{
+  "devroux": { "status": "active", "task": "Coordinating Mission Control update", "location": "Command Center" },
+  "isaac": { "status": "active", "task": "Analyzing market trends", "location": "Archives" },
+  "charles": { "status": "idle", "task": "Awaiting new script", "location": "Studio" },
+  "max": { "status": "active", "task": "Developing UI components", "location": "Workbench" },
+  "gabriel": { "status": "active", "task": "Monitoring system vitals", "location": "Server Room" },
+  "ollie": { "status": "idle", "task": "Awaiting content for distribution", "location": "Comms Hub" },
+  "silas": { "status": "active", "task": "Drafting articles on AI", "location": "Library" }
+}

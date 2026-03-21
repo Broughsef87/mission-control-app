@@ -1,0 +1,65 @@
+[
+  {
+    "id": "devroux",
+    "name": "Devroux",
+    "title": "Chief of Staff",
+    "responsibilities": "Execution, coordination, and system operations. The central node for all Forge OS activities.",
+    "avatar": "https://api.dicebear.com/7.x/bottts/svg?seed=devroux",
+    "status": "Active",
+    "location": "Command Center"
+  },
+  {
+    "id": "isaac",
+    "name": "Isaac",
+    "title": "Researcher",
+    "responsibilities": "Market analysis, trend identification, and data-driven insights for content and strategy.",
+    "avatar": "https://api.dicebear.com/7.x/bottts/svg?seed=isaac",
+    "status": "Idle",
+    "location": "Ready Room"
+  },
+  {
+    "id": "charles",
+    "name": "Charles",
+    "title": "Producer",
+    "responsibilities": "Handles the story, packaging, and production of all content, turning raw ideas into finished products.",
+    "avatar": "https://api.dicebear.com/7.x/bottts/svg?seed=charles",
+    "status": "Idle",
+    "location": "Ready Room"
+  },
+  {
+    "id": "max",
+    "name": "Max",
+    "title": "Engineer",
+    "responsibilities": "Code and build. Responsible for all software development, from web apps to automation tools.",
+    "avatar": "https://api.dicebear.com/7.x/bottts/svg?seed=max",
+    "status": "Idle",
+    "location": "Ready Room"
+  },
+  {
+    "id": "gabriel",
+    "name": "Gabriel",
+    "title": "Watchdog",
+    "responsibilities": "Monitors system uptime, performance, and security of Mission Control and other critical infrastructure.",
+    "avatar": "https://api.dicebear.com/7.x/bottts/svg?seed=gabriel",
+    "status": "Idle",
+    "location": "Ready Room"
+  },
+  {
+    "id": "ollie",
+    "name": "Ollie",
+    "title": "Social Media",
+    "responsibilities": "Content distribution, community engagement, and managing the public-facing social channels.",
+    "avatar": "https://api.dicebear.com/7.x/bottts/svg?seed=ollie",
+    "status": "Idle",
+    "location": "Ready Room"
+  },
+  {
+    "id": "silas",
+    "name": "Silas",
+    "title": "Writer",
+    "responsibilities": "Authors articles, scripts, and other long-form content.",
+    "avatar": "https://api.dicebear.com/7.x/bottts/svg?seed=silas",
+    "status": "Idle",
+    "location": "Ready Room"
+  }
+]

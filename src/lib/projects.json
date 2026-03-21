@@ -1,0 +1,42 @@
+[
+  {
+    "id": "1",
+    "name": "Dad Strength App",
+    "status": "In Dev",
+    "progress": 75,
+    "description": "Functional strength training for new dads. Next.js/Supabase/PWA.",
+    "priority": "HIGH",
+    "category": "Software",
+    "lastUpdate": "2026-03-15"
+  },
+  {
+    "id": "2",
+    "name": "Forge OS Website",
+    "status": "Live",
+    "progress": 100,
+    "description": "B2B AI Automation Agency landing page and client portal.",
+    "priority": "MEDIUM",
+    "category": "Agency",
+    "lastUpdate": "2026-03-14"
+  },
+  {
+    "id": "3",
+    "name": "The Nap-Squeeze SaaS",
+    "status": "Planning",
+    "progress": 15,
+    "description": "Productivity tool for squeezing maximum output into tight windows.",
+    "priority": "MEDIUM",
+    "category": "Software",
+    "lastUpdate": "2026-03-15"
+  },
+  {
+    "id": "4",
+    "name": "Dad Operating System",
+    "status": "Backlog",
+    "progress": 0,
+    "description": "Comprehensive Notion/workflow system for fatherhood management.",
+    "priority": "LOW",
+    "category": "Templates",
+    "lastUpdate": "2026-03-12"
+  }
+]

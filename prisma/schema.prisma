@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  name        String
+  status      String
+  description String?
+  priority    Int      @default(1)
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  tasks       Task[]
+}
+
+model Task {
+  id        String   @id @default(cuid())
+  content   String
+  completed Boolean  @default(false)
+  agent     String?
+  projectId String
+  createdAt DateTime @default(now())
+  project   Project  @relation(fields: [projectId], references: [id])
+}
+
+model AgentAction {
+  id        String   @id @default(cuid())
+  agent     String
+  action    String
+  path      String?
+  timestamp DateTime @default(now())
+}
+
+model TokenLog {
+  id        String   @id @default(cuid())
+  agent     String
+  model     String
+  tokens    Int
+  cost      Float
+  timestamp DateTime @default(now())
+}
+
+model ExternalStatus {
+  id        String   @id @default(cuid())
+  service   String
+  status    String
+  message   String?
+  timestamp DateTime @default(now())
+}

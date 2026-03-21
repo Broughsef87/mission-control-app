@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FORGE OS: Live Operations</title>
+    <style>
+        :root {
+            --bg-color: #F5F2ED;
+            --card-bg: #FFFFFF;
+            --floor-bg: #FAFAF7;
+            --text-primary: #1A1A1A;
+            --text-secondary: #6B6B6B;
+            --accent: #7A9E7E;
+            --accent-glow: rgba(122, 158, 126, 0.25);
+            --line-color: #D9D5CF;
+            --success: #5B8C5A;
+            --warning: #B8860B;
+            --danger: #C0392B;
+            --meeting: #7B68AA;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .hq-container {
+            width: 100%;
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 40px;
+        }
+
+        .office-floor {
+            background: var(--floor-bg);
+            border: 2px solid var(--line-color);
+            border-radius: 24px;
+            padding: 40px;
+            position: relative;
+            min-height: 600px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+            background-image: radial-gradient(var(--line-color) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .workstation {
+            background: var(--card-bg);
+            border: 1px solid var(--line-color);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+
+        .workstation.active {
+            border-color: var(--success);
+            box-shadow: 0 0 12px rgba(91, 140, 90, 0.12);
+        }
+
+        .workstation.active::after {
+            content: 'ACTIVE';
+            position: absolute;
+            top: -8px;
+            right: 10px;
+            background: var(--success);
+            color: white;
+            font-size: 0.5rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .agent-sprite {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+            border: 2px solid transparent;
+            background: var(--bg-color);
+        }
+
+        .relative {
+            position: relative;
+        }
+
+        .absolute {
+            position: absolute;
+        }
+
+        .workstation.active .agent-sprite {
+            border-color: var(--success);
+        }
+
+        .agent-name {
+            font-weight: bold;
+            font-size: 0.8rem;
+            color: var(--text-primary);
+        }
+
+        .agent-role {
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .status-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--line-color);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+
+        .status-header {
+            font-weight: bold;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--line-color);
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-primary);
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+        }
+
+        .pulse {
+            width: 10px;
+            height: 10px;
+            background: var(--success);
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 5px var(--success);
+            animation: pulse-green 2s infinite;
+        }
+
+        @keyframes pulse-green {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(91, 140, 90, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(91, 140, 90, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(91, 140, 90, 0); }
+        }
+
+        .agent-badge {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            background: var(--accent);
+            border-radius: 50%;
+            padding: 3px;
+            border: 2px solid var(--card-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1 style="margin-bottom: 5px; letter-spacing: 4px; color: var(--text-primary); font-weight: 300; font-size: 1.4rem;">FORGE OS: LIVE OPERATIONS</h1>
+    <p style="margin-bottom: 40px; font-size: 0.75rem; letter-spacing: 3px; color: var(--text-secondary); text-transform: uppercase;">Build the Legacy. Automate the Rest.</p>
+
+    <div class="hq-container">
+        <div class="office-floor">
+
+            <!-- Devroux -->
+            <div class="workstation active">
+                <img src="https://api.dicebear.com/9.x/bottts/svg?seed=Devroux&colors=blue" class="agent-sprite" alt="Devroux">
+                <div class="agent-name">Devroux</div>
+                <div class="agent-role">Chief of Staff</div>
+            </div>
+
+            <!-- Isaac -->
+            <div class="workstation active">
+                <img src="https://api.dicebear.com/9.x/bottts/svg?seed=Researcher&colors=green" class="agent-sprite" alt="Isaac">
+                <div class="agent-name">Isaac</div>
+                <div class="agent-role">Researcher</div>
+                <div style="font-size: 0.5rem; color: var(--success); margin-top: 5px; letter-spacing: 1px;">ANALYZING NAP-SQUEEZE</div>
+            </div>
+
+            <!-- Charles -->
+            <div class="workstation active">
+                <img src="https://api.dicebear.com/9.x/bottts/svg?seed=Producer&colors=purple" class="agent-sprite" alt="Charles">
+                <div class="agent-name">Charles</div>
+                <div class="agent-role">Producer</div>
+                <div style="font-size: 0.5rem; color: var(--success); margin-top: 5px; letter-spacing: 1px;">WRITING SCRIPT</div>
+            </div>
+
+            <!-- Max -->
+            <div class="workstation active">
+                <div class="relative">
+                    <img src="https://api.dicebear.com/9.x/bottts/svg?seed=Engineer&colors=amber" class="agent-sprite" alt="Max">
+                    <div class="agent-badge">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m18 2 4 4"/><path d="m17 7 3-3"/><path d="M19 9 11 17l-5-5L15 3z"/><path d="m14 18-8 4-4-8 4-8"/><path d="m7 14 5 5"/></svg>
+                    </div>
+                </div>
+                <div class="agent-name">Max</div>
+                <div class="agent-role">Engineer</div>
+                <div style="font-size: 10px; color: var(--success); font-weight: bold; margin-top: 4px; letter-spacing: 1px;">LOGGER UI</div>
+            </div>
+
+            <!-- Ollie -->
+            <div class="workstation active">
+                <img src="https://api.dicebear.com/9.x/bottts/svg?seed=Ollie&colors=orange" class="agent-sprite" alt="Ollie">
+                <div class="agent-name">Ollie</div>
+                <div class="agent-role">Social Media</div>
+            </div>
+
+            <!-- Leo -->
+            <div class="workstation active">
+                <img src="https://api.dicebear.com/9.x/bottts/svg?seed=Leo&colors=cyan" class="agent-sprite" alt="Leo">
+                <div class="agent-name">Leo</div>
+                <div class="agent-role">Product</div>
+            </div>
+
+            <!-- Silas -->
+            <div class="workstation active">
+                <img src="https://api.dicebear.com/9.x/bottts/svg?seed=Silas&colors=grey" class="agent-sprite" alt="Silas">
+                <div class="agent-name">Silas</div>
+                <div class="agent-role">Reputation</div>
+            </div>
+
+            <!-- Gabriel -->
+            <div class="workstation active">
+                <img src="https://api.dicebear.com/9.x/bottts/svg?seed=Gabriel&colors=red" class="agent-sprite" alt="Gabriel">
+                <div class="agent-name">Gabriel</div>
+                <div class="agent-role">Watchdog</div>
+            </div>
+
+        </div>
+
+        <div class="sidebar">
+            <div class="status-card">
+                <div class="status-header">
+                    OPERATIONS
+                    <span class="pulse"></span>
+                </div>
+                <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                    <p style="margin: 6px 0;">🟢 Full Roster Active</p>
+                    <p style="margin: 6px 0;">📍 Distributed Sprint</p>
+                    <p style="margin: 6px 0;">⚡ High Value Mode</p>
+                    <p style="margin: 6px 0;">🎙️ Devroux Monitoring</p>
+                    <p style="font-size: 0.6rem; margin-top: 12px; opacity: 0.6;">Last Sync: 2026-03-21 00:30 MDT</p>
+                    <p style="font-size: 0.6rem; opacity: 0.6;">Tailscale: <span style="color: var(--danger);">NOT FOUND</span></p>
+                </div>
+            </div>
+
+            <div class="status-card">
+                <div class="status-header">CURRENT SPRINT</div>
+                <div style="font-size: 0.75rem; color: var(--text-secondary);">
+                    <p style="margin: 6px 0;">🛠️ Max: Active Workout Logger UI</p>
+                    <p style="margin: 6px 0;">🎬 Charles: Full Script Draft</p>
+                    <p style="margin: 6px 0;">🏛️ Silas: ORM Article #2</p>
+                    <p style="margin: 6px 0;">📱 Ollie: 7-Day Neon-Noir Schedule</p>
+                    <p style="margin: 6px 0;">📦 Leo: The Nap-Squeeze UX</p>
+                    <p style="margin: 6px 0;">📡 Isaac: Nap-Squeeze Market Analysis</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
