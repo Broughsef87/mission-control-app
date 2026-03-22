@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, Suspense } from 'react';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import React, { useState, Suspense } from 'react';
+import { createBrowserClient } from '@supabase/ssr';
 import { useRouter, useSearchParams } from 'next/navigation';
 import ForgeLogo from '@/components/ForgeLogo';
 
@@ -10,37 +10,36 @@ function LoginForm() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [sb, setSb] = useState<SupabaseClient | null>(null);
   const router = useRouter();
   const params = useSearchParams();
 
-  // Fetch Supabase config from API route (runtime env vars — always reliable)
-  useEffect(() => {
-    fetch('/api/config')
-      .then(r => r.json())
-      .then(({ url, key }) => {
-        if (url && key) setSb(createClient(url, key));
-      });
-  }, []);
+  // createBrowserClient from @supabase/ssr stores session in cookies
+  // so the server-side middleware can read it
+  const sb = createBrowserClient(
+    'https://qegyqvyxzvaiulshgbsh.supabase.co',
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
+  );
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
-    if (!sb) { setError('Configuration loading — please try again.'); return; }
     setLoading(true);
     setError('');
 
-    const { error: err } = await sb.auth.signInWithPassword({ email, password });
-    if (err) {
-      setError(err.message);
+    try {
+      const { error: err } = await sb.auth.signInWithPassword({ email, password });
+      if (err) {
+        setError(err.message);
+        setLoading(false);
+        return;
+      }
+      const redirect = params.get('redirect');
+      const dest = redirect && !redirect.startsWith('/api') ? redirect : '/';
+      router.push(dest);
+      router.refresh();
+    } catch (ex: any) {
+      setError(ex.message ?? 'Login failed');
       setLoading(false);
-      return;
     }
-
-    const redirect = params.get('redirect');
-    // Don't redirect back to an API route
-    const dest = redirect && !redirect.startsWith('/api') ? redirect : '/';
-    router.push(dest);
-    router.refresh();
   }
 
   return (
@@ -83,10 +82,10 @@ function LoginForm() {
 
       <button
         type="submit"
-        disabled={loading || !sb}
+        disabled={loading}
         className="forge-button disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {loading ? 'Authenticating...' : !sb ? 'Loading...' : 'Enter Mission Control →'}
+        {loading ? 'Authenticating...' : 'Enter Mission Control →'}
       </button>
     </form>
   );

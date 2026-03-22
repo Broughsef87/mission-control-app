@@ -10,8 +10,8 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function createSupabaseServerClient() {
   const cookieStore = await cookies();
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    (process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL ?? '').trim(),
+    (process.env.SUPABASE_ANON_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '').trim(),
     {
       cookies: {
         getAll() { return cookieStore.getAll(); },
@@ -29,8 +29,8 @@ export async function createSupabaseServerClient() {
 
 export function createSupabaseMiddlewareClient(request: NextRequest, response: NextResponse) {
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    (process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL ?? '').trim(),
+    (process.env.SUPABASE_ANON_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '').trim(),
     {
       cookies: {
         getAll() { return request.cookies.getAll(); },
