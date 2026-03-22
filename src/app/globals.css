@@ -5,26 +5,59 @@
   --font-display: var(--font-chivo), "Chivo", system-ui, sans-serif;
   --font-mono: var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, monospace;
 
-  /* Vuori / Apple / Mercedes — Light Palette */
-  --color-brand-parchment: #f8f6f2;
-  --color-brand-ivory: #f1ede6;
-  --color-brand-warm-gray: #e3ddd6;
-  --color-brand-medium-gray: #a09890;
-  --color-brand-slate: #6b6257;
-  --color-brand-charcoal: #2e2b27;
-  --color-brand-ink: #1a1816;
-  --color-brand-gold: #b87333;
-  --color-brand-gold-light: #d4924a;
+  /* ── Modern / Clean / Industrial ───────────────────────────
+     Inspired by: Fallingwater concrete, G-Wagon chrome,
+     Apple precision, penthouse command center at night.
+  ────────────────────────────────────────────────────────── */
 
-  /* Legacy aliases (keep backward compat) */
-  --color-brand-orange: #b87333;
-  --color-brand-light-slate: #a09890;
-  --color-forge-dark: #f8f6f2;
-  --color-forge-panel: #ffffff;
-  --color-forge-border: #e3ddd6;
-  --color-forge-orange: #b87333;
-  --color-forge-text: #1a1816;
-  --color-forge-muted: #a09890;
+  /* Base surfaces — warm architectural charcoal */
+  --color-base:        #111210;   /* near-black, warm walnut undertone */
+  --color-surface:     #1A1917;   /* panel base — like brushed concrete */
+  --color-surface-2:   #232119;   /* card surface — slightly lifted */
+  --color-surface-3:   #2C2A26;   /* hover / active states */
+
+  /* Borders — structural, not decorative */
+  --color-border:      #302E2A;   /* primary border — warm stone */
+  --color-border-2:    #3E3C38;   /* lifted border — panel edges */
+  --color-border-chrome: #5A5850; /* chrome border for accents */
+
+  /* Chrome / Silver — primary accent (G-Wagon, Apple) */
+  --color-chrome:      #B8B4AC;   /* base chrome silver */
+  --color-chrome-2:    #D4D0C8;   /* bright chrome — active/focus */
+  --color-chrome-muted: #7A7870;  /* muted chrome — secondary text */
+
+  /* Typography */
+  --color-text:        #E8E4DC;   /* warm off-white — primary text */
+  --color-text-2:      #A8A49C;   /* secondary text — stone grey */
+  --color-text-muted:  #6A6860;   /* muted — labels, captions */
+
+  /* Status colors — muted, architectural */
+  --color-green:       #4E7A5C;   /* Fallingwater forest green */
+  --color-green-2:     #6A9A78;   /* lighter green */
+  --color-amber:       #8A7A50;   /* aged brass — used sparingly */
+  --color-amber-2:     #B09A6A;   /* warm brass highlight */
+  --color-red:         #8A4A42;   /* deep red */
+  --color-red-2:       #A86058;   /* lighter red */
+  --color-blue:        #4A6A8A;   /* cool steel blue */
+
+  /* Legacy aliases — keep backward compat with existing components */
+  --color-brand-parchment:   #E8E4DC;
+  --color-brand-ivory:       #D4D0C8;
+  --color-brand-warm-gray:   #3E3C38;
+  --color-brand-medium-gray: #6A6860;
+  --color-brand-slate:       #A8A49C;
+  --color-brand-charcoal:    #232119;
+  --color-brand-ink:         #E8E4DC;
+  --color-brand-gold:        #B09A6A;
+  --color-brand-gold-light:  #C8B080;
+  --color-brand-orange:      #B09A6A;
+  --color-brand-light-slate: #A8A49C;
+  --color-forge-dark:        #111210;
+  --color-forge-panel:       #1A1917;
+  --color-forge-border:      #302E2A;
+  --color-forge-orange:      #B09A6A;
+  --color-forge-text:        #E8E4DC;
+  --color-forge-muted:       #6A6860;
 }
 
 * {
@@ -36,44 +69,52 @@ html {
 }
 
 body {
-  background-color: var(--color-brand-parchment);
-  color: var(--color-brand-ink);
+  background-color: var(--color-base);
+  color: var(--color-text);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 4px; height: 4px; }
-::-webkit-scrollbar-track { background: var(--color-brand-parchment); }
-::-webkit-scrollbar-thumb { background: var(--color-brand-warm-gray); border-radius: 2px; }
-::-webkit-scrollbar-thumb:hover { background: var(--color-brand-medium-gray); }
+/* ── Scrollbar ─────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 3px; height: 3px; }
+::-webkit-scrollbar-track { background: var(--color-surface); }
+::-webkit-scrollbar-thumb { background: var(--color-border-2); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-chrome-muted); }
 
-/* Forge grid background — very subtle warm grid on light background */
+/* ── Forge grid background — concrete grid on dark base ────── */
 .bg-forge-grid {
-  background-color: var(--color-brand-parchment);
+  background-color: var(--color-base);
   background-image:
-    linear-gradient(color-mix(in srgb, var(--color-brand-warm-gray) 60%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--color-brand-warm-gray) 60%, transparent) 1px, transparent 1px);
+    linear-gradient(rgba(184, 180, 172, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(184, 180, 172, 0.04) 1px, transparent 1px);
   background-size: 48px 48px;
 }
 
+/* ── Panel — concrete slab card ───────────────────────────── */
 .forge-panel {
-  background-color: #ffffff;
-  border: 1px solid var(--color-brand-warm-gray);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 0.875rem;
   padding: 1.5rem;
   transition: border-color 0.25s ease, box-shadow 0.25s ease;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.03) inset,
+    0 2px 8px rgba(0, 0, 0, 0.4),
+    0 8px 32px rgba(0, 0, 0, 0.25);
 }
 
 .forge-panel:hover {
-  border-color: var(--color-brand-medium-gray);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.06);
+  border-color: var(--color-border-chrome);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 4px 16px rgba(0, 0, 0, 0.5),
+    0 12px 40px rgba(0, 0, 0, 0.3);
 }
 
+/* ── Heading ───────────────────────────────────────────────── */
 .forge-heading {
-  color: var(--color-brand-ink);
+  color: var(--color-text);
   font-weight: 700;
   text-transform: uppercase;
   font-style: italic;
@@ -81,27 +122,30 @@ body {
   font-family: var(--font-display);
 }
 
+/* ── Button — chrome industrial ────────────────────────────── */
 .forge-button {
-  background-color: var(--color-brand-charcoal);
-  color: #ffffff;
+  background-color: var(--color-surface-3);
+  color: var(--color-chrome-2);
   font-weight: 700;
   text-transform: uppercase;
   padding: 0.5rem 1.5rem;
   border-radius: 0.5rem;
   font-size: 0.75rem;
   font-style: italic;
-  border: none;
+  border: 1px solid var(--color-border-chrome);
   cursor: pointer;
   letter-spacing: 0.06em;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   width: 100%;
 }
 
 .forge-button:hover {
-  background-color: var(--color-brand-ink);
+  background-color: var(--color-border-chrome);
+  border-color: var(--color-chrome);
+  color: var(--color-base);
 }
 
-/* Subtle accent line animation */
+/* ── Chrome accent sweep ───────────────────────────────────── */
 .glow-border {
   position: relative;
   overflow: hidden;
@@ -114,7 +158,7 @@ body {
   left: -100%;
   width: 100%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--color-brand-gold), transparent);
+  background: linear-gradient(90deg, transparent, var(--color-chrome), transparent);
   transition: left 0.4s ease;
 }
 
@@ -122,7 +166,7 @@ body {
   left: 100%;
 }
 
-/* Staggered reveal animations — matches the agency site pattern */
+/* ── Staggered reveal animations ───────────────────────────── */
 @keyframes reveal-up {
   from {
     opacity: 0;
@@ -147,15 +191,42 @@ body {
 [data-reveal="5"] { animation-delay: 400ms; }
 [data-reveal="6"] { animation-delay: 480ms; }
 
-/* Shared inline card style — rounder than before, matches agency aesthetic */
+/* ── Forge card ─────────────────────────────────────────────── */
 .forge-card {
-  background-color: #ffffff;
-  border: 1px solid var(--color-brand-warm-gray);
+  background-color: var(--color-surface-2);
+  border: 1px solid var(--color-border);
   border-radius: 0.875rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .forge-card:hover {
-  border-color: color-mix(in srgb, var(--color-brand-gold) 40%, transparent);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  border-color: var(--color-border-chrome);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
+
+/* ── Chrome shimmer badge ───────────────────────────────────── */
+.chrome-badge {
+  background: linear-gradient(135deg, var(--color-surface-3) 0%, var(--color-border-chrome) 50%, var(--color-surface-3) 100%);
+  color: var(--color-chrome-2);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.6rem;
+  border-radius: 0.25rem;
+  border: 1px solid var(--color-border-chrome);
+}
+
+/* ── Architectural divider ──────────────────────────────────── */
+.forge-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-border-2), transparent);
+  margin: 1.5rem 0;
+}
+
+/* ── Status indicators ──────────────────────────────────────── */
+.status-active  { color: var(--color-green-2); }
+.status-idle    { color: var(--color-chrome-muted); }
+.status-error   { color: var(--color-red-2); }
+.status-warning { color: var(--color-amber-2); }
