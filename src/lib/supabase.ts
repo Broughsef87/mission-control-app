@@ -14,13 +14,8 @@ export function getSupabaseClient(): SupabaseClient {
 // Admin client — uses service role key, bypasses RLS, server-side only
 export function getSupabaseAdmin(): SupabaseClient {
   // SUPABASE_URL (no NEXT_PUBLIC_) is a pure runtime env var — always available server-side
-  const url = process.env.SUPABASE_URL
-    ?? process.env.NEXT_PUBLIC_SUPABASE_URL
-    ?? '';
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
-    ?? process.env.SUPABASE_ANON_KEY
-    ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    ?? '';
+  const url = (process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL ?? '').trim();
+  const key = (process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_ANON_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '').trim();
   if (!url) throw new Error('Missing SUPABASE_URL env var');
   if (!_adminClient) _adminClient = createClient(url, key, { auth: { persistSession: false } });
   return _adminClient;
