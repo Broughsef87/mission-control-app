@@ -3,41 +3,29 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 let _client: SupabaseClient | null = null;
 let _adminClient: SupabaseClient | null = null;
 
-function getClient(): SupabaseClient | null {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !key) return null;
+// Anon client — used for browser/auth flows
+export function getSupabaseClient(): SupabaseClient {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
   if (!_client) _client = createClient(url, key);
   return _client;
 }
 
-function getAdminClient(): SupabaseClient | null {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  // Use service role key (server-side only) — bypasses RLS for API routes
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !key) return null;
+// Admin client — uses service role key, bypasses RLS, server-side only
+export function getSupabaseAdmin(): SupabaseClient {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
   if (!_adminClient) _adminClient = createClient(url, key, { auth: { persistSession: false } });
   return _adminClient;
 }
 
-function makeProxy(clientFn: () => SupabaseClient | null) {
-  return new Proxy({} as SupabaseClient, {
-    get(_target, prop) {
-      const client = clientFn();
-      if (!client) {
-        return () => Promise.resolve({ data: null, error: new Error('Supabase not configured') });
-      }
-      const value = (client as any)[prop];
-      return typeof value === 'function' ? value.bind(client) : value;
-    }
-  });
-}
-
-// Anon client — used for browser/auth flows
-export const supabase = makeProxy(getClient);
-
-// Admin client — uses service role key, bypasses RLS, server-side API routes only
-export const supabaseAdmin = makeProxy(getAdminClient);
+// Legacy anon export (used by client components / auth flows)
+export const supabase = {
+  get auth() { return getSupabaseClient().auth; },
+  from: (table: string) => getSupabaseClient().from(table),
+  channel: (name: string) => getSupabaseClient().channel(name),
+  removeChannel: (channel: any) => getSupabaseClient().removeChannel(channel),
+};
 
 // Types matching our schema
 export interface AgentStatus {
