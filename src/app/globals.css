@@ -1,63 +1,76 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-inter), "Inter", system-ui, sans-serif;
+  --font-sans:    var(--font-inter), "Inter", system-ui, sans-serif;
   --font-display: var(--font-chivo), "Chivo", system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, monospace;
+  --font-mono:    var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, monospace;
 
-  /* ── Modern / Clean / Industrial ───────────────────────────
-     Inspired by: Fallingwater concrete, G-Wagon chrome,
-     Apple precision, penthouse command center at night.
-  ────────────────────────────────────────────────────────── */
+  /* ── Forge OS Light Theme ────────────────────────────────────
+     Warm cream surfaces, coral accent, black contrast.
+     Inspired by forge-os-website.vercel.app
+  ─────────────────────────────────────────────────────────── */
 
-  /* Base surfaces — warm architectural charcoal */
-  --color-base:        #111210;   /* near-black, warm walnut undertone */
-  --color-surface:     #1A1917;   /* panel base — like brushed concrete */
-  --color-surface-2:   #232119;   /* card surface — slightly lifted */
-  --color-surface-3:   #2C2A26;   /* hover / active states */
+  /* Surfaces — warm cream */
+  --color-base:        #F2EFEA;   /* main background — warm parchment */
+  --color-surface:     #FAFAF8;   /* panel base — near white */
+  --color-surface-2:   #F5F2EE;   /* card surface — slightly warmer */
+  --color-surface-3:   #EDE9E4;   /* hover / active states */
 
-  /* Borders — structural, not decorative */
-  --color-border:      #302E2A;   /* primary border — warm stone */
-  --color-border-2:    #3E3C38;   /* lifted border — panel edges */
-  --color-border-chrome: #5A5850; /* chrome border for accents */
+  /* Borders — barely-there */
+  --color-border:      #E4E0DA;   /* primary border */
+  --color-border-2:    #D8D4CE;   /* slightly more visible */
+  --color-border-chrome: #C8C4BE; /* stronger border for accents */
 
-  /* Chrome / Silver — primary accent (G-Wagon, Apple) */
-  --color-chrome:      #B8B4AC;   /* base chrome silver */
-  --color-chrome-2:    #D4D0C8;   /* bright chrome — active/focus */
-  --color-chrome-muted: #7A7870;  /* muted chrome — secondary text */
+  /* Accent — coral/salmon (the Forge signature color) */
+  --color-accent:      #E07A5F;   /* coral — primary accent */
+  --color-accent-2:    #C86048;   /* darker coral */
+  --color-accent-light: #F5EBE8;  /* very pale coral tint */
 
   /* Typography */
-  --color-text:        #E8E4DC;   /* warm off-white — primary text */
-  --color-text-2:      #A8A49C;   /* secondary text — stone grey */
-  --color-text-muted:  #6A6860;   /* muted — labels, captions */
+  --color-text:        #1A1917;   /* near-black, warm */
+  --color-text-2:      #6B6862;   /* secondary — warm grey */
+  --color-text-muted:  #9B9894;   /* muted — labels, captions */
 
-  /* Status colors — muted, architectural */
-  --color-green:       #4E7A5C;   /* Fallingwater forest green */
-  --color-green-2:     #6A9A78;   /* lighter green */
-  --color-amber:       #8A7A50;   /* aged brass — used sparingly */
-  --color-amber-2:     #B09A6A;   /* warm brass highlight */
-  --color-red:         #8A4A42;   /* deep red */
-  --color-red-2:       #A86058;   /* lighter red */
-  --color-blue:        #4A6A8A;   /* cool steel blue */
+  /* Black — for buttons and contrast sections */
+  --color-black:       #0D0D0C;
+  --color-black-2:     #1A1917;
 
-  /* Legacy aliases — keep backward compat with existing components */
-  --color-brand-parchment:   #E8E4DC;
-  --color-brand-ivory:       #D4D0C8;
-  --color-brand-warm-gray:   #3E3C38;
-  --color-brand-medium-gray: #6A6860;
-  --color-brand-slate:       #A8A49C;
-  --color-brand-charcoal:    #232119;
-  --color-brand-ink:         #E8E4DC;
-  --color-brand-gold:        #B09A6A;
-  --color-brand-gold-light:  #C8B080;
-  --color-brand-orange:      #B09A6A;
-  --color-brand-light-slate: #A8A49C;
-  --color-forge-dark:        #111210;
-  --color-forge-panel:       #1A1917;
-  --color-forge-border:      #302E2A;
-  --color-forge-orange:      #B09A6A;
-  --color-forge-text:        #E8E4DC;
-  --color-forge-muted:       #6A6860;
+  /* Status colors — muted, for light backgrounds */
+  --color-green:       #3D7A52;
+  --color-green-2:     #52A06C;
+  --color-green-bg:    #EDF5F0;
+  --color-amber:       #9A7A30;
+  --color-amber-2:     #C49A40;
+  --color-amber-bg:    #FBF5E8;
+  --color-red:         #C0483A;
+  --color-red-2:       #E06050;
+  --color-red-bg:      #FEF0EE;
+  --color-blue:        #3A6A9A;
+  --color-blue-bg:     #EEF3FA;
+
+  /* Chrome / Silver — kept for legacy compat */
+  --color-chrome:        #9B9894;
+  --color-chrome-2:      #6B6862;
+  --color-chrome-muted:  #B8B4AE;
+
+  /* Legacy aliases — backward compat */
+  --color-brand-parchment:   #F2EFEA;
+  --color-brand-ivory:       #FAFAF8;
+  --color-brand-warm-gray:   #E4E0DA;
+  --color-brand-medium-gray: #9B9894;
+  --color-brand-slate:       #6B6862;
+  --color-brand-charcoal:    #1A1917;
+  --color-brand-ink:         #1A1917;
+  --color-brand-gold:        #E07A5F;
+  --color-brand-gold-light:  #F5A080;
+  --color-brand-orange:      #E07A5F;
+  --color-brand-light-slate: #9B9894;
+  --color-forge-dark:        #0D0D0C;
+  --color-forge-panel:       #FAFAF8;
+  --color-forge-border:      #E4E0DA;
+  --color-forge-orange:      #E07A5F;
+  --color-forge-text:        #1A1917;
+  --color-forge-muted:       #9B9894;
 }
 
 * {
@@ -78,74 +91,175 @@ body {
 
 /* ── Scrollbar ─────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 3px; height: 3px; }
-::-webkit-scrollbar-track { background: var(--color-surface); }
+::-webkit-scrollbar-track { background: var(--color-surface-2); }
 ::-webkit-scrollbar-thumb { background: var(--color-border-2); border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--color-chrome-muted); }
 
-/* ── Forge grid background — concrete grid on dark base ────── */
+/* ── Background — warm cream with barely-visible grid ──────── */
 .bg-forge-grid {
   background-color: var(--color-base);
   background-image:
-    linear-gradient(rgba(184, 180, 172, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(184, 180, 172, 0.04) 1px, transparent 1px);
+    linear-gradient(rgba(26, 25, 23, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(26, 25, 23, 0.035) 1px, transparent 1px);
   background-size: 48px 48px;
 }
 
-/* ── Panel — concrete slab card ───────────────────────────── */
+/* ── Panel — clean white card ──────────────────────────────── */
 .forge-panel {
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 0.875rem;
+  border-radius: 1rem;
   padding: 1.5rem;
   transition: border-color 0.25s ease, box-shadow 0.25s ease;
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.03) inset,
-    0 2px 8px rgba(0, 0, 0, 0.4),
-    0 8px 32px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05), 0 4px 16px rgba(0, 0, 0, 0.04);
 }
 
 .forge-panel:hover {
   border-color: var(--color-border-chrome);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.04) inset,
-    0 4px 16px rgba(0, 0, 0, 0.5),
-    0 12px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+/* ── Forge card ─────────────────────────────────────────────── */
+.forge-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.forge-card:hover {
+  border-color: var(--color-border-chrome);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
 }
 
 /* ── Heading ───────────────────────────────────────────────── */
 .forge-heading {
   color: var(--color-text);
-  font-weight: 700;
-  text-transform: uppercase;
-  font-style: italic;
-  letter-spacing: 0.04em;
+  font-weight: 300;
+  letter-spacing: -0.02em;
   font-family: var(--font-display);
+  line-height: 1.1;
 }
 
-/* ── Button — chrome industrial ────────────────────────────── */
-.forge-button {
-  background-color: var(--color-surface-3);
-  color: var(--color-chrome-2);
-  font-weight: 700;
+/* ── Label — uppercase tracked ─────────────────────────────── */
+.forge-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
-  padding: 0.5rem 1.5rem;
-  border-radius: 0.5rem;
-  font-size: 0.75rem;
-  font-style: italic;
-  border: 1px solid var(--color-border-chrome);
+  color: var(--color-text-muted);
+}
+
+/* ── Button — black pill (primary) ─────────────────────────── */
+.forge-button {
+  background-color: var(--color-black);
+  color: #FAFAF8;
+  font-weight: 500;
+  padding: 0.625rem 1.75rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  border: none;
   cursor: pointer;
-  letter-spacing: 0.06em;
-  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  letter-spacing: 0.01em;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
   width: 100%;
 }
 
 .forge-button:hover {
-  background-color: var(--color-border-chrome);
-  border-color: var(--color-chrome);
-  color: var(--color-base);
+  background-color: var(--color-black-2);
+  opacity: 0.9;
 }
 
-/* ── Chrome accent sweep ───────────────────────────────────── */
+/* ── Button outline — white pill (secondary) ────────────────── */
+.forge-button-outline {
+  background-color: transparent;
+  color: var(--color-text);
+  font-weight: 500;
+  padding: 0.625rem 1.75rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  border: 1px solid var(--color-border-chrome);
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.forge-button-outline:hover {
+  border-color: var(--color-text-2);
+  background-color: var(--color-surface-3);
+}
+
+/* ── Coral accent line — section labels ─────────────────────── */
+.forge-accent-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.forge-accent-label::before {
+  content: '';
+  display: block;
+  width: 1.5rem;
+  height: 2px;
+  background-color: var(--color-accent);
+  border-radius: 1px;
+  flex-shrink: 0;
+}
+
+/* ── Staggered reveal animations ───────────────────────────── */
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+[data-reveal] {
+  opacity: 0;
+  animation: reveal-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+[data-reveal="0"] { animation-delay: 0ms; }
+[data-reveal="1"] { animation-delay: 80ms; }
+[data-reveal="2"] { animation-delay: 160ms; }
+[data-reveal="3"] { animation-delay: 240ms; }
+[data-reveal="4"] { animation-delay: 320ms; }
+[data-reveal="5"] { animation-delay: 400ms; }
+[data-reveal="6"] { animation-delay: 480ms; }
+
+/* ── Divider ────────────────────────────────────────────────── */
+.forge-divider {
+  height: 1px;
+  background: var(--color-border);
+  margin: 1.5rem 0;
+}
+
+/* ── Status indicators ──────────────────────────────────────── */
+.status-active  { color: var(--color-green); }
+.status-idle    { color: var(--color-text-muted); }
+.status-error   { color: var(--color-red); }
+.status-warning { color: var(--color-amber); }
+
+/* ── Chrome shimmer badge — adapted for light ───────────────── */
+.chrome-badge {
+  background-color: var(--color-surface-3);
+  color: var(--color-text-2);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.6rem;
+  border-radius: 0.375rem;
+  border: 1px solid var(--color-border-2);
+}
+
+/* ── Glow border (kept for compat, now subtle) ──────────────── */
 .glow-border {
   position: relative;
   overflow: hidden;
@@ -158,75 +272,10 @@ body {
   left: -100%;
   width: 100%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--color-chrome), transparent);
+  background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
   transition: left 0.4s ease;
 }
 
 .glow-border:hover::after {
   left: 100%;
 }
-
-/* ── Staggered reveal animations ───────────────────────────── */
-@keyframes reveal-up {
-  from {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-[data-reveal] {
-  opacity: 0;
-  animation: reveal-up 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-[data-reveal="0"] { animation-delay: 0ms; }
-[data-reveal="1"] { animation-delay: 80ms; }
-[data-reveal="2"] { animation-delay: 160ms; }
-[data-reveal="3"] { animation-delay: 240ms; }
-[data-reveal="4"] { animation-delay: 320ms; }
-[data-reveal="5"] { animation-delay: 400ms; }
-[data-reveal="6"] { animation-delay: 480ms; }
-
-/* ── Forge card ─────────────────────────────────────────────── */
-.forge-card {
-  background-color: var(--color-surface-2);
-  border: 1px solid var(--color-border);
-  border-radius: 0.875rem;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.forge-card:hover {
-  border-color: var(--color-border-chrome);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-}
-
-/* ── Chrome shimmer badge ───────────────────────────────────── */
-.chrome-badge {
-  background: linear-gradient(135deg, var(--color-surface-3) 0%, var(--color-border-chrome) 50%, var(--color-surface-3) 100%);
-  color: var(--color-chrome-2);
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 0.2rem 0.6rem;
-  border-radius: 0.25rem;
-  border: 1px solid var(--color-border-chrome);
-}
-
-/* ── Architectural divider ──────────────────────────────────── */
-.forge-divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--color-border-2), transparent);
-  margin: 1.5rem 0;
-}
-
-/* ── Status indicators ──────────────────────────────────────── */
-.status-active  { color: var(--color-green-2); }
-.status-idle    { color: var(--color-chrome-muted); }
-.status-error   { color: var(--color-red-2); }
-.status-warning { color: var(--color-amber-2); }

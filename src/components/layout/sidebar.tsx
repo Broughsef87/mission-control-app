@@ -22,23 +22,24 @@ const navItems = [
   { name: 'Settings',        path: '/settings', icon: Settings        },
 ];
 
-// ── Design tokens (dark industrial)
+// ── Design tokens (Forge OS light)
 const T = {
-  base:          '#111210',
-  surface:       '#1A1917',
-  surface2:      '#232119',
-  surface3:      '#2C2A26',
-  border:        '#302E2A',
-  border2:       '#3E3C38',
-  borderChrome:  '#5A5850',
-  chrome:        '#B8B4AC',
-  chrome2:       '#D4D0C8',
-  chromeMuted:   '#7A7870',
-  text:          '#E8E4DC',
-  text2:         '#A8A49C',
-  textMuted:     '#6A6860',
-  green:         '#6A9A78',
-  amber:         '#B09A6A',
+  base:          '#F2EFEA',
+  surface:       '#FAFAF8',
+  surface2:      '#F5F2EE',
+  surface3:      '#EDE9E4',
+  border:        '#E4E0DA',
+  border2:       '#D8D4CE',
+  borderChrome:  '#C8C4BE',
+  chrome:        '#9B9894',
+  chrome2:       '#6B6862',
+  chromeMuted:   '#B8B4AE',
+  text:          '#1A1917',
+  text2:         '#6B6862',
+  textMuted:     '#9B9894',
+  accent:        '#E07A5F',
+  green:         '#3D7A52',
+  amber:         '#9A7A30',
 };
 
 export default function Sidebar() {
@@ -82,7 +83,7 @@ export default function Sidebar() {
       position: 'sticky',
       top: 0,
       flexShrink: 0,
-      boxShadow: `2px 0 24px rgba(0,0,0,0.5)`,
+      boxShadow: `1px 0 0 ${T.border}`,
       transition: 'width 0.25s cubic-bezier(0.16, 1, 0.3, 1), min-width 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
       overflow: 'hidden',
     }}>
@@ -147,21 +148,21 @@ export default function Sidebar() {
                 padding: collapsed ? '0.625rem' : '0.5rem 0.875rem',
                 borderRadius: '0.5rem',
                 marginBottom: '0.125rem',
-                color: isActive ? T.chrome2 : T.text2,
+                color: isActive ? T.text : T.text2,
                 backgroundColor: isActive ? T.surface3 : 'transparent',
                 textDecoration: 'none',
                 transition: 'all 0.15s ease',
-                borderLeft: !collapsed && isActive ? `2px solid ${T.chrome}` : '2px solid transparent',
+                borderLeft: !collapsed && isActive ? `2px solid ${T.accent}` : '2px solid transparent',
               }}
             >
-              <Icon style={{ width: '1rem', height: '1rem', color: isActive ? T.chrome : T.chromeMuted, flexShrink: 0 }} />
+              <Icon style={{ width: '1rem', height: '1rem', color: isActive ? T.accent : T.chromeMuted, flexShrink: 0 }} />
               {!collapsed && (
-                <span style={{ fontSize: '0.625rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', fontStyle: isActive ? 'italic' : 'normal', whiteSpace: 'nowrap', fontFamily: 'var(--font-mono)' }}>
+                <span style={{ fontSize: '0.625rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', whiteSpace: 'nowrap', fontFamily: 'var(--font-mono)' }}>
                   {item.name}
                 </span>
               )}
               {!collapsed && isActive && (
-                <div style={{ marginLeft: 'auto', width: '4px', height: '4px', borderRadius: '50%', backgroundColor: T.chrome }} />
+                <div style={{ marginLeft: 'auto', width: '4px', height: '4px', borderRadius: '50%', backgroundColor: T.accent }} />
               )}
             </Link>
           );
@@ -169,36 +170,7 @@ export default function Sidebar() {
       </nav>
 
       {/* Footer */}
-      <div style={{ padding: collapsed ? '0.75rem 0.5rem' : '1rem 0.75rem', borderTop: `1px solid ${T.border}`, backgroundColor: T.base }}>
-        {!collapsed && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', marginBottom: '0.75rem' }}>
-            <div style={{
-              width: '2rem', height: '2rem', borderRadius: '0.375rem',
-              backgroundColor: T.surface3, border: `1px solid ${T.borderChrome}`,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: '0.55rem', fontWeight: 700, color: T.chrome2,
-              fontStyle: 'italic', fontFamily: 'var(--font-mono)', flexShrink: 0,
-            }}>
-              DV
-            </div>
-            <div style={{ overflow: 'hidden' }}>
-              <div style={{ fontSize: '0.6rem', fontWeight: 700, color: T.text, textTransform: 'uppercase', whiteSpace: 'nowrap', fontFamily: 'var(--font-mono)' }}>Devroux</div>
-              <div style={{ fontSize: '0.5rem', fontFamily: 'var(--font-mono)', color: T.green, textTransform: 'uppercase', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>Active Session</div>
-            </div>
-          </div>
-        )}
-
-        {!collapsed && (
-          <div style={{ marginBottom: '0.625rem' }}>
-            <div style={{ height: '2px', width: '100%', backgroundColor: T.border2, borderRadius: '999px', overflow: 'hidden' }}>
-              <div style={{ height: '100%', width: '75%', background: `linear-gradient(90deg, ${T.borderChrome}, ${T.chrome})` }} />
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.3rem', fontSize: '0.45rem', fontFamily: 'var(--font-mono)', color: T.textMuted, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-              <span>Core Load</span><span>75%</span>
-            </div>
-          </div>
-        )}
-
+      <div style={{ padding: collapsed ? '0.75rem 0.5rem' : '1rem 0.75rem', borderTop: `1px solid ${T.border}`, backgroundColor: T.surface2 }}>
         <button
           onClick={handleLogout}
           title={collapsed ? 'Logout' : undefined}
@@ -208,20 +180,20 @@ export default function Sidebar() {
             alignItems: 'center',
             justifyContent: collapsed ? 'center' : 'flex-start',
             gap: '0.5rem',
-            padding: collapsed ? '0.5rem' : '0.5rem 0.75rem',
-            borderRadius: '0.375rem',
+            padding: collapsed ? '0.5rem' : '0.5rem 0.875rem',
+            borderRadius: '9999px',
             border: `1px solid ${T.border2}`,
             background: 'transparent',
             color: T.textMuted,
             cursor: 'pointer',
             transition: 'all 0.15s ease',
-            fontSize: '0.55rem',
-            fontWeight: 700,
+            fontSize: '0.6rem',
+            fontWeight: 500,
             textTransform: 'uppercase',
             letterSpacing: '0.1em',
             fontFamily: 'var(--font-mono)',
           }}
-          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#A86058'; (e.currentTarget as HTMLElement).style.borderColor = '#8A4A42'; }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = T.accent; (e.currentTarget as HTMLElement).style.borderColor = T.accent; }}
           onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = T.textMuted; (e.currentTarget as HTMLElement).style.borderColor = T.border2; }}
         >
           <LogOut style={{ width: '0.75rem', height: '0.75rem', flexShrink: 0 }} />
