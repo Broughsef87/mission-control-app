@@ -47,7 +47,8 @@ function LoginForm() {
           onChange={e => setEmail(e.target.value)}
           required
           placeholder="you@forge.com"
-          className="w-full bg-brand-parchment border border-brand-warm-gray rounded-lg p-3 text-sm text-brand-ink focus:outline-none focus:border-brand-gold transition-colors font-mono uppercase tracking-tight"
+          style={{ backgroundColor: '#2C2A26', color: '#E8E4DC', borderColor: '#3E3C38', caretColor: '#D4D0C8' }}
+          className="w-full border rounded-lg p-3 text-sm focus:outline-none transition-colors font-mono tracking-tight placeholder:text-[#5A5850]"
         />
       </div>
 
@@ -61,12 +62,13 @@ function LoginForm() {
           onChange={e => setPassword(e.target.value)}
           required
           placeholder="••••••••"
-          className="w-full bg-brand-parchment border border-brand-warm-gray rounded-lg p-3 text-sm text-brand-ink focus:outline-none focus:border-brand-gold transition-colors font-mono"
+          style={{ backgroundColor: '#2C2A26', color: '#E8E4DC', borderColor: '#3E3C38', caretColor: '#D4D0C8' }}
+          className="w-full border rounded-lg p-3 text-sm focus:outline-none transition-colors font-mono placeholder:text-[#5A5850]"
         />
       </div>
 
       {error && (
-        <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-[11px] font-mono text-red-600 uppercase">
+        <div className="p-3 rounded-lg text-[11px] font-mono uppercase" style={{ backgroundColor: '#2A1A18', borderColor: '#8A4A42', border: '1px solid', color: '#A86058' }}>
           {error}
         </div>
       )}
@@ -84,7 +86,7 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen bg-brand-parchment bg-forge-grid flex items-center justify-center p-6">
+    <div className="min-h-screen bg-forge-grid flex items-center justify-center p-6">
       <div data-reveal="0" className="w-full max-w-sm">
         {/* Logo */}
         <div className="flex items-center gap-3 mb-10 justify-center">
