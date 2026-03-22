@@ -6,6 +6,19 @@
 -- Enable UUID extension
 create extension if not exists "uuid-ossp";
 
+-- ── CLEAN SLATE (drop in reverse dependency order) ───────────
+drop table if exists token_logs        cascade;
+drop table if exists agent_logs        cascade;
+drop table if exists agent_status      cascade;
+drop table if exists daily_briefings   cascade;
+drop table if exists platform_metrics  cascade;
+drop table if exists content_items     cascade;
+drop table if exists notifications     cascade;
+drop table if exists revenue           cascade;
+drop table if exists tasks             cascade;
+drop table if exists clients           cascade;
+drop table if exists projects          cascade;
+
 -- ── PROJECTS ─────────────────────────────────────────────────
 create table if not exists projects (
   id          uuid primary key default uuid_generate_v4(),
