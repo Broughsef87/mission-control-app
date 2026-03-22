@@ -1,6 +1,7 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 let _client: SupabaseClient | null = null;
+let _adminClient: SupabaseClient | null = null;
 
 function getClient(): SupabaseClient | null {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -10,18 +11,33 @@ function getClient(): SupabaseClient | null {
   return _client;
 }
 
-// Proxy that returns null when env vars are missing (build-time safe)
-export const supabase = new Proxy({} as SupabaseClient, {
-  get(_target, prop) {
-    const client = getClient();
-    if (!client) {
-      // Return a no-op function that resolves to empty data
-      return () => Promise.resolve({ data: null, error: new Error('Supabase not configured') });
+function getAdminClient(): SupabaseClient | null {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  // Use service role key (server-side only) — bypasses RLS for API routes
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !key) return null;
+  if (!_adminClient) _adminClient = createClient(url, key, { auth: { persistSession: false } });
+  return _adminClient;
+}
+
+function makeProxy(clientFn: () => SupabaseClient | null) {
+  return new Proxy({} as SupabaseClient, {
+    get(_target, prop) {
+      const client = clientFn();
+      if (!client) {
+        return () => Promise.resolve({ data: null, error: new Error('Supabase not configured') });
+      }
+      const value = (client as any)[prop];
+      return typeof value === 'function' ? value.bind(client) : value;
     }
-    const value = (client as any)[prop];
-    return typeof value === 'function' ? value.bind(client) : value;
-  }
-});
+  });
+}
+
+// Anon client — used for browser/auth flows
+export const supabase = makeProxy(getClient);
+
+// Admin client — uses service role key, bypasses RLS, server-side API routes only
+export const supabaseAdmin = makeProxy(getAdminClient);
 
 // Types matching our schema
 export interface AgentStatus {

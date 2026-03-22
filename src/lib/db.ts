@@ -3,7 +3,7 @@
  * All pages and API routes import from here instead of calling supabase directly.
  */
 
-import { supabase } from './supabase';
+import { supabaseAdmin as supabase } from './supabase';
 
 // ── PROJECTS ────────────────────────────────────────────────
 
