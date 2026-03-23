@@ -42,6 +42,29 @@ const T = {
   amber:         '#9A7A30',
 };
 
+// ── Dark sidebar tokens
+const D = {
+  bg:            '#111110',
+  bgFooter:      '#0A0A09',
+  border:        '#1E1E1C',
+  navDefault:    '#9A9790',
+  navActive:     '#F5F2EE',
+  navActiveBg:   'rgba(224, 122, 95, 0.12)',
+  navActiveBorder: '#E07A5F',
+  iconActive:    '#E07A5F',
+  iconDefault:   '#5A5856',
+  navLabel:      '#3A3836',
+  logoText:      '#F5F2EE',
+  logoSub:       '#4A4846',
+  toggleBorder:  '#2A2826',
+  toggleColor:   '#5A5856',
+  logoutColor:   '#5A5856',
+  logoutBorder:  '#2A2826',
+  logoutHoverColor:  '#E07A5F',
+  logoutHoverBorder: '#E07A5F',
+  accent:        '#E07A5F',
+};
+
 export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
@@ -75,15 +98,15 @@ export default function Sidebar() {
     <aside style={{
       width: w,
       minWidth: w,
-      backgroundColor: T.surface,
-      borderRight: `1px solid ${T.border}`,
+      backgroundColor: '#111110',
+      borderRight: `1px solid ${D.border}`,
       display: 'flex',
       flexDirection: 'column',
       height: '100vh',
       position: 'sticky',
       top: 0,
       flexShrink: 0,
-      boxShadow: `1px 0 0 ${T.border}`,
+      boxShadow: '2px 0 8px rgba(0,0,0,0.15)',
       transition: 'width 0.25s cubic-bezier(0.16, 1, 0.3, 1), min-width 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
       overflow: 'hidden',
     }}>
@@ -91,15 +114,15 @@ export default function Sidebar() {
       {/* Logo + Toggle */}
       <div style={{
         padding: collapsed ? '1.25rem 1rem' : '1.5rem 1.5rem 1rem',
-        borderBottom: `1px solid ${T.border}`,
+        borderBottom: `1px solid ${D.border}`,
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: collapsed ? 'center' : 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', overflow: 'hidden' }}>
             <ForgeLogo className="w-8 h-8 shrink-0" />
             {!collapsed && (
               <div style={{ overflow: 'hidden' }}>
-                <div className="forge-heading" style={{ fontSize: '1rem', whiteSpace: 'nowrap', color: T.text }}>Forge OS</div>
-                <div style={{ fontSize: '0.5rem', fontFamily: 'var(--font-mono)', color: T.chromeMuted, textTransform: 'uppercase', letterSpacing: '0.2em', whiteSpace: 'nowrap' }}>
+                <div className="forge-heading" style={{ fontSize: '1rem', whiteSpace: 'nowrap', color: D.logoText }}>Forge OS</div>
+                <div style={{ fontSize: '0.5rem', fontFamily: 'var(--font-mono)', color: D.logoSub, textTransform: 'uppercase', letterSpacing: '0.2em', whiteSpace: 'nowrap' }}>
                   Executive Terminal
                 </div>
               </div>
@@ -108,7 +131,7 @@ export default function Sidebar() {
           {!collapsed && (
             <button
               onClick={toggleCollapsed}
-              style={{ padding: '0.25rem', borderRadius: '0.375rem', border: `1px solid ${T.border2}`, color: T.chromeMuted, cursor: 'pointer', background: 'transparent', display: 'flex', alignItems: 'center' }}
+              style={{ padding: '0.25rem', borderRadius: '0.375rem', border: `1px solid ${D.toggleBorder}`, color: D.toggleColor, cursor: 'pointer', background: 'transparent', display: 'flex', alignItems: 'center' }}
             >
               <ChevronLeft style={{ width: '0.875rem', height: '0.875rem' }} />
             </button>
@@ -118,7 +141,7 @@ export default function Sidebar() {
         {collapsed && (
           <button
             onClick={toggleCollapsed}
-            style={{ marginTop: '0.75rem', width: '100%', padding: '0.25rem', borderRadius: '0.375rem', border: `1px solid ${T.border2}`, color: T.chromeMuted, cursor: 'pointer', background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            style={{ marginTop: '0.75rem', width: '100%', padding: '0.25rem', borderRadius: '0.375rem', border: `1px solid ${D.toggleBorder}`, color: D.toggleColor, cursor: 'pointer', background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >
             <ChevronRight style={{ width: '0.875rem', height: '0.875rem' }} />
           </button>
@@ -128,7 +151,7 @@ export default function Sidebar() {
       {/* Nav */}
       <nav style={{ padding: collapsed ? '0.75rem 0.5rem' : '1rem 0.75rem', flex: 1, overflowY: 'auto' }}>
         {!collapsed && (
-          <div style={{ fontSize: '0.45rem', fontWeight: 700, color: T.textMuted, textTransform: 'uppercase', letterSpacing: '0.3em', marginBottom: '0.75rem', marginLeft: '0.5rem', fontFamily: 'var(--font-mono)' }}>
+          <div style={{ fontSize: '0.45rem', fontWeight: 700, color: D.navLabel, textTransform: 'uppercase', letterSpacing: '0.3em', marginBottom: '0.75rem', marginLeft: '0.5rem', fontFamily: 'var(--font-mono)' }}>
             Navigation
           </div>
         )}
@@ -148,21 +171,21 @@ export default function Sidebar() {
                 padding: collapsed ? '0.625rem' : '0.5rem 0.875rem',
                 borderRadius: '0.5rem',
                 marginBottom: '0.125rem',
-                color: isActive ? T.text : T.text2,
-                backgroundColor: isActive ? T.surface3 : 'transparent',
+                color: isActive ? D.navActive : D.navDefault,
+                backgroundColor: isActive ? D.navActiveBg : 'transparent',
                 textDecoration: 'none',
                 transition: 'all 0.15s ease',
-                borderLeft: !collapsed && isActive ? `2px solid ${T.accent}` : '2px solid transparent',
+                borderLeft: !collapsed && isActive ? `2px solid ${D.navActiveBorder}` : '2px solid transparent',
               }}
             >
-              <Icon style={{ width: '1rem', height: '1rem', color: isActive ? T.accent : T.chromeMuted, flexShrink: 0 }} />
+              <Icon style={{ width: '1rem', height: '1rem', color: isActive ? D.iconActive : D.iconDefault, flexShrink: 0 }} />
               {!collapsed && (
                 <span style={{ fontSize: '0.625rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', whiteSpace: 'nowrap', fontFamily: 'var(--font-mono)' }}>
                   {item.name}
                 </span>
               )}
               {!collapsed && isActive && (
-                <div style={{ marginLeft: 'auto', width: '4px', height: '4px', borderRadius: '50%', backgroundColor: T.accent }} />
+                <div style={{ marginLeft: 'auto', width: '4px', height: '4px', borderRadius: '50%', backgroundColor: D.accent }} />
               )}
             </Link>
           );
@@ -170,7 +193,7 @@ export default function Sidebar() {
       </nav>
 
       {/* Footer */}
-      <div style={{ padding: collapsed ? '0.75rem 0.5rem' : '1rem 0.75rem', borderTop: `1px solid ${T.border}`, backgroundColor: T.surface2 }}>
+      <div style={{ padding: collapsed ? '0.75rem 0.5rem' : '1rem 0.75rem', borderTop: `1px solid ${D.border}`, backgroundColor: D.bgFooter }}>
         <button
           onClick={handleLogout}
           title={collapsed ? 'Logout' : undefined}
@@ -182,9 +205,9 @@ export default function Sidebar() {
             gap: '0.5rem',
             padding: collapsed ? '0.5rem' : '0.5rem 0.875rem',
             borderRadius: '9999px',
-            border: `1px solid ${T.border2}`,
+            border: `1px solid ${D.logoutBorder}`,
             background: 'transparent',
-            color: T.textMuted,
+            color: D.logoutColor,
             cursor: 'pointer',
             transition: 'all 0.15s ease',
             fontSize: '0.6rem',
@@ -193,8 +216,8 @@ export default function Sidebar() {
             letterSpacing: '0.1em',
             fontFamily: 'var(--font-mono)',
           }}
-          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = T.accent; (e.currentTarget as HTMLElement).style.borderColor = T.accent; }}
-          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = T.textMuted; (e.currentTarget as HTMLElement).style.borderColor = T.border2; }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = D.logoutHoverColor; (e.currentTarget as HTMLElement).style.borderColor = D.logoutHoverBorder; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = D.logoutColor; (e.currentTarget as HTMLElement).style.borderColor = D.logoutBorder; }}
         >
           <LogOut style={{ width: '0.75rem', height: '0.75rem', flexShrink: 0 }} />
           {!collapsed && 'Logout'}
