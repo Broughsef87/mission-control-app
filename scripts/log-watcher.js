@@ -2,7 +2,7 @@
 /**
  * log-watcher.js — OpenClaw → Mission Control live sync
  *
- * Watches .openclaw/agents/*/sessions/*.jsonl files for new lines,
+ * Watches .openclaw/agents/{agent}/sessions/{id}.jsonl files for new lines,
  * parses agent activity (model calls, tool uses, token costs) and
  * pushes everything to Supabase in real-time.
  *

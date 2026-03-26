@@ -267,6 +267,25 @@ export async function upsertMetric(platform: string, metric_key: string, metric_
   if (error) throw error;
 }
 
+// ── DAILY LOGS ───────────────────────────────────────────────
+
+export async function getDailyLogs(limit = 60) {
+  const { data, error } = await db()
+    .from('daily_logs')
+    .select('*')
+    .order('log_date', { ascending: false })
+    .limit(limit);
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function upsertDailyLog(log_date: string, content: string) {
+  const { error } = await db()
+    .from('daily_logs')
+    .upsert({ log_date, content, synced_at: new Date().toISOString() }, { onConflict: 'log_date' });
+  if (error) throw error;
+}
+
 // ── DAILY BRIEFING ───────────────────────────────────────────
 
 export async function getLatestBriefing() {

@@ -44,7 +44,7 @@ export async function GET() {
 
     // Fetch agent statuses from Supabase
     const { data: agentRows } = await supabase
-      .from('agent_statuses')
+      .from('agent_status')
       .select('agent_name, status, last_seen');
 
     const oneHourAgo = Date.now() - 1000 * 60 * 60;

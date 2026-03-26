@@ -7,7 +7,7 @@ import { createClient } from '@supabase/supabase-js';
 import ForgeLogo from '../ForgeLogo';
 import {
   LayoutDashboard, Building2, Users, DollarSign,
-  Wrench, FileVideo, Settings, ChevronLeft, ChevronRight, LogOut, Briefcase
+  Wrench, FileVideo, Settings, ChevronLeft, ChevronRight, LogOut, Briefcase, BookOpen
 } from 'lucide-react';
 
 const navItems = [
@@ -18,6 +18,7 @@ const navItems = [
   { name: 'Projects',        path: '/projects', icon: Briefcase       },
   { name: 'Agency CRM',      path: '/crm',      icon: Users           },
   { name: 'Content',         path: '/content',  icon: FileVideo       },
+  { name: 'Daily Logs',      path: '/logs',     icon: BookOpen        },
   { name: 'Tools',           path: '/tools',    icon: Wrench          },
   { name: 'Settings',        path: '/settings', icon: Settings        },
 ];
