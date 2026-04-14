@@ -1,180 +1,291 @@
-import { getProjects, getAgentStatuses, getRevenueMTD } from '@/lib/db';
-import MorningBriefing from '@/components/MorningBriefing';
-import PlatformMetrics from '@/components/PlatformMetrics';
-import LiveAgentFeed from '@/components/LiveAgentFeed';
-import AnimatedOffice from '@/components/AnimatedOffice';
+import { getProjects, getPendingApprovals, getRevenueMTD, getAgentLogs } from '@/lib/db';
+import { getTodayCheckinWithFallback } from '@/lib/parseCheckin';
+import ApprovalsPanel from '@/components/ApprovalsPanel';
 import Link from 'next/link';
+import { formatDistanceToNow } from 'date-fns';
 
-const systemVitals = [
-  { name: 'API Latency', status: 'Optimal', value: '72ms', pct: '90%' },
-  { name: 'VectorDB', status: 'Healthy', value: '1.2M chunks', pct: '80%' },
-];
+export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const [projects, agentStatuses, revenueMTD] = await Promise.all([
+  const today = new Date().toISOString().split('T')[0];
+  const dateLabel = new Date().toLocaleDateString('en-US', {
+    weekday: 'long', month: 'long', day: 'numeric',
+  });
+
+  const [projects, revenueMTD, agentLogs, approvals] = await Promise.all([
     getProjects().catch(() => []),
-    getAgentStatuses().catch(() => []),
     getRevenueMTD().catch(() => ({ total: 0, byCategory: {} })),
+    getAgentLogs(12).catch(() => []),
+    getPendingApprovals().catch(() => []),
   ]);
 
-  const activeAgents = agentStatuses.filter((a: any) => a.status === 'Working').length;
-  const inProgressProjects = projects.filter((p: any) => p.status === 'In Progress').length;
+  const { checkin, usingFallback, fallbackDate } = getTodayCheckinWithFallback();
+
+  const inProgressProjects = (projects as any[]).filter(p => p.status === 'In Progress');
+  const missingCheckin = !checkin.found;
+  const needsAttentionCount = (approvals as any[]).length + (missingCheckin ? 1 : 0);
 
   return (
-    <div className="space-y-8 max-w-7xl mx-auto">
-      {/* Header */}
-      <header data-reveal="0" className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-brand-warm-gray pb-8">
+    <div className="space-y-10 max-w-5xl mx-auto">
+
+      {/* ── Header ─────────────────────────────────────────────── */}
+      <header className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-brand-warm-gray pb-6">
         <div>
-          <h1 className="forge-heading text-4xl sm:text-5xl lg:text-6xl mb-2">
+          <h1 className="forge-heading text-4xl sm:text-5xl mb-1">
             Mission <span className="text-brand-gold">Control</span>
           </h1>
-          <p className="text-brand-medium-gray font-mono text-xs uppercase tracking-[0.3em]">
-            Forge OS Command & Control Center // v2.4.0
-          </p>
+          <p className="text-brand-medium-gray font-mono text-xs uppercase tracking-[0.25em]">{dateLabel}</p>
         </div>
-        <div className="flex items-center gap-3 bg-brand-parchment border border-brand-warm-gray px-4 py-2 rounded-xl self-start">
-          <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></div>
-          <span className="text-[10px] text-brand-ink font-bold uppercase tracking-widest">
-            {activeAgents} Agents Active
-          </span>
+        <div className="flex items-center gap-3 flex-wrap">
+          {checkin.found && !usingFallback ? (
+            <span className="flex items-center gap-1.5 text-[9px] font-mono font-bold text-green-600 uppercase tracking-widest">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block" />
+              Check-in found
+            </span>
+          ) : usingFallback ? (
+            <span className="flex items-center gap-1.5 text-[9px] font-mono font-bold text-amber-600 uppercase tracking-widest">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 inline-block" />
+              Using {fallbackDate} priorities
+            </span>
+          ) : (
+            <span className="flex items-center gap-1.5 text-[9px] font-mono font-bold text-amber-600 uppercase tracking-widest">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse inline-block" />
+              No check-in today
+            </span>
+          )}
+          {(approvals as any[]).length > 0 && (
+            <Link
+              href="/approvals"
+              className="flex items-center gap-1.5 bg-brand-gold text-white text-[9px] font-mono font-bold uppercase tracking-widest px-3 py-1.5 rounded-full hover:opacity-90 transition-opacity"
+            >
+              {(approvals as any[]).length} approval{(approvals as any[]).length !== 1 ? 's' : ''} pending
+            </Link>
+          )}
         </div>
       </header>
 
-      {/* Morning Briefing */}
-      <div data-reveal="1">
-        <MorningBriefing />
-      </div>
+      {/* ── TODAY ──────────────────────────────────────────────── */}
+      <section>
+        <div className="forge-label mb-4">Today</div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-      {/* KPI Strip */}
-      <div data-reveal="2" className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {[
-          { label: 'Revenue MTD', value: `$${revenueMTD.total.toLocaleString()}`, sub: 'Goal: $1M/yr', color: 'text-brand-gold' },
-          { label: 'Active Agents', value: `${activeAgents}/${agentStatuses.length}`, sub: 'Deployed', color: 'text-green-600' },
-          { label: 'Live Projects', value: String(inProgressProjects), sub: 'In progress', color: 'text-brand-ink' },
-          { label: 'API Latency', value: '72ms', sub: 'Nominal', color: 'text-brand-ink' },
-        ].map((kpi) => (
-          <div key={kpi.label} className="forge-card rounded-2xl p-4">
-            <div className="text-[9px] font-mono text-brand-medium-gray uppercase tracking-widest mb-1">{kpi.label}</div>
-            <div className={`text-2xl font-black font-mono ${kpi.color}`}>{kpi.value}</div>
-            <div className="text-[9px] font-mono text-brand-medium-gray uppercase mt-0.5">{kpi.sub}</div>
+          {/* Priorities + Blocker */}
+          <div className="forge-panel">
+            <div className="flex items-center justify-between mb-3">
+              <div className="forge-label">
+                {usingFallback ? `From ${fallbackDate} — First Move` : "This Session's Focus"}
+              </div>
+              {usingFallback && (
+                <span className="text-[8px] font-mono text-amber-600 uppercase tracking-widest">No check-in today</span>
+              )}
+            </div>
+
+            {checkin.found && checkin.priorities.length > 0 ? (
+              <ol className="space-y-2.5">
+                {checkin.priorities.map((p, i) => (
+                  <li key={i} className="flex gap-3 items-start">
+                    <span className="text-[10px] font-mono font-bold text-brand-gold shrink-0 w-4 pt-0.5">{i + 1}.</span>
+                    <span className="text-sm text-brand-ink leading-snug">{p}</span>
+                  </li>
+                ))}
+              </ol>
+            ) : (
+              <p className="text-xs text-brand-medium-gray italic">
+                No priorities found. Create{' '}
+                <code className="text-[10px] bg-brand-warm-gray px-1 py-0.5 rounded">
+                  workspace/memory/checkins/{today}.md
+                </code>
+              </p>
+            )}
+
+            {checkin.blocker && (
+              <div className="mt-4 pt-4 border-t border-brand-warm-gray">
+                <div className="forge-label mb-1 text-red-500">Blocker</div>
+                <p className="text-xs text-brand-slate italic">{checkin.blocker}</p>
+              </div>
+            )}
           </div>
-        ))}
-      </div>
 
-      {/* Main Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Left Column */}
-        <div className="lg:col-span-8 space-y-8">
+          {/* KPI Snapshot */}
+          <div className="forge-panel">
+            <div className="forge-label mb-3">KPI Snapshot</div>
 
-          {/* Agent HQ Visualization */}
-          <section data-reveal="3" className="forge-panel !p-0 overflow-hidden relative group">
-            <div className="absolute top-4 left-4 z-10">
-              <h2 className="forge-heading text-lg">Agent HQ</h2>
-              <p className="text-[10px] text-brand-medium-gray font-mono uppercase tracking-widest">Real-time Visualization</p>
-            </div>
-            <div className="aspect-video w-full bg-brand-ivory">
-              <AnimatedOffice />
-            </div>
-          </section>
-
-          {/* Platform Metrics */}
-          <section data-reveal="4">
-            <PlatformMetrics />
-          </section>
-
-          {/* Active Projects */}
-          <section data-reveal="5">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="forge-heading text-2xl">Active Projects</h2>
-              <Link href="/projects" className="text-[10px] font-bold uppercase tracking-widest text-brand-gold hover:text-brand-ink transition-colors">
-                View All →
-              </Link>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {(projects as any[]).filter(p => p.status === 'In Progress').slice(0, 4).map((project: any) => (
-                <div key={project.id} className="forge-panel group cursor-pointer relative overflow-hidden !rounded-2xl">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-brand-gold/5 blur-3xl -mr-16 -mt-16 group-hover:bg-brand-gold/10 transition-colors" />
-                  <div className="relative z-10">
-                    <div className="flex justify-between items-start mb-3">
-                      <h3 className="forge-heading text-base group-hover:text-brand-gold transition-colors">{project.name}</h3>
-                      <span className="text-[9px] font-bold uppercase px-2 py-0.5 border border-brand-gold text-brand-gold bg-brand-gold/5">
-                        {project.status}
-                      </span>
-                    </div>
-                    {project.description && (
-                      <p className="text-xs text-brand-slate font-sans mb-4 line-clamp-2 italic">{project.description}</p>
-                    )}
-                    <div className="flex items-center justify-between pt-3 border-t border-brand-warm-gray">
-                      <span className="text-[9px] font-mono text-brand-medium-gray uppercase">{project.client ?? 'Internal'}</span>
-                      {project.deadline && (
-                        <span className="text-[9px] font-mono text-brand-medium-gray">Due {project.deadline}</span>
-                      )}
-                    </div>
+            {checkin.found && checkin.kpi.length > 0 ? (
+              <div className="space-y-2">
+                {checkin.kpi.map((item, i) => (
+                  <div key={i} className="flex justify-between items-start py-0.5 gap-3">
+                    <span className="text-[11px] font-mono text-brand-slate">{item.key}</span>
+                    <span className="text-[11px] font-mono font-bold tabular-nums text-brand-ink text-right shrink-0">{item.value}</span>
                   </div>
-                </div>
-              ))}
-            </div>
-          </section>
+                ))}
+              </div>
+            ) : (
+              <div className="space-y-2 text-[11px] font-mono text-brand-medium-gray">
+                <div className="flex justify-between"><span>Content posts</span><span>—</span></div>
+                <div className="flex justify-between"><span>Outreach contacts</span><span>—</span></div>
+                <div className="flex justify-between"><span>Revenue conversations</span><span>—</span></div>
+                <p className="text-[10px] italic pt-1">Add a Numbers section to your check-in to populate this.</p>
+              </div>
+            )}
+
+            {checkin.revenueNote && (
+              <div className="mt-4 pt-4 border-t border-brand-warm-gray">
+                <div className="forge-label mb-1 text-brand-gold">Revenue Note</div>
+                <p className="text-xs text-brand-slate italic">{checkin.revenueNote}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* ── NEEDS ATTENTION ────────────────────────────────────── */}
+      <section>
+        <div className="flex items-center gap-3 mb-4">
+          <div className="forge-label">Needs Attention</div>
+          {needsAttentionCount === 0 && (
+            <span className="text-[9px] font-mono text-green-600 font-bold uppercase tracking-widest">— All clear</span>
+          )}
         </div>
 
-        {/* Right Column */}
-        <div data-reveal="4" className="lg:col-span-4 space-y-8">
-          {/* Live Agent Feed */}
-          <LiveAgentFeed />
-
-          {/* System Vitals */}
-          <section className="forge-panel">
-            <h2 className="forge-heading text-lg mb-6">System Vitals</h2>
-            <div className="space-y-4">
-              {/* Revenue progress */}
-              <div className="flex justify-between items-center group">
-                <div>
-                  <div className="text-[10px] font-bold text-brand-slate uppercase tracking-widest">Forge Revenue</div>
-                  <div className="text-xs font-mono text-brand-medium-gray">Tracking</div>
-                </div>
-                <div className="text-right">
-                  <div className="text-lg font-bold text-brand-ink font-mono">${revenueMTD.total.toLocaleString()}</div>
-                  <div className="h-0.5 w-24 bg-brand-warm-gray mt-1 overflow-hidden">
-                    <div className="h-full bg-brand-gold" style={{ width: `${Math.min(100, (revenueMTD.total / 83333) * 100)}%` }} />
-                  </div>
-                </div>
-              </div>
-              {systemVitals.map(vital => (
-                <div key={vital.name} className="flex justify-between items-center group">
-                  <div>
-                    <div className="text-[10px] font-bold text-brand-slate uppercase tracking-widest group-hover:text-brand-ink transition-colors">{vital.name}</div>
-                    <div className="text-xs font-mono text-brand-medium-gray">{vital.status}</div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-lg font-bold text-brand-ink font-mono">{vital.value}</div>
-                    <div className="h-0.5 w-full bg-brand-warm-gray mt-1 overflow-hidden">
-                      <div className="h-full bg-brand-gold" style={{ width: vital.pct }} />
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <Link href="/tools" className="forge-button mt-8 block text-center">
-              Open Full Diagnostics
-            </Link>
-          </section>
-
-          {/* Active Sprint Badge */}
-          <section className="forge-panel border-dashed border-brand-warm-gray bg-brand-parchment">
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-brand-gold/10 border border-brand-gold/20 rounded-xl">
-                <svg className="w-5 h-5 text-brand-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
+        {missingCheckin && (
+          <div className="forge-panel mb-4" style={{ borderColor: 'var(--color-amber)', backgroundColor: 'var(--color-amber-bg)' }}>
+            <div className="flex items-start gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0 mt-1.5" />
               <div>
-                <div className="text-xs font-bold text-brand-ink uppercase italic">Active Sprint</div>
-                <div className="text-[10px] text-brand-medium-gray font-mono">24H AUTONOMOUS MODE</div>
+                <div className="text-xs font-bold text-amber-800 mb-0.5">No daily check-in for {today}</div>
+                <p className="text-[11px] text-amber-700 italic">
+                  Create <code className="bg-amber-100 px-1 py-0.5 rounded text-[10px]">workspace/memory/checkins/{today}.md</code>{' '}
+                  to populate priorities, KPIs, and blockers.
+                </p>
               </div>
             </div>
-          </section>
+          </div>
+        )}
+
+        <ApprovalsPanel />
+      </section>
+
+      {/* ── BUSINESS MOVEMENT ──────────────────────────────────── */}
+      <section>
+        <div className="forge-label mb-4">Business Movement</div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {[
+            { label: 'Revenue MTD',    value: `$${(revenueMTD as any).total.toLocaleString()}`, sub: 'Goal: $1M/yr', color: 'text-brand-gold' },
+            { label: 'Active Clients', value: String((projects as any[]).filter((p: any) => p.client && p.client !== 'Internal' && p.status === 'In Progress').length), sub: 'Forge Agency', color: 'text-brand-ink' },
+            { label: 'In Progress',    value: String(inProgressProjects.length), sub: 'Projects', color: 'text-brand-ink' },
+            { label: 'Approvals',      value: String((approvals as any[]).length || '—'), sub: 'Pending review', color: (approvals as any[]).length > 0 ? 'text-amber-600' : 'text-brand-ink' },
+          ].map(kpi => (
+            <div key={kpi.label} className="forge-card rounded-2xl p-4">
+              <div className="forge-label mb-1">{kpi.label}</div>
+              <div className={`text-2xl font-black font-mono tabular-nums ${kpi.color}`}>{kpi.value}</div>
+              <div className="text-[9px] font-mono text-brand-medium-gray uppercase mt-0.5">{kpi.sub}</div>
+            </div>
+          ))}
         </div>
-      </div>
+
+        {/* Wins + Decisions from most recent EOD check-in */}
+        {(checkin.wins.length > 0 || checkin.decisions.length > 0) && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            {checkin.wins.length > 0 && (
+              <div className="forge-panel">
+                <div className="forge-label mb-3 text-green-600">
+                  {usingFallback ? `Wins — ${fallbackDate}` : "Today's Wins"}
+                </div>
+                <ul className="space-y-2">
+                  {checkin.wins.map((w, i) => (
+                    <li key={i} className="flex gap-2 items-start text-xs text-brand-ink">
+                      <span className="text-green-500 shrink-0">✓</span>{w}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {checkin.decisions.length > 0 && (
+              <div className="forge-panel">
+                <div className="forge-label mb-3">
+                  {usingFallback ? `Decisions — ${fallbackDate}` : 'Decisions Made'}
+                </div>
+                <ul className="space-y-2">
+                  {checkin.decisions.map((d, i) => (
+                    <li key={i} className="flex gap-2 items-start text-xs text-brand-ink">
+                      <span className="text-brand-gold shrink-0">→</span>{d}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
+      </section>
+
+      {/* ── ACTIVE PROJECTS ────────────────────────────────────── */}
+      {inProgressProjects.length > 0 && (
+        <section>
+          <div className="flex items-center justify-between mb-4">
+            <div className="forge-label">Active Projects</div>
+            <Link href="/projects" className="text-[9px] font-mono font-bold text-brand-gold uppercase tracking-widest hover:text-brand-ink transition-colors">
+              View All →
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {inProgressProjects.slice(0, 6).map((project: any) => (
+              <div key={project.id} className="forge-panel">
+                <div className="flex justify-between items-start gap-2 mb-2">
+                  <h3 className="forge-heading text-sm leading-tight">{project.name}</h3>
+                  <span className="text-[8px] font-bold uppercase px-2 py-0.5 border border-brand-gold text-brand-gold bg-brand-gold/5 rounded shrink-0">
+                    {project.status}
+                  </span>
+                </div>
+                {project.description && (
+                  <p className="text-[11px] text-brand-slate italic line-clamp-2 mb-3">{project.description}</p>
+                )}
+                <div className="flex items-center justify-between pt-3 border-t border-brand-warm-gray">
+                  <span className="text-[9px] font-mono text-brand-medium-gray uppercase">{project.client ?? 'Internal'}</span>
+                  {project.deadline && (
+                    <span className="text-[9px] font-mono text-brand-medium-gray">Due {project.deadline}</span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ── RECENT EXECUTION ───────────────────────────────────── */}
+      {(agentLogs as any[]).length > 0 && (
+        <section>
+          <div className="flex items-center justify-between mb-4">
+            <div className="forge-label">Recent Execution</div>
+            <Link href="/agents" className="text-[9px] font-mono font-bold text-brand-gold uppercase tracking-widest hover:text-brand-ink transition-colors">
+              View All →
+            </Link>
+          </div>
+          <div className="forge-panel !p-0 overflow-hidden">
+            {(agentLogs as any[]).map((log: any, i: number) => (
+              <div
+                key={log.id ?? i}
+                className="flex items-start gap-4 px-5 py-3 border-b border-brand-warm-gray last:border-0 hover:bg-brand-parchment transition-colors"
+              >
+                <div className="text-[9px] font-mono text-brand-medium-gray shrink-0 w-16 pt-0.5 tabular-nums">
+                  {formatDistanceToNow(new Date(log.created_at), { addSuffix: true })}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className="text-[9px] font-mono font-bold text-brand-gold uppercase mr-1.5">{log.agent_name}</span>
+                  <span className="text-[11px] text-brand-slate">
+                    {[log.action, log.path].filter(Boolean).join(' — ')}
+                  </span>
+                </div>
+                {Number(log.cost) > 0 && (
+                  <div className="text-[9px] font-mono text-brand-medium-gray shrink-0 tabular-nums">
+                    ${Number(log.cost).toFixed(4)}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
     </div>
   );
 }
