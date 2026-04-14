@@ -1,5 +1,6 @@
 import { getProjects, getPendingApprovals, getRevenueMTD, getAgentLogs } from '@/lib/db';
 import { getTodayCheckinWithFallback } from '@/lib/parseCheckin';
+import { getCronHealth } from '@/lib/cronHealth';
 import ApprovalsPanel from '@/components/ApprovalsPanel';
 import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
@@ -18,6 +19,8 @@ export default async function Home() {
     getAgentLogs(12).catch(() => []),
     getPendingApprovals().catch(() => []),
   ]);
+
+  const cronJobs = getCronHealth();
 
   const { checkin, usingFallback, fallbackDate } = getTodayCheckinWithFallback();
 
@@ -53,6 +56,12 @@ export default async function Home() {
               No check-in today
             </span>
           )}
+          <Link
+            href="/checkin"
+            className="flex items-center gap-1.5 border border-brand-warm-gray text-brand-slate text-[9px] font-mono font-bold uppercase tracking-widest px-3 py-1.5 rounded-full hover:border-brand-gold hover:text-brand-gold transition-colors"
+          >
+            + Check-in
+          </Link>
           {(approvals as any[]).length > 0 && (
             <Link
               href="/approvals"
@@ -247,6 +256,61 @@ export default async function Home() {
                 </div>
               </div>
             ))}
+          </div>
+        </section>
+      )}
+
+      {/* ── CRON HEALTH ────────────────────────────────────────── */}
+      {cronJobs.length > 0 && (
+        <section>
+          <div className="flex items-center justify-between mb-4">
+            <div className="forge-label">Agent Run Health</div>
+            <span className="text-[9px] font-mono text-brand-medium-gray">
+              {cronJobs.filter(j => j.lastRunStatus === 'ok').length}/{cronJobs.length} OK
+            </span>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {cronJobs.map(job => {
+              const statusColor =
+                !job.enabled ? 'text-brand-medium-gray' :
+                job.lastRunStatus === 'ok' ? 'text-green-600' :
+                job.lastRunStatus === 'error' ? 'text-red-500' :
+                job.lastRunStatus === 'never' ? 'text-amber-500' :
+                'text-brand-medium-gray';
+              const dot =
+                !job.enabled ? 'bg-brand-medium-gray' :
+                job.lastRunStatus === 'ok' ? 'bg-green-500' :
+                job.lastRunStatus === 'error' ? 'bg-red-500 animate-pulse' :
+                job.lastRunStatus === 'never' ? 'bg-amber-400' :
+                'bg-brand-medium-gray';
+              return (
+                <div key={job.id} className="forge-card rounded-xl p-3.5">
+                  <div className="flex items-start gap-2">
+                    <span className={`w-1.5 h-1.5 rounded-full shrink-0 mt-1.5 ${dot}`} />
+                    <div className="flex-1 min-w-0">
+                      <div className="text-[11px] font-bold text-brand-ink leading-tight truncate">{job.name}</div>
+                      <div className="text-[9px] font-mono text-brand-medium-gray mt-0.5">{job.schedule}</div>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between mt-2">
+                    <span className={`text-[9px] font-mono font-bold uppercase ${statusColor}`}>
+                      {!job.enabled ? 'Disabled' : job.lastRunStatus}
+                      {job.consecutiveErrors > 1 ? ` ×${job.consecutiveErrors}` : ''}
+                    </span>
+                    {job.lastRunAt && (
+                      <span className="text-[8px] font-mono text-brand-medium-gray">
+                        {formatDistanceToNow(new Date(job.lastRunAt), { addSuffix: true })}
+                      </span>
+                    )}
+                  </div>
+                  {job.lastError && job.lastRunStatus === 'error' && (
+                    <div className="mt-1.5 text-[9px] font-mono text-red-500 truncate" title={job.lastError}>
+                      {job.lastError}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </section>
       )}

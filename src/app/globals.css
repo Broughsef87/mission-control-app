@@ -233,6 +233,29 @@ body {
 [data-reveal="5"] { animation-delay: 400ms; }
 [data-reveal="6"] { animation-delay: 480ms; }
 
+/* ── Input ──────────────────────────────────────────────────── */
+.forge-input {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-2);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  width: 100%;
+}
+
+.forge-input:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px rgba(224, 122, 95, 0.12);
+}
+
+.forge-input::placeholder {
+  color: var(--color-text-muted);
+}
+
 /* ── Divider ────────────────────────────────────────────────── */
 .forge-divider {
   height: 1px;
