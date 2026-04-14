@@ -308,3 +308,23 @@ export async function createBriefing(content: string, metrics_snapshot: Record<s
   if (error) throw error;
   return data;
 }
+
+// ── APPROVALS ─────────────────────────────────────────────────
+
+export async function getPendingApprovals() {
+  const { data, error } = await db()
+    .from('pending_approvals')
+    .select('*')
+    .eq('status', 'pending')
+    .order('created_at', { ascending: false });
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function resolveApproval(id: string, status: 'approved' | 'denied') {
+  const { error } = await db()
+    .from('pending_approvals')
+    .update({ status, resolved_at: new Date().toISOString() })
+    .eq('id', id);
+  if (error) throw error;
+}
