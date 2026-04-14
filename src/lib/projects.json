@@ -2,41 +2,51 @@
   {
     "id": "1",
     "name": "Dad Strength App",
-    "status": "In Dev",
+    "status": "In Progress",
     "progress": 75,
-    "description": "Functional strength training for new dads. Next.js/Supabase/PWA.",
+    "description": "Functional strength training for new dads. Next.js/Supabase/PWA. Play Store launch phase.",
     "priority": "HIGH",
-    "category": "Software",
-    "lastUpdate": "2026-03-15"
+    "category": "Product",
+    "lastUpdate": "2026-04-14"
   },
   {
     "id": "2",
     "name": "Forge OS Website",
     "status": "Live",
     "progress": 100,
-    "description": "B2B AI Automation Agency landing page and client portal.",
+    "description": "B2B AI Automation Agency landing page. Live at forge-os-website.vercel.app.",
     "priority": "MEDIUM",
     "category": "Agency",
-    "lastUpdate": "2026-03-14"
+    "lastUpdate": "2026-04-14"
   },
   {
     "id": "3",
-    "name": "The Nap-Squeeze SaaS",
-    "status": "Planning",
-    "progress": 15,
-    "description": "Productivity tool for squeezing maximum output into tight windows.",
-    "priority": "MEDIUM",
-    "category": "Software",
-    "lastUpdate": "2026-03-15"
+    "name": "Mission Control",
+    "status": "In Progress",
+    "progress": 60,
+    "description": "Forge OS execution dashboard. Active rebuild — turning it into a real decision surface.",
+    "priority": "HIGH",
+    "category": "Internal",
+    "lastUpdate": "2026-04-14"
   },
   {
     "id": "4",
-    "name": "Dad Operating System",
-    "status": "Backlog",
-    "progress": 0,
-    "description": "Comprehensive Notion/workflow system for fatherhood management.",
-    "priority": "LOW",
-    "category": "Templates",
-    "lastUpdate": "2026-03-12"
+    "name": "Forge Compass",
+    "status": "In Progress",
+    "progress": 25,
+    "description": "AI automation audit tool. Dual-use: internal Forge Agency scoping + $500 standalone product.",
+    "priority": "HIGH",
+    "category": "Product",
+    "lastUpdate": "2026-04-14"
+  },
+  {
+    "id": "5",
+    "name": "She Sells Red Iron",
+    "status": "In Progress",
+    "progress": 50,
+    "description": "Lisa Wirth's sales business. Metal buildings focus. Partner relationship feeding Forge Agency leads.",
+    "priority": "MEDIUM",
+    "category": "Partner",
+    "lastUpdate": "2026-04-14"
   }
 ]

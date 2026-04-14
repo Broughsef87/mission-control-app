@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import { parseCheckinContent } from '@/lib/parseCheckin';
 
 const CHECKINS_DIR =
   process.env.CHECKINS_DIR ??
@@ -61,7 +62,8 @@ export async function GET(req: NextRequest) {
     const date = searchParams.get('date') ?? new Date().toISOString().split('T')[0];
     const filePath = path.join(CHECKINS_DIR, `${date}.md`);
     const content = fs.existsSync(filePath) ? fs.readFileSync(filePath, 'utf-8') : null;
-    return NextResponse.json({ date, content, exists: !!content });
+    const parsed = content ? parseCheckinContent(content, date) : null;
+    return NextResponse.json({ date, content, exists: !!content, parsed });
   } catch (e: any) {
     return NextResponse.json({ error: e.message }, { status: 500 });
   }

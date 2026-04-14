@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useCallback } from 'react';
-import { Mail, Calendar, CheckSquare, Clock, ArrowUpRight, Search, FileText, Bell, CheckCheck } from 'lucide-react';
+import { Mail, Calendar, CheckSquare, Clock, ArrowUpRight, Search, FileText, Bell, CheckCheck, CheckCircle2, XCircle, Inbox } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
 interface Notification {
@@ -12,6 +12,20 @@ interface Notification {
   source: string;
   read: boolean;
   created_at: string;
+}
+
+interface Approval {
+  id: string;
+  title: string;
+  description?: string;
+  requested_by?: string;
+  priority?: string;
+  created_at: string;
+  status: string;
+}
+
+interface CheckinPriority {
+  text: string;
 }
 
 const TYPE_STYLES: Record<string, string> = {
@@ -28,20 +42,41 @@ const TYPE_DOTS: Record<string, string> = {
   info: 'bg-brand-gold',
 };
 
-const tasks = [
-  { title: 'Approve Forge OS Landing Page Copy', time: '09:00 AM', priority: 'High', type: 'Review' },
-  { title: 'Update TODO.md for Autonomous Content', time: '11:30 AM', priority: 'Medium', type: 'Dev' },
-  { title: 'Check B2B Agency Leads', time: '02:00 PM', priority: 'High', type: 'Sales' },
-];
-
 export default function OfficePage() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [approvals, setApprovals] = useState<Approval[]>([]);
+  const [priorities, setPriorities] = useState<CheckinPriority[]>([]);
+  const [checkinDate, setCheckinDate] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
 
   const load = useCallback(async () => {
-    const data = await fetch('/api/notifications').then(r => r.json()).catch(() => []);
-    setNotifications(data ?? []);
+    const today = new Date().toISOString().split('T')[0];
+
+    const [notifData, approvalData, checkinData] = await Promise.all([
+      fetch('/api/notifications').then(r => r.json()).catch(() => []),
+      fetch('/api/approvals').then(r => r.json()).catch(() => []),
+      fetch(`/api/checkin?date=${today}`).then(r => r.json()).catch(() => null),
+    ]);
+
+    setNotifications(notifData ?? []);
+    setApprovals((approvalData ?? []).filter((a: Approval) => a.status === 'pending'));
+
+    if (checkinData?.exists && checkinData?.parsed?.priorities?.length) {
+      setPriorities(checkinData.parsed.priorities.map((p: string) => ({ text: p })));
+      setCheckinDate(today);
+    } else {
+      // fall back to yesterday
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yd = yesterday.toISOString().split('T')[0];
+      const fallback = await fetch(`/api/checkin?date=${yd}`).then(r => r.json()).catch(() => null);
+      if (fallback?.exists && fallback?.parsed?.priorities?.length) {
+        setPriorities(fallback.parsed.priorities.map((p: string) => ({ text: p })));
+        setCheckinDate(yd);
+      }
+    }
+
     setLoading(false);
   }, []);
 
@@ -57,10 +92,23 @@ export default function OfficePage() {
     setNotifications(prev => prev.map(n => ({ ...n, read: true })));
   }
 
+  async function resolveApproval(id: string, status: 'approved' | 'denied') {
+    await fetch('/api/approvals', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, status }),
+    });
+    setApprovals(prev => prev.filter(a => a.id !== id));
+  }
+
   const unreadCount = notifications.filter(n => !n.read).length;
   const filtered = notifications.filter(n =>
     !search || n.title.toLowerCase().includes(search.toLowerCase()) || n.body?.toLowerCase().includes(search.toLowerCase())
   );
+
+  const today = new Date();
+  const dateNum = today.getDate();
+  const dateMonth = today.toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
 
   return (
     <div className="space-y-10">
@@ -129,57 +177,101 @@ export default function OfficePage() {
             ))}
           </div>
 
-          {/* Task Queue */}
+          {/* Pending Approvals */}
           <div className="pt-6 space-y-4">
             <h2 className="text-xs font-black uppercase tracking-[0.3em] text-brand-slate flex items-center gap-3">
-              <CheckSquare className="w-3 h-3 text-brand-gold" /> Task Queue
+              <CheckSquare className="w-3 h-3 text-brand-gold" /> Pending Approvals
+              {approvals.length > 0 && (
+                <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-[8px] font-black rounded-full">{approvals.length}</span>
+              )}
             </h2>
-            <div className="grid grid-cols-1 gap-2">
-              {tasks.map((task, i) => (
-                <div key={i} className="flex items-center gap-4 p-4 bg-white border border-brand-warm-gray rounded-xl group hover:border-brand-gold/40 transition-all">
-                  <div className={`text-[8px] font-black uppercase px-2 py-1 rounded-lg italic tracking-widest ${task.priority === 'High' ? 'bg-brand-gold text-white' : 'border border-brand-warm-gray text-brand-medium-gray'}`}>
-                    {task.priority}
+            {loading ? (
+              Array.from({ length: 2 }).map((_, i) => (
+                <div key={i} className="h-14 bg-brand-warm-gray rounded-xl animate-pulse" />
+              ))
+            ) : approvals.length === 0 ? (
+              <div className="text-center py-8">
+                <Inbox className="w-5 h-5 text-brand-warm-gray mx-auto mb-2" />
+                <p className="text-[10px] font-mono text-brand-medium-gray uppercase tracking-widest">No pending approvals.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-2">
+                {approvals.map((approval) => (
+                  <div key={approval.id} className="flex items-center gap-4 p-4 bg-white border border-brand-warm-gray rounded-xl group hover:border-brand-gold/40 transition-all">
+                    <div className={`text-[8px] font-black uppercase px-2 py-1 rounded-lg italic tracking-widest ${approval.priority === 'high' ? 'bg-brand-gold text-white' : 'border border-brand-warm-gray text-brand-medium-gray'}`}>
+                      {approval.priority ?? 'Review'}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-xs font-bold text-brand-ink uppercase tracking-tight group-hover:text-brand-gold transition-colors truncate">{approval.title}</div>
+                      {approval.description && (
+                        <div className="text-[9px] font-mono text-brand-medium-gray uppercase mt-0.5 truncate">{approval.description}</div>
+                      )}
+                      <div className="text-[8px] font-mono text-brand-medium-gray mt-0.5">
+                        {formatDistanceToNow(new Date(approval.created_at), { addSuffix: true })}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <button
+                        onClick={() => resolveApproval(approval.id, 'approved')}
+                        className="flex items-center gap-1 text-[8px] font-mono font-black text-green-600 uppercase tracking-widest hover:text-green-700 transition-colors"
+                      >
+                        <CheckCircle2 className="w-3.5 h-3.5" /> Approve
+                      </button>
+                      <button
+                        onClick={() => resolveApproval(approval.id, 'denied')}
+                        className="flex items-center gap-1 text-[8px] font-mono font-black text-red-500 uppercase tracking-widest hover:text-red-600 transition-colors"
+                      >
+                        <XCircle className="w-3.5 h-3.5" /> Deny
+                      </button>
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <div className="text-xs font-bold text-brand-ink uppercase tracking-tight group-hover:text-brand-gold transition-colors">{task.title}</div>
-                    <div className="text-[9px] font-mono text-brand-medium-gray uppercase mt-0.5">{task.type} <span className="mx-1 opacity-30">|</span> {task.time}</div>
-                  </div>
-                  <input type="checkbox" className="w-4 h-4 border-brand-warm-gray accent-brand-gold" />
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Calendar / Schedule */}
+        {/* Schedule / Priorities */}
         <div data-reveal="2" className="space-y-6">
-          <div className="bg-white border border-brand-warm-gray rounded-2xl p-6 space-y-8 relative overflow-hidden" style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+          <div className="bg-white border border-brand-warm-gray rounded-2xl p-6 space-y-6 relative overflow-hidden" style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
             <h2 className="text-xs font-black uppercase tracking-[0.3em] text-brand-slate flex items-center gap-3">
-              <Calendar className="w-3 h-3 text-brand-gold" /> Schedule
+              <Calendar className="w-3 h-3 text-brand-gold" /> Today's Focus
             </h2>
-            <div className="space-y-8">
-              <div className="flex gap-4">
-                <div className="flex flex-col items-center">
-                  <div className="text-lg font-black text-brand-ink italic">21</div>
-                  <div className="text-[8px] font-mono text-brand-gold uppercase tracking-widest font-bold">MAR</div>
-                </div>
-                <div className="flex-1 border-l border-brand-warm-gray pl-4">
-                  <div className="text-[10px] font-black text-brand-ink uppercase tracking-widest mb-1">Sunday Sprint</div>
-                  <div className="text-[8px] font-mono text-brand-medium-gray uppercase italic">08:00 AM - 12:00 PM</div>
-                </div>
+
+            {/* Date block */}
+            <div className="flex gap-4 items-center">
+              <div className="flex flex-col items-center">
+                <div className="text-lg font-black text-brand-ink italic">{dateNum}</div>
+                <div className="text-[8px] font-mono text-brand-gold uppercase tracking-widest font-bold">{dateMonth}</div>
               </div>
-              <div className="space-y-3">
-                <div className="text-[8px] font-black uppercase text-brand-medium-gray tracking-widest italic border-b border-brand-warm-gray pb-2 flex justify-between items-center">
-                  Up Next <Clock className="w-3 h-3" />
+              <div className="flex-1 border-l border-brand-warm-gray pl-4">
+                <div className="text-[10px] font-black text-brand-ink uppercase tracking-widest mb-1">
+                  {new Date().toLocaleDateString('en-US', { weekday: 'long' })}
                 </div>
-                <div className="text-[10px] font-bold text-brand-slate uppercase tracking-tight">Weekly Review & Planning</div>
-                <div className="text-[10px] font-bold text-brand-medium-gray uppercase tracking-tight opacity-70">Content Production: Video 01</div>
-                <div className="text-[10px] font-bold text-brand-gold/70 uppercase tracking-tight opacity-60">App Deployment Test</div>
+                <div className="text-[8px] font-mono text-brand-medium-gray uppercase italic">
+                  {checkinDate ? `Check-in: ${checkinDate}` : 'No check-in found'}
+                </div>
               </div>
             </div>
-            <button className="w-full bg-brand-parchment border border-brand-warm-gray rounded-lg hover:border-brand-gold text-brand-ink font-black uppercase text-[10px] py-3 tracking-widest transition-all italic mt-2">
-              Open Full Calendar
-            </button>
+
+            {/* Priorities from check-in */}
+            <div className="space-y-3">
+              <div className="text-[8px] font-black uppercase text-brand-medium-gray tracking-widest italic border-b border-brand-warm-gray pb-2 flex justify-between items-center">
+                First Move <Clock className="w-3 h-3" />
+              </div>
+              {loading ? (
+                Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="h-5 bg-brand-warm-gray rounded animate-pulse" />
+                ))
+              ) : priorities.length === 0 ? (
+                <p className="text-[10px] font-mono text-brand-medium-gray italic">No check-in priorities found.</p>
+              ) : priorities.map((p, i) => (
+                <div key={i} className="flex items-start gap-2">
+                  <span className="text-[9px] font-mono font-bold text-brand-gold shrink-0 mt-0.5">{i + 1}.</span>
+                  <span className="text-[10px] font-bold text-brand-slate uppercase tracking-tight leading-snug">{p.text}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="bg-white border border-brand-warm-gray rounded-2xl p-6 flex items-center justify-between group cursor-pointer hover:border-brand-gold/40 transition-all" style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
@@ -189,7 +281,7 @@ export default function OfficePage() {
               </div>
               <div>
                 <div className="text-xs font-bold text-brand-ink uppercase tracking-tight group-hover:text-brand-gold transition-colors">Forge OS Assets</div>
-                <div className="text-[8px] font-mono text-brand-medium-gray uppercase">24 files • 1.2 GB</div>
+                <div className="text-[8px] font-mono text-brand-medium-gray uppercase">Google Drive</div>
               </div>
             </div>
             <ArrowUpRight className="w-4 h-4 text-brand-medium-gray group-hover:text-brand-gold" />

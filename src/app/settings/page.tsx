@@ -61,7 +61,7 @@ const SettingsPage = () => {
                 </div>
                 <div className="space-y-2">
                   <label className="text-[10px] font-mono text-brand-medium-gray uppercase tracking-widest">Callsign</label>
-                  <input type="text" defaultValue="The Architect" className="w-full bg-brand-parchment border border-brand-warm-gray p-3 text-[11px] text-brand-ink focus:outline-none focus:border-brand-gold uppercase font-bold" />
+                  <input type="text" defaultValue="" placeholder="Optional" className="w-full bg-brand-parchment border border-brand-warm-gray p-3 text-[11px] text-brand-ink focus:outline-none focus:border-brand-gold uppercase font-bold" />
                 </div>
               </div>
 
