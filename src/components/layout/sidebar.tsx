@@ -7,21 +7,23 @@ import { createClient } from '@supabase/supabase-js';
 import ForgeLogo from '../ForgeLogo';
 import {
   LayoutDashboard, Building2, Users, DollarSign,
-  FileVideo, Settings, ChevronLeft, ChevronRight, LogOut, Briefcase, BookOpen, ClipboardCheck, GitFork
+  FileVideo, Settings, ChevronLeft, ChevronRight, LogOut, Briefcase, BookOpen, ClipboardCheck, GitFork, CheckCircle, Target
 } from 'lucide-react';
 
 const navItems = [
-  { name: 'Mission Control', path: '/',         icon: LayoutDashboard },
-  { name: 'Check-in',        path: '/checkin',  icon: ClipboardCheck  },
-  { name: 'Agent HQ',        path: '/office',   icon: Building2       },
-  { name: 'Org Chart',       path: '/org',      icon: GitFork         },
-  { name: 'Agents',          path: '/agents',   icon: Users           },
-  { name: 'Revenue',         path: '/revenue',  icon: DollarSign      },
-  { name: 'Projects',        path: '/projects', icon: Briefcase       },
-  { name: 'Agency CRM',      path: '/crm',      icon: Users           },
-  { name: 'Content',         path: '/content',  icon: FileVideo       },
-  { name: 'Daily Logs',      path: '/logs',     icon: BookOpen        },
-  { name: 'Settings',        path: '/settings', icon: Settings        },
+  { name: 'Mission Control', path: '/',           icon: LayoutDashboard },
+  { name: 'Check-in',        path: '/checkin',    icon: ClipboardCheck  },
+  { name: 'Approvals',       path: '/approvals',  icon: CheckCircle     },
+  { name: 'Agent HQ',        path: '/office',     icon: Building2       },
+  { name: 'Org Chart',       path: '/org',        icon: GitFork         },
+  { name: 'Agents',          path: '/agents',     icon: Users           },
+  { name: 'Revenue',         path: '/revenue',    icon: DollarSign      },
+  { name: 'Projects',        path: '/projects',   icon: Briefcase       },
+  { name: 'Goals',           path: '/goals',      icon: Target          },
+  { name: 'Agency CRM',      path: '/crm',        icon: Users           },
+  { name: 'Content',         path: '/content',    icon: FileVideo       },
+  { name: 'Daily Logs',      path: '/logs',       icon: BookOpen        },
+  { name: 'Settings',        path: '/settings',   icon: Settings        },
 ];
 
 // ── Design tokens (Forge OS light)
