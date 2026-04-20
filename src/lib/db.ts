@@ -375,6 +375,56 @@ export async function resolveApproval(id: string, status: 'approved' | 'denied')
   if (error) throw error;
 }
 
+// ── GOALS ─────────────────────────────────────────────────────
+
+export async function getGoals(companyId?: string) {
+  let query = db()
+    .from('goals')
+    .select('*, companies(name, color)')
+    .order('created_at', { ascending: false });
+  if (companyId) query = query.eq('company_id', companyId);
+  const { data, error } = await query;
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function createGoal(payload: Record<string, unknown>) {
+  const { data, error } = await db()
+    .from('goals')
+    .insert(payload)
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+export async function updateGoal(id: string, payload: Record<string, unknown>) {
+  const { data, error } = await db()
+    .from('goals')
+    .update({ ...payload, updated_at: new Date().toISOString() })
+    .eq('id', id)
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+export async function deleteGoal(id: string) {
+  const { error } = await db().from('goals').delete().eq('id', id);
+  if (error) throw error;
+}
+
+// ── COMPANIES ─────────────────────────────────────────────────
+
+export async function getCompanies() {
+  const { data, error } = await db()
+    .from('companies')
+    .select('*')
+    .order('name', { ascending: true });
+  if (error) throw error;
+  return data ?? [];
+}
+
 // ── TICKETS ───────────────────────────────────────────────────
 
 export async function getTickets(status?: string, companyId?: string) {
