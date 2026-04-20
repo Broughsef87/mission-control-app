@@ -126,7 +126,7 @@ export default async function Home() {
 
             {checkin.found && checkin.priorities.length > 0 ? (
               <ol className="space-y-2.5">
-                {checkin.priorities.map((p: string, i: number) => (
+                {checkin.priorities.map((p, i) => (
                   <li key={i} className="flex gap-3 items-start">
                     <span className="text-[10px] font-mono font-bold text-brand-gold shrink-0 w-4 pt-0.5">{i + 1}.</span>
                     <span className="text-sm text-brand-ink leading-snug">{p}</span>
