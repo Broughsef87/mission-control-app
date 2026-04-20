@@ -1,5 +1,5 @@
-import { getProjects, getPendingApprovals, getRevenueMTD, getAgentLogs } from '@/lib/db';
-import { getTodayCheckinWithFallback } from '@/lib/parseCheckin';
+import { getProjects, getPendingApprovals, getRevenueMTD, getAgentLogs, getCheckinByDate } from '@/lib/db';
+import { parseCheckinContent } from '@/lib/parseCheckin';
 import { getCronHealth } from '@/lib/cronHealth';
 import ApprovalsPanel from '@/components/ApprovalsPanel';
 import Link from 'next/link';
@@ -7,22 +7,57 @@ import { formatDistanceToNow } from 'date-fns';
 
 export const dynamic = 'force-dynamic';
 
+// Build a Checkin-shaped object from a Supabase row
+function rowToCheckin(row: any, date: string) {
+  if (row?.content) return parseCheckinContent(row.content, date);
+  if (!row) return null;
+  return {
+    date,
+    found: true,
+    format: 'supabase' as const,
+    priorities: row.priorities ?? [],
+    blocker: row.blocker ?? '',
+    notes: row.notes ? [row.notes] : [],
+    kpi: Object.entries(row.numbers ?? {}).map(([key, value]) => ({ key, value: String(value) })),
+    completed: [] as string[],
+    wins: [] as string[],
+    decisions: [] as string[],
+    revenueNote: '',
+    commitments: [] as string[],
+  };
+}
+
 export default async function Home() {
   const today = new Date().toISOString().split('T')[0];
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const yd = yesterday.toISOString().split('T')[0];
+
   const dateLabel = new Date().toLocaleDateString('en-US', {
     weekday: 'long', month: 'long', day: 'numeric',
   });
 
-  const [projects, revenueMTD, agentLogs, approvals] = await Promise.all([
+  const [projects, revenueMTD, agentLogs, approvals, todayRow, yesterdayRow] = await Promise.all([
     getProjects().catch(() => []),
     getRevenueMTD().catch(() => ({ total: 0, byCategory: {} })),
     getAgentLogs(12).catch(() => []),
     getPendingApprovals().catch(() => []),
+    getCheckinByDate(today).catch(() => null),
+    getCheckinByDate(yd).catch(() => null),
   ]);
 
   const cronJobs = getCronHealth();
 
-  const { checkin, usingFallback, fallbackDate } = getTodayCheckinWithFallback();
+  const todayCheckin = rowToCheckin(todayRow, today);
+  const fallbackCheckin = rowToCheckin(yesterdayRow, yd);
+  const usingFallback = !todayCheckin && !!fallbackCheckin;
+  const fallbackDate = yd;
+  const checkin = todayCheckin ?? fallbackCheckin ?? {
+    date: today, found: false, format: 'unknown' as const,
+    priorities: [], blocker: '', notes: [], kpi: [],
+    completed: [], wins: [], decisions: [], revenueNote: '', commitments: [],
+  };
+  (checkin as any).found = !!(todayCheckin || fallbackCheckin);
 
   const inProgressProjects = (projects as any[]).filter(p => p.status === 'In Progress');
   const missingCheckin = !checkin.found;

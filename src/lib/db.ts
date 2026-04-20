@@ -309,6 +309,52 @@ export async function createBriefing(content: string, metrics_snapshot: Record<s
   return data;
 }
 
+// ── CHECKINS ─────────────────────────────────────────────────
+
+export async function getCheckinByDate(date: string) {
+  const { data, error } = await db()
+    .from('checkins')
+    .select('*')
+    .eq('date', date)
+    .maybeSingle();
+  if (error) throw error;
+  return data ?? null;
+}
+
+export async function getLatestCheckin(daysBack = 3) {
+  const since = new Date();
+  since.setDate(since.getDate() - daysBack);
+  const { data, error } = await db()
+    .from('checkins')
+    .select('*')
+    .gte('date', since.toISOString().split('T')[0])
+    .order('date', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (error) throw error;
+  return data ?? null;
+}
+
+export async function upsertCheckin(payload: {
+  date: string;
+  priorities: string[];
+  blocker?: string;
+  numbers?: Record<string, string>;
+  notes?: string;
+  content?: string;
+}) {
+  const { data, error } = await db()
+    .from('checkins')
+    .upsert(
+      { ...payload, updated_at: new Date().toISOString() },
+      { onConflict: 'date' }
+    )
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
 // ── APPROVALS ─────────────────────────────────────────────────
 
 export async function getPendingApprovals() {
