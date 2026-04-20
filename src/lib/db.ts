@@ -374,3 +374,52 @@ export async function resolveApproval(id: string, status: 'approved' | 'denied')
     .eq('id', id);
   if (error) throw error;
 }
+
+// ── TICKETS ───────────────────────────────────────────────────
+
+export async function getTickets(status?: string, companyId?: string) {
+  let query = db()
+    .from('tickets')
+    .select('*, companies(name, color)')
+    .order('created_at', { ascending: false });
+  if (status) query = query.eq('status', status);
+  if (companyId) query = query.eq('company_id', companyId);
+  const { data, error } = await query;
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function getTicketMessages(ticketId: string) {
+  const { data, error } = await db()
+    .from('ticket_messages')
+    .select('*')
+    .eq('ticket_id', ticketId)
+    .order('created_at', { ascending: true });
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function createTicket(payload: Record<string, unknown>) {
+  const { data, error } = await db()
+    .from('tickets')
+    .insert(payload)
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+export async function addTicketMessage(ticketId: string, role: string, content: string) {
+  const { error } = await db()
+    .from('ticket_messages')
+    .insert({ ticket_id: ticketId, role, content });
+  if (error) throw error;
+}
+
+export async function updateTicketStatus(id: string, status: string) {
+  const { error } = await db()
+    .from('tickets')
+    .update({ status, updated_at: new Date().toISOString() })
+    .eq('id', id);
+  if (error) throw error;
+}
