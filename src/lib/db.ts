@@ -355,6 +355,19 @@ export async function upsertCheckin(payload: {
   return data;
 }
 
+export async function getCheckinsMTD() {
+  const startOfMonth = new Date();
+  startOfMonth.setDate(1);
+  startOfMonth.setHours(0, 0, 0, 0);
+  const { data, error } = await db()
+    .from('checkins')
+    .select('date, numbers')
+    .gte('date', startOfMonth.toISOString().split('T')[0])
+    .order('date', { ascending: true });
+  if (error) throw error;
+  return data ?? [];
+}
+
 // ── APPROVALS ─────────────────────────────────────────────────
 
 export async function getPendingApprovals() {

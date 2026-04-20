@@ -1,4 +1,4 @@
-import { getProjects, getPendingApprovals, getRevenueMTD, getAgentLogs, getCheckinByDate } from '@/lib/db';
+import { getProjects, getPendingApprovals, getRevenueMTD, getAgentLogs, getCheckinByDate, getCheckinsMTD } from '@/lib/db';
 import { parseCheckinContent } from '@/lib/parseCheckin';
 import { getCronHealth } from '@/lib/cronHealth';
 import ApprovalsPanel from '@/components/ApprovalsPanel';
@@ -37,14 +37,33 @@ export default async function Home() {
     weekday: 'long', month: 'long', day: 'numeric',
   });
 
-  const [projects, revenueMTD, agentLogs, approvals, todayRow, yesterdayRow] = await Promise.all([
+  const [projects, revenueMTD, agentLogs, approvals, todayRow, yesterdayRow, checkinsMTD] = await Promise.all([
     getProjects().catch(() => []),
     getRevenueMTD().catch(() => ({ total: 0, byCategory: {} })),
     getAgentLogs(12).catch(() => []),
     getPendingApprovals().catch(() => []),
     getCheckinByDate(today).catch(() => null),
     getCheckinByDate(yd).catch(() => null),
+    getCheckinsMTD().catch(() => []),
   ]);
+
+  // Sum MTD KPIs from check-in numbers across all days this month
+  function sumKey(rows: any[], ...matchers: string[]): number {
+    return rows.reduce((total, row) => {
+      const nums = row.numbers ?? {};
+      for (const [k, v] of Object.entries(nums)) {
+        const kl = k.toLowerCase();
+        if (matchers.some(m => kl.includes(m))) {
+          const n = parseFloat(String(v));
+          if (!isNaN(n)) total += n;
+        }
+      }
+      return total;
+    }, 0);
+  }
+  const contentPostsMTD   = sumKey(checkinsMTD, 'content', 'post');
+  const outreachMTD       = sumKey(checkinsMTD, 'outreach', 'contact');
+  const revenueConvosMTD  = sumKey(checkinsMTD, 'revenue conv', 'convo', 'revenue conversation');
 
   const cronJobs = getCronHealth();
 
@@ -107,6 +126,25 @@ export default async function Home() {
           )}
         </div>
       </header>
+
+      {/* ── KPI STRIP ──────────────────────────────────────────── */}
+      <section>
+        <div className="forge-label mb-3">Month to Date</div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {[
+            { label: 'Revenue MTD',    value: `$${(revenueMTD as any).total.toLocaleString()}`, sub: 'Goal: $1M/yr',       color: 'text-brand-gold' },
+            { label: 'Content Posts',  value: contentPostsMTD  || '—',                          sub: 'Posts this month',  color: 'text-brand-ink'  },
+            { label: 'Outreach',       value: outreachMTD      || '—',                          sub: 'Contacts this month', color: 'text-brand-ink' },
+            { label: 'Rev. Convos',    value: revenueConvosMTD || '—',                          sub: 'Conversations MTD', color: 'text-brand-ink'  },
+          ].map(kpi => (
+            <div key={kpi.label} className="forge-card rounded-2xl p-4">
+              <div className="forge-label mb-1">{kpi.label}</div>
+              <div className={`text-2xl font-black font-mono tabular-nums ${kpi.color}`}>{String(kpi.value)}</div>
+              <div className="text-[9px] font-mono text-brand-medium-gray uppercase mt-0.5">{kpi.sub}</div>
+            </div>
+          ))}
+        </div>
+      </section>
 
       {/* ── TODAY ──────────────────────────────────────────────── */}
       <section>
@@ -212,12 +250,11 @@ export default async function Home() {
       {/* ── BUSINESS MOVEMENT ──────────────────────────────────── */}
       <section>
         <div className="forge-label mb-4">Business Movement</div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-3 gap-4">
           {[
-            { label: 'Revenue MTD',    value: `$${(revenueMTD as any).total.toLocaleString()}`, sub: 'Goal: $1M/yr', color: 'text-brand-gold' },
-            { label: 'Active Clients', value: String((projects as any[]).filter((p: any) => p.client && p.client !== 'Internal' && p.status === 'In Progress').length), sub: 'Forge Agency', color: 'text-brand-ink' },
-            { label: 'In Progress',    value: String(inProgressProjects.length), sub: 'Projects', color: 'text-brand-ink' },
-            { label: 'Approvals',      value: String((approvals as any[]).length || '—'), sub: 'Pending review', color: (approvals as any[]).length > 0 ? 'text-amber-600' : 'text-brand-ink' },
+            { label: 'Active Clients', value: String((projects as any[]).filter((p: any) => p.client && p.client !== 'Internal' && p.status === 'In Progress').length), sub: 'Forge Agency',   color: 'text-brand-ink' },
+            { label: 'In Progress',    value: String(inProgressProjects.length),                                                                                          sub: 'Projects',      color: 'text-brand-ink' },
+            { label: 'Approvals',      value: String((approvals as any[]).length || '—'),                                                                                 sub: 'Pending review', color: (approvals as any[]).length > 0 ? 'text-amber-600' : 'text-brand-ink' },
           ].map(kpi => (
             <div key={kpi.label} className="forge-card rounded-2xl p-4">
               <div className="forge-label mb-1">{kpi.label}</div>
@@ -262,6 +299,74 @@ export default async function Home() {
         )}
       </section>
 
+      {/* ── AGENT RUN HEALTH ───────────────────────────────────── */}
+      {cronJobs.length > 0 && (
+        <section>
+          <div className="flex items-center justify-between mb-4">
+            <div className="forge-label">Agent Run Health</div>
+            <div className="flex items-center gap-3">
+              <span className="text-[9px] font-mono text-green-600 font-bold">
+                {cronJobs.filter(j => j.stalenessStatus === 'ok').length} healthy
+              </span>
+              {cronJobs.filter(j => j.stalenessStatus === 'stale').length > 0 && (
+                <span className="text-[9px] font-mono text-amber-600 font-bold">
+                  {cronJobs.filter(j => j.stalenessStatus === 'stale').length} stale
+                </span>
+              )}
+              {cronJobs.filter(j => j.stalenessStatus === 'critical').length > 0 && (
+                <span className="text-[9px] font-mono text-red-500 font-bold">
+                  {cronJobs.filter(j => j.stalenessStatus === 'critical').length} critical
+                </span>
+              )}
+            </div>
+          </div>
+          <div className="forge-panel !p-0 overflow-hidden">
+            {cronJobs.map((job, i) => {
+              const dot =
+                job.stalenessStatus === 'ok'       ? 'bg-green-500' :
+                job.stalenessStatus === 'stale'    ? 'bg-amber-400' :
+                job.stalenessStatus === 'critical' ? 'bg-red-500 animate-pulse' :
+                job.stalenessStatus === 'never'    ? 'bg-amber-400' :
+                                                     'bg-brand-warm-gray';
+              const statusLabel =
+                job.stalenessStatus === 'ok'       ? 'Healthy' :
+                job.stalenessStatus === 'stale'    ? 'Stale' :
+                job.stalenessStatus === 'critical' ? (job.lastRunStatus === 'error' ? 'Error' : 'Critical') :
+                job.stalenessStatus === 'never'    ? 'Never run' :
+                job.stalenessStatus === 'disabled' ? 'Disabled' :
+                                                     'One-time';
+              const statusColor =
+                job.stalenessStatus === 'ok'       ? 'text-green-600' :
+                job.stalenessStatus === 'stale'    ? 'text-amber-600' :
+                job.stalenessStatus === 'critical' ? 'text-red-500' :
+                job.stalenessStatus === 'never'    ? 'text-amber-500' :
+                                                     'text-brand-medium-gray';
+              return (
+                <div key={job.id} className={`flex items-center gap-4 px-5 py-3 border-b border-brand-warm-gray last:border-0 ${i % 2 === 0 ? '' : 'bg-brand-parchment/40'}`}>
+                  <span className={`w-2 h-2 rounded-full shrink-0 ${dot}`} />
+                  <div className="flex-1 min-w-0">
+                    <span className="text-[11px] font-bold text-brand-ink">{job.name}</span>
+                    <span className="text-[9px] font-mono text-brand-medium-gray ml-2">{job.schedule}</span>
+                  </div>
+                  <div className="flex items-center gap-4 shrink-0">
+                    {job.lastRunAt ? (
+                      <span className="text-[9px] font-mono text-brand-medium-gray tabular-nums">
+                        {formatDistanceToNow(new Date(job.lastRunAt), { addSuffix: true })}
+                      </span>
+                    ) : (
+                      <span className="text-[9px] font-mono text-brand-medium-gray">—</span>
+                    )}
+                    <span className={`text-[9px] font-mono font-bold uppercase w-16 text-right ${statusColor}`}>
+                      {statusLabel}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
       {/* ── ACTIVE PROJECTS ────────────────────────────────────── */}
       {inProgressProjects.length > 0 && (
         <section>
@@ -295,60 +400,6 @@ export default async function Home() {
         </section>
       )}
 
-      {/* ── CRON HEALTH ────────────────────────────────────────── */}
-      {cronJobs.length > 0 && (
-        <section>
-          <div className="flex items-center justify-between mb-4">
-            <div className="forge-label">Agent Run Health</div>
-            <span className="text-[9px] font-mono text-brand-medium-gray">
-              {cronJobs.filter(j => j.lastRunStatus === 'ok').length}/{cronJobs.length} OK
-            </span>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {cronJobs.map(job => {
-              const statusColor =
-                !job.enabled ? 'text-brand-medium-gray' :
-                job.lastRunStatus === 'ok' ? 'text-green-600' :
-                job.lastRunStatus === 'error' ? 'text-red-500' :
-                job.lastRunStatus === 'never' ? 'text-amber-500' :
-                'text-brand-medium-gray';
-              const dot =
-                !job.enabled ? 'bg-brand-medium-gray' :
-                job.lastRunStatus === 'ok' ? 'bg-green-500' :
-                job.lastRunStatus === 'error' ? 'bg-red-500 animate-pulse' :
-                job.lastRunStatus === 'never' ? 'bg-amber-400' :
-                'bg-brand-medium-gray';
-              return (
-                <div key={job.id} className="forge-card rounded-xl p-3.5">
-                  <div className="flex items-start gap-2">
-                    <span className={`w-1.5 h-1.5 rounded-full shrink-0 mt-1.5 ${dot}`} />
-                    <div className="flex-1 min-w-0">
-                      <div className="text-[11px] font-bold text-brand-ink leading-tight truncate">{job.name}</div>
-                      <div className="text-[9px] font-mono text-brand-medium-gray mt-0.5">{job.schedule}</div>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between mt-2">
-                    <span className={`text-[9px] font-mono font-bold uppercase ${statusColor}`}>
-                      {!job.enabled ? 'Disabled' : job.lastRunStatus}
-                      {job.consecutiveErrors > 1 ? ` ×${job.consecutiveErrors}` : ''}
-                    </span>
-                    {job.lastRunAt && (
-                      <span className="text-[8px] font-mono text-brand-medium-gray">
-                        {formatDistanceToNow(new Date(job.lastRunAt), { addSuffix: true })}
-                      </span>
-                    )}
-                  </div>
-                  {job.lastError && job.lastRunStatus === 'error' && (
-                    <div className="mt-1.5 text-[9px] font-mono text-red-500 truncate" title={job.lastError}>
-                      {job.lastError}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </section>
-      )}
 
       {/* ── RECENT EXECUTION ───────────────────────────────────── */}
       {(agentLogs as any[]).length > 0 && (
