@@ -7,11 +7,12 @@ import { createClient } from '@supabase/supabase-js';
 import ForgeLogo from '../ForgeLogo';
 import {
   LayoutDashboard, Building2, Users, DollarSign,
-  FileVideo, Settings, ChevronLeft, ChevronRight, LogOut, Briefcase, BookOpen, ClipboardCheck, GitFork, CheckCircle, Target
+  FileVideo, Settings, ChevronLeft, ChevronRight, LogOut, Briefcase, BookOpen, ClipboardCheck, GitFork, CheckCircle, Target, Monitor
 } from 'lucide-react';
 
 const navItems = [
-  { name: 'Mission Control', path: '/',           icon: LayoutDashboard },
+  { name: 'The Foundry', path: '/',           icon: LayoutDashboard },
+  { name: 'Morning Desk', path: '/morning-desk', icon: Monitor },
   { name: 'Check-in',        path: '/checkin',    icon: ClipboardCheck  },
   { name: 'Approvals',       path: '/approvals',  icon: CheckCircle     },
   { name: 'Agent HQ',        path: '/office',     icon: Building2       },
