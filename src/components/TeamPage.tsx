@@ -129,6 +129,17 @@ export default function TeamPage() {
                  avatar="https://api.dicebear.com/9.x/bottts/svg?seed=Leo&colors=teal"
                />
             </div>
+
+            {/* Agent 7: Scribe */}
+            <div className="flex flex-col items-center relative mt-4">
+               <div className="absolute -top-14 left-1/2 h-14 w-0.5 bg-ab-border -translate-x-1/2 hidden lg:block"></div>
+               <AgentCard 
+                 role="Data Ingestion" 
+                 name="Scribe" 
+                 desc="Sweeps Discord drops, captures Granola meetings, runs weekly client digester."
+                 avatar="https://api.dicebear.com/9.x/bottts/svg?seed=Scribe&colors=orange"
+               />
+            </div>
         </div>
       </div>
     </div>
