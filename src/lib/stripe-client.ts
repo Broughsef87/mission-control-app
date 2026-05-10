@@ -1,5 +1,5 @@
 /**
- * stripe-client.ts — Stripe metrics helpers for Dad Strength App
+ * stripe-client.ts — Stripe metrics helpers for Forge platforms
  * Requires env var: STRIPE_SECRET_KEY
  */
 

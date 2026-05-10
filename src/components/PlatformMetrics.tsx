@@ -92,35 +92,7 @@ export default function PlatformMetrics() {
           )}
         </div>
 
-        {/* Dad Strength App (Stripe) */}
-        <div className="forge-card p-4 rounded-2xl">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="p-2 bg-brand-gold/10 rounded-xl">
-              <CreditCard className="w-4 h-4 text-brand-gold" />
-            </div>
-            <span className="text-[10px] font-black uppercase tracking-widest text-brand-slate">Dad Strength</span>
-          </div>
-          {stripe?.configured === false ? (
-            <p className="text-[9px] font-mono text-brand-medium-gray italic">Add STRIPE_SECRET_KEY to enable</p>
-          ) : (
-            <div className="space-y-2">
-              <div>
-                <div className="text-2xl font-black text-brand-ink">{mrrFormatted}</div>
-                <div className="text-[9px] font-mono text-brand-medium-gray uppercase tracking-wide">MRR</div>
-              </div>
-              <div className="flex gap-4 pt-1 border-t border-brand-warm-gray">
-                <div>
-                  <div className="text-sm font-bold text-brand-charcoal">{stripe?.activeSubscriptions ?? '—'}</div>
-                  <div className="text-[8px] font-mono text-brand-medium-gray uppercase">Active Subs</div>
-                </div>
-                <div>
-                  <div className="text-sm font-bold text-ab-green">+{stripe?.newSubscriptionsThisMonth ?? '—'}</div>
-                  <div className="text-[8px] font-mono text-brand-medium-gray uppercase">New MTD</div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
+
 
         {/* Skool */}
         <div className="forge-card p-4 rounded-2xl">

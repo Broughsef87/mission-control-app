@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
         await createNotification({
           type: 'success',
           title: 'New Subscriber',
-          body: `Dad Strength App — new subscription at $${(amount / 100).toFixed(2)}/mo`,
+          body: `Forge OS — new subscription at $${(amount / 100).toFixed(2)}/mo`,
           source: 'stripe',
         });
         break;
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
         await createNotification({
           type: 'warning',
           title: 'Subscription Canceled',
-          body: 'Dad Strength App — subscriber canceled their plan',
+          body: 'Forge OS — subscriber canceled their plan',
           source: 'stripe',
         });
         break;
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
         await createNotification({
           type: 'error',
           title: 'Payment Failed',
-          body: 'Dad Strength App — an invoice payment failed',
+          body: 'Forge OS — an invoice payment failed',
           source: 'stripe',
         });
         break;

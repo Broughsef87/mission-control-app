@@ -81,7 +81,7 @@ export default function TeamPage() {
                <AgentCard 
                  role="Engineering (Lead)" 
                  name="Max" 
-                 desc="Full-stack dev. Dad Strength App builder. Next.js & Supabase specialist."
+                 desc="Full-stack dev. Next.js & Supabase specialist."
                  avatar="https://api.dicebear.com/9.x/bottts/svg?seed=Max&colors=amber"
                />
                

@@ -104,7 +104,6 @@ export default function RootLayout({
                   <span key={i} style={{ display: 'flex', gap: '4rem' }}>
                     <span style={{ color: 'var(--ab-red)' }}>SYS: ONLINE</span>
                     <span>FORGE AGENCY — ACTIVE</span>
-                    <span>DAD STRENGTH — ACTIVE</span>
                     <span>The Foundry v3.0</span>
                     <span style={{ color: 'var(--ab-gold)' }}>OPENCLAW · COLORADO, USA</span>
                     <span>BUILD IN PUBLIC</span>

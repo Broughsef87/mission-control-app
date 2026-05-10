@@ -138,7 +138,7 @@ function parseMinimal(lines: string[], date: string): Checkin {
     const trimmed = raw.trim();
     if (!trimmed) continue;
 
-    // "Priority 1 (Dad Strength Visual Identity): unknown" or ": some description"
+    // "Priority 1 (Scribe Agent Build): unknown" or ": some description"
     const prioMatch = trimmed.match(/^Priority\s+\d+\s+\((.+?)\):\s*(.*)$/i);
     if (prioMatch) {
       const name = prioMatch[1].trim();
