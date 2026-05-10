@@ -1,7 +1,7 @@
 "use client";
 
 import useSWR from 'swr';
-import { formatDistanceToNow, format, isToday } from 'date-fns';
+import { format } from 'date-fns';
 
 const fetcher = (url: string) => fetch(url).then(r => r.json());
 const REFRESH = 60 * 1000;
@@ -12,11 +12,13 @@ interface CalEvent {
   start: string;
   end: string;
   attendees?: string[];
-  prep_url?: string;
+  source?: 'personal' | 'workspace';
 }
 
 interface CalData {
   configured: boolean;
+  personal_connected?: boolean;
+  workspace_connected?: boolean;
   events: CalEvent[];
   message?: string;
   as_of?: string;
@@ -35,7 +37,21 @@ export default function CalendarPanel() {
     <div className="forge-panel flex flex-col gap-0 h-full">
       <PanelHeader label="Today's Calendar" cadence="1m" validating={isValidating} />
 
-      <div className="text-[10px] font-mono mt-2 mb-3" style={{ color: 'var(--ab-muted)' }}>{todayLabel}</div>
+      <div className="flex items-center justify-between mt-2 mb-2">
+        <span className="text-[10px] font-mono" style={{ color: 'var(--ab-muted)' }}>{todayLabel}</span>
+        {data?.configured && (
+          <div className="flex items-center gap-1.5">
+            <span className="text-[8px] font-mono px-1.5 py-0.5 rounded" style={{
+              color: data.personal_connected ? 'var(--ab-green)' : 'var(--ab-muted)',
+              border: `1px solid ${data.personal_connected ? 'rgba(40,205,65,0.3)' : 'var(--ab-border)'}`,
+            }}>personal</span>
+            <span className="text-[8px] font-mono px-1.5 py-0.5 rounded" style={{
+              color: data.workspace_connected ? 'var(--ab-green)' : 'var(--ab-muted)',
+              border: `1px solid ${data.workspace_connected ? 'rgba(40,205,65,0.3)' : 'var(--ab-border)'}`,
+            }}>workspace</span>
+          </div>
+        )}
+      </div>
 
       {!data && (
         <div className="flex flex-col gap-2">
@@ -47,14 +63,11 @@ export default function CalendarPanel() {
 
       {data && !data.configured && (
         <div className="flex flex-col items-center justify-center flex-1 gap-2 py-6">
-          <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: 'var(--ab-surface-2)', border: '1px solid var(--ab-border)' }}>
-            <span style={{ fontSize: 16 }}>📅</span>
-          </div>
           <p className="text-[10px] font-mono text-center" style={{ color: 'var(--ab-muted)' }}>
-            Google Calendar pending
+            Google Calendar not connected
           </p>
-          <p className="text-[9px] font-mono text-center" style={{ color: 'var(--ab-border-bright)' }}>
-            Set GOOGLE_CALENDAR_TOKEN to connect
+          <p className="text-[9px] font-mono text-center px-4 leading-relaxed" style={{ color: 'var(--ab-border-bright)' }}>
+            {data.message}
           </p>
         </div>
       )}
@@ -66,7 +79,7 @@ export default function CalendarPanel() {
       )}
 
       {data?.configured && data.events.length > 0 && (
-        <div className="flex flex-col gap-1.5 overflow-y-auto">
+        <div className="flex flex-col gap-1.5 overflow-y-auto flex-1">
           {data.events.map(ev => (
             <CalEventRow key={ev.id} event={ev} />
           ))}
@@ -101,7 +114,12 @@ function CalEventRow({ event }: { event: CalEvent }) {
         </div>
       </div>
       <div className="flex-1 min-w-0">
-        <div className="text-[11px] font-mono font-semibold truncate" style={{ color: 'var(--ab-text)' }}>{event.summary}</div>
+        <div className="flex items-center gap-1.5">
+          <span className="text-[11px] font-mono font-semibold truncate" style={{ color: 'var(--ab-text)' }}>{event.summary}</span>
+          {event.source && (
+            <span className="text-[7px] font-mono shrink-0" style={{ color: 'var(--ab-muted)' }}>{event.source === 'personal' ? '·p' : '·w'}</span>
+          )}
+        </div>
         {event.attendees && event.attendees.length > 0 && (
           <div className="text-[9px] font-mono truncate" style={{ color: 'var(--ab-muted)' }}>
             {event.attendees.slice(0, 3).join(', ')}{event.attendees.length > 3 ? ` +${event.attendees.length - 3}` : ''}

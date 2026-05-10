@@ -15,6 +15,12 @@ interface Project {
   updated_at: string;
 }
 
+interface ShippedItem {
+  id: string;
+  name: string;
+  team?: string;
+}
+
 interface WorkData {
   configured: boolean;
   linear_connected: boolean;
@@ -23,6 +29,7 @@ interface WorkData {
   overdue_count: number;
   by_project: Project[];
   stale_note: string[];
+  shipped_yesterday: ShippedItem[];
   as_of: string;
   error?: string;
 }
@@ -59,7 +66,21 @@ export default function WorkStatusPanel() {
 
           {!data.linear_connected && (
             <div className="text-[8px] font-mono px-2 py-1 rounded mb-2" style={{ color: 'var(--ab-muted)', background: 'var(--ab-surface-2)', border: '1px solid var(--ab-border)' }}>
-              Linear not connected — showing internal projects only
+              {data.error ?? 'Linear not connected — set LINEAR_API_KEY'}
+            </div>
+          )}
+
+          {/* Shipped yesterday */}
+          {data.linear_connected && data.shipped_yesterday?.length > 0 && (
+            <div className="mb-2">
+              <div className="forge-label mb-1" style={{ color: 'var(--ab-green)' }}>Shipped yesterday</div>
+              {data.shipped_yesterday.slice(0, 4).map(item => (
+                <div key={item.id} className="flex items-center gap-2 px-2 py-1">
+                  <div className="w-1 h-1 rounded-full shrink-0" style={{ background: 'var(--ab-green)' }} />
+                  <span className="text-[10px] font-mono flex-1 truncate" style={{ color: 'var(--ab-body-text)' }}>{item.name}</span>
+                  {item.team && <span className="text-[8px] font-mono shrink-0" style={{ color: 'var(--ab-muted)' }}>{item.team}</span>}
+                </div>
+              ))}
             </div>
           )}
 

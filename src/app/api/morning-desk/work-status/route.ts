@@ -1,45 +1,130 @@
 import { NextResponse } from 'next/server';
-import { getProjects } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 
-// Linear integration pending for full issue-level data.
-// For now: derives work status from the projects table + agent_logs.
-export async function GET() {
-  try {
-    const projects = await getProjects();
+const LINEAR_API = 'https://api.linear.app/graphql';
 
-    const inProgress = (projects as any[]).filter(p => p.status === 'In Progress');
-    const blocked = (projects as any[]).filter(p => p.status === 'Blocked');
-    const overdue = (projects as any[]).filter(p => {
-      if (!p.deadline) return false;
-      return new Date(p.deadline) < new Date() && p.status !== 'Done';
+async function linearQuery(query: string, variables?: Record<string, unknown>) {
+  const apiKey = process.env.LINEAR_API_KEY;
+  if (!apiKey) throw new Error('LINEAR_API_KEY not set');
+
+  const res = await fetch(LINEAR_API, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: apiKey, // Linear accepts bare API key (no "Bearer")
+    },
+    body: JSON.stringify({ query, variables }),
+  });
+
+  if (!res.ok) throw new Error(`Linear API ${res.status}: ${await res.text()}`);
+  const json = await res.json();
+  if (json.errors?.length) throw new Error(json.errors[0].message);
+  return json.data;
+}
+
+const WORK_STATUS_QUERY = `
+  query FoundryWorkStatus($yesterday: DateTimeComparatorInput) {
+    inProgress: issues(
+      filter: { state: { type: { in: ["started"] } } }
+      first: 50
+      orderBy: updatedAt
+    ) {
+      nodes {
+        id
+        title
+        state { name type }
+        team { name }
+        dueDate
+        updatedAt
+        assignee { name }
+      }
+    }
+    blocked: issues(
+      filter: { state: { name: { containsIgnoreCase: "blocked" } } }
+      first: 20
+    ) {
+      nodes {
+        id
+        title
+        team { name }
+        updatedAt
+      }
+    }
+    shippedYesterday: issues(
+      filter: { completedAt: $yesterday }
+      first: 30
+    ) {
+      nodes {
+        id
+        title
+        completedAt
+        team { name }
+      }
+    }
+  }
+`;
+
+export async function GET() {
+  if (!process.env.LINEAR_API_KEY) {
+    return NextResponse.json({
+      configured: false,
+      linear_connected: false,
+      error: 'LINEAR_API_KEY not set',
+      in_progress_count: 0,
+      blocked_count: 0,
+      overdue_count: 0,
+      by_project: [],
+      stale_note: [],
+      shipped_yesterday: [],
+      as_of: new Date().toISOString(),
+    });
+  }
+
+  try {
+    const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+    const data = await linearQuery(WORK_STATUS_QUERY, {
+      yesterday: { gte: yesterday },
     });
 
-    const byProject = inProgress.slice(0, 8).map(p => ({
-      id: p.id,
-      name: p.name,
-      client: p.client ?? 'Internal',
-      status: p.status,
-      deadline: p.deadline ?? null,
-      updated_at: p.updated_at,
+    const inProgressIssues = data.inProgress?.nodes ?? [];
+    const blockedIssues    = data.blocked?.nodes ?? [];
+    const shipped          = data.shippedYesterday?.nodes ?? [];
+
+    const now = new Date();
+    const overdue = inProgressIssues.filter((i: any) => {
+      if (!i.dueDate) return false;
+      return new Date(i.dueDate) < now;
+    });
+
+    const stale = inProgressIssues.filter((i: any) => {
+      if (!i.updatedAt) return false;
+      const daysSince = (now.getTime() - new Date(i.updatedAt).getTime()) / (1000 * 60 * 60 * 24);
+      return daysSince > 7;
+    }).map((i: any) => i.title);
+
+    const byProject = inProgressIssues.slice(0, 10).map((i: any) => ({
+      id:         i.id,
+      name:       i.title,
+      client:     i.team?.name ?? 'No team',
+      status:     i.state?.name ?? 'In Progress',
+      deadline:   i.dueDate ?? null,
+      updated_at: i.updatedAt,
+      assignee:   i.assignee?.name ?? null,
     }));
 
     return NextResponse.json({
       configured: true,
-      linear_connected: false,
-      in_progress_count: inProgress.length,
-      blocked_count: blocked.length,
+      linear_connected: true,
+      in_progress_count: inProgressIssues.length,
+      blocked_count: blockedIssues.length,
       overdue_count: overdue.length,
       by_project: byProject,
-      stale_note: inProgress.filter(p => {
-        if (!p.updated_at) return false;
-        const daysSince = (Date.now() - new Date(p.updated_at).getTime()) / (1000 * 60 * 60 * 24);
-        return daysSince > 7;
-      }).map(p => p.name),
+      stale_note: stale,
+      shipped_yesterday: shipped.map((i: any) => ({ id: i.id, name: i.title, team: i.team?.name })),
       as_of: new Date().toISOString(),
     });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json({ configured: true, linear_connected: false, error: err.message }, { status: 500 });
   }
 }
