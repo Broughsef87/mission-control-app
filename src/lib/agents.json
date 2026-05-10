@@ -60,6 +60,20 @@
     "location": "Ready Room"
   },
   {
+    "id": "coffer",
+    "name": "Coffer",
+    "role": "Treasury / Finance",
+    "personaType": "treasury",
+    "statusIcon": ":moneybag:",
+    "owner": "Andrew",
+    "description": "Daily treasury sync — pulls Stripe activity, alerts on disputes/failed payments, mirrors events to agent_logs.",
+    "responsibilities": ["Daily Stripe cash summary", "Dispute and failed-payment alerts", "Mirroring treasury events to Mission Control agent logs"],
+    "routeWhen": "Treasury status, Stripe activity, cash summary, disputes, failed payments",
+    "avatar": "https://api.dicebear.com/7.x/bottts/svg?seed=coffer",
+    "status": "Idle",
+    "location": "Treasury Desk"
+  },
+  {
     "id": "forge-foreman",
     "name": "Forge Foreman",
     "role": "PM & QA",
@@ -78,5 +92,15 @@
     "avatar": "https://api.dicebear.com/7.x/bottts/svg?seed=antigravity",
     "status": "Active",
     "location": "Control Room"
+  },
+  {
+    "id": "scribe",
+    "name": "Scribe",
+    "role": "Data Ingestion & Capture",
+    "responsibilities": ["Granola meeting capture", "Discord drop-inbox sweeps", "Weekly client thread digester"],
+    "routeWhen": "Meeting notes, dropped screenshots or thoughts, weekly client communications rollup",
+    "avatar": "https://api.dicebear.com/7.x/bottts/svg?seed=scribe",
+    "status": "Active",
+    "location": "Ingestion Desk"
   }
 ]

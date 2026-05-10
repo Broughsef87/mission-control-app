@@ -1,15 +1,5 @@
 [
   {
-    "id": "1",
-    "name": "Dad Strength App",
-    "status": "In Progress",
-    "progress": 75,
-    "description": "Functional strength training for new dads. Next.js/Supabase/PWA. Play Store launch phase.",
-    "priority": "HIGH",
-    "category": "Product",
-    "lastUpdate": "2026-04-14"
-  },
-  {
     "id": "2",
     "name": "Forge OS Website",
     "status": "Live",
@@ -21,7 +11,7 @@
   },
   {
     "id": "3",
-    "name": "Mission Control",
+    "name": "The Foundry",
     "status": "In Progress",
     "progress": 60,
     "description": "Forge OS execution dashboard. Active rebuild — turning it into a real decision surface.",

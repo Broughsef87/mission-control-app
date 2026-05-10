@@ -1,7 +1,10 @@
-import { getProjects, getPendingApprovals, getRevenueMTD, getAgentLogs, getCheckinByDate, getCheckinsMTD } from '@/lib/db';
+import { getProjects, getPendingApprovals, getRevenueMTD, getCheckinByDate, getCheckinsMTD } from '@/lib/db';
 import { parseCheckinContent } from '@/lib/parseCheckin';
 import { getCronHealth } from '@/lib/cronHealth';
 import ApprovalsPanel from '@/components/ApprovalsPanel';
+import AlertBanner from '@/components/AlertBanner';
+import EventFeed from '@/components/EventFeed';
+import LiveAgentFeed from '@/components/LiveAgentFeed';
 import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -37,10 +40,9 @@ export default async function Home() {
     weekday: 'long', month: 'long', day: 'numeric',
   });
 
-  const [projects, revenueMTD, agentLogs, approvals, todayRow, yesterdayRow, checkinsMTD] = await Promise.all([
+  const [projects, revenueMTD, approvals, todayRow, yesterdayRow, checkinsMTD] = await Promise.all([
     getProjects().catch(() => []),
     getRevenueMTD().catch(() => ({ total: 0, byCategory: {} })),
-    getAgentLogs(12).catch(() => []),
     getPendingApprovals().catch(() => []),
     getCheckinByDate(today).catch(() => null),
     getCheckinByDate(yd).catch(() => null),
@@ -83,30 +85,33 @@ export default async function Home() {
   const needsAttentionCount = (approvals as any[]).length + (missingCheckin ? 1 : 0);
 
   return (
-    <div className="space-y-10 max-w-5xl mx-auto">
+    <div className="space-y-10 max-w-6xl mx-auto">
+
+      {/* ── Alert Banner ───────────────────────────────────────── */}
+      <AlertBanner />
 
       {/* ── Header ─────────────────────────────────────────────── */}
       <header className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-brand-warm-gray pb-6">
         <div>
           <h1 className="forge-heading text-4xl sm:text-5xl mb-1">
-            Mission <span className="text-brand-gold">Control</span>
+            The <span className="text-brand-gold">Foundry</span>
           </h1>
           <p className="text-brand-medium-gray font-mono text-xs uppercase tracking-[0.25em]">{dateLabel}</p>
         </div>
         <div className="flex items-center gap-3 flex-wrap">
           {checkin.found && !usingFallback ? (
-            <span className="flex items-center gap-1.5 text-[9px] font-mono font-bold text-green-600 uppercase tracking-widest">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block" />
+            <span className="flex items-center gap-1.5 text-[9px] font-mono font-bold text-ab-green uppercase tracking-widest">
+              <span className="w-1.5 h-1.5 rounded-full bg-ab-green inline-block" />
               Check-in found
             </span>
           ) : usingFallback ? (
-            <span className="flex items-center gap-1.5 text-[9px] font-mono font-bold text-amber-600 uppercase tracking-widest">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 inline-block" />
+            <span className="flex items-center gap-1.5 text-[9px] font-mono font-bold text-ab-gold uppercase tracking-widest">
+              <span className="w-1.5 h-1.5 rounded-full bg-ab-gold inline-block" />
               Using {fallbackDate} priorities
             </span>
           ) : (
-            <span className="flex items-center gap-1.5 text-[9px] font-mono font-bold text-amber-600 uppercase tracking-widest">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse inline-block" />
+            <span className="flex items-center gap-1.5 text-[9px] font-mono font-bold text-ab-gold uppercase tracking-widest">
+              <span className="w-1.5 h-1.5 rounded-full bg-ab-gold animate-pulse inline-block" />
               No check-in today
             </span>
           )}
@@ -119,7 +124,7 @@ export default async function Home() {
           {(approvals as any[]).length > 0 && (
             <Link
               href="/approvals"
-              className="flex items-center gap-1.5 bg-brand-gold text-white text-[9px] font-mono font-bold uppercase tracking-widest px-3 py-1.5 rounded-full hover:opacity-90 transition-opacity"
+              className="flex items-center gap-1.5 bg-brand-gold text-ab-body text-[9px] font-mono font-bold uppercase tracking-widest px-3 py-1.5 rounded-full hover:opacity-90 transition-opacity"
             >
               {(approvals as any[]).length} approval{(approvals as any[]).length !== 1 ? 's' : ''} pending
             </Link>
@@ -158,7 +163,7 @@ export default async function Home() {
                 {usingFallback ? `From ${fallbackDate} — First Move` : "This Session's Focus"}
               </div>
               {usingFallback && (
-                <span className="text-[8px] font-mono text-amber-600 uppercase tracking-widest">No check-in today</span>
+                <span className="text-[8px] font-mono text-ab-gold uppercase tracking-widest">No check-in today</span>
               )}
             </div>
 
@@ -182,7 +187,7 @@ export default async function Home() {
 
             {checkin.blocker && (
               <div className="mt-4 pt-4 border-t border-brand-warm-gray">
-                <div className="forge-label mb-1 text-red-500">Blocker</div>
+                <div className="forge-label mb-1 text-ab-red">Blocker</div>
                 <p className="text-xs text-brand-slate italic">{checkin.blocker}</p>
               </div>
             )}
@@ -225,18 +230,18 @@ export default async function Home() {
         <div className="flex items-center gap-3 mb-4">
           <div className="forge-label">Needs Attention</div>
           {needsAttentionCount === 0 && (
-            <span className="text-[9px] font-mono text-green-600 font-bold uppercase tracking-widest">— All clear</span>
+            <span className="text-[9px] font-mono text-ab-green font-bold uppercase tracking-widest">— All clear</span>
           )}
         </div>
 
         {missingCheckin && (
           <div className="forge-panel mb-4" style={{ borderColor: 'var(--color-amber)', backgroundColor: 'var(--color-amber-bg)' }}>
             <div className="flex items-start gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0 mt-1.5" />
+              <span className="w-1.5 h-1.5 rounded-full bg-ab-gold shrink-0 mt-1.5" />
               <div>
-                <div className="text-xs font-bold text-amber-800 mb-0.5">No daily check-in for {today}</div>
-                <p className="text-[11px] text-amber-700 italic">
-                  Create <code className="bg-amber-100 px-1 py-0.5 rounded text-[10px]">workspace/memory/checkins/{today}.md</code>{' '}
+                <div className="text-xs font-bold text-ab-gold mb-0.5">No daily check-in for {today}</div>
+                <p className="text-[11px] text-ab-gold italic">
+                  Create <code className="bg-ab-gold px-1 py-0.5 rounded text-[10px]">workspace/memory/checkins/{today}.md</code>{' '}
                   to populate priorities, KPIs, and blockers.
                 </p>
               </div>
@@ -247,194 +252,74 @@ export default async function Home() {
         <ApprovalsPanel />
       </section>
 
-      {/* ── BUSINESS MOVEMENT ──────────────────────────────────── */}
+      {/* ── TWO-PANE: FEED + AGENT ACTIVITY ───────────────────── */}
       <section>
-        <div className="forge-label mb-4">Business Movement</div>
-        <div className="grid grid-cols-3 gap-4">
-          {[
-            { label: 'Active Clients', value: String((projects as any[]).filter((p: any) => p.client && p.client !== 'Internal' && p.status === 'In Progress').length), sub: 'Forge Agency',   color: 'text-brand-ink' },
-            { label: 'In Progress',    value: String(inProgressProjects.length),                                                                                          sub: 'Projects',      color: 'text-brand-ink' },
-            { label: 'Approvals',      value: String((approvals as any[]).length || '—'),                                                                                 sub: 'Pending review', color: (approvals as any[]).length > 0 ? 'text-amber-600' : 'text-brand-ink' },
-          ].map(kpi => (
-            <div key={kpi.label} className="forge-card rounded-2xl p-4">
-              <div className="forge-label mb-1">{kpi.label}</div>
-              <div className={`text-2xl font-black font-mono tabular-nums ${kpi.color}`}>{kpi.value}</div>
-              <div className="text-[9px] font-mono text-brand-medium-gray uppercase mt-0.5">{kpi.sub}</div>
-            </div>
-          ))}
-        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
 
-        {/* Wins + Decisions from most recent EOD check-in */}
-        {(checkin.wins.length > 0 || checkin.decisions.length > 0) && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-            {checkin.wins.length > 0 && (
-              <div className="forge-panel">
-                <div className="forge-label mb-3 text-green-600">
-                  {usingFallback ? `Wins — ${fallbackDate}` : "Today's Wins"}
-                </div>
-                <ul className="space-y-2">
-                  {checkin.wins.map((w, i) => (
-                    <li key={i} className="flex gap-2 items-start text-xs text-brand-ink">
-                      <span className="text-green-500 shrink-0">✓</span>{w}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            {checkin.decisions.length > 0 && (
-              <div className="forge-panel">
-                <div className="forge-label mb-3">
-                  {usingFallback ? `Decisions — ${fallbackDate}` : 'Decisions Made'}
-                </div>
-                <ul className="space-y-2">
-                  {checkin.decisions.map((d, i) => (
-                    <li key={i} className="flex gap-2 items-start text-xs text-brand-ink">
-                      <span className="text-brand-gold shrink-0">→</span>{d}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+          {/* Left pane — Event Feed (60%) */}
+          <div className="lg:col-span-3">
+            <EventFeed />
           </div>
-        )}
-      </section>
 
-      {/* ── AGENT RUN HEALTH ───────────────────────────────────── */}
-      {cronJobs.length > 0 && (
-        <section>
-          <div className="flex items-center justify-between mb-4">
-            <div className="forge-label">Agent Run Health</div>
-            <div className="flex items-center gap-3">
-              <span className="text-[9px] font-mono text-green-600 font-bold">
-                {cronJobs.filter(j => j.stalenessStatus === 'ok').length} healthy
-              </span>
-              {cronJobs.filter(j => j.stalenessStatus === 'stale').length > 0 && (
-                <span className="text-[9px] font-mono text-amber-600 font-bold">
-                  {cronJobs.filter(j => j.stalenessStatus === 'stale').length} stale
-                </span>
-              )}
-              {cronJobs.filter(j => j.stalenessStatus === 'critical').length > 0 && (
-                <span className="text-[9px] font-mono text-red-500 font-bold">
-                  {cronJobs.filter(j => j.stalenessStatus === 'critical').length} critical
-                </span>
-              )}
-            </div>
-          </div>
-          <div className="forge-panel !p-0 overflow-hidden">
-            {cronJobs.map((job, i) => {
-              const dot =
-                job.stalenessStatus === 'ok'       ? 'bg-green-500' :
-                job.stalenessStatus === 'stale'    ? 'bg-amber-400' :
-                job.stalenessStatus === 'critical' ? 'bg-red-500 animate-pulse' :
-                job.stalenessStatus === 'never'    ? 'bg-amber-400' :
-                                                     'bg-brand-warm-gray';
-              const statusLabel =
-                job.stalenessStatus === 'ok'       ? 'Healthy' :
-                job.stalenessStatus === 'stale'    ? 'Stale' :
-                job.stalenessStatus === 'critical' ? (job.lastRunStatus === 'error' ? 'Error' : 'Critical') :
-                job.stalenessStatus === 'never'    ? 'Never run' :
-                job.stalenessStatus === 'disabled' ? 'Disabled' :
-                                                     'One-time';
-              const statusColor =
-                job.stalenessStatus === 'ok'       ? 'text-green-600' :
-                job.stalenessStatus === 'stale'    ? 'text-amber-600' :
-                job.stalenessStatus === 'critical' ? 'text-red-500' :
-                job.stalenessStatus === 'never'    ? 'text-amber-500' :
-                                                     'text-brand-medium-gray';
-              return (
-                <div key={job.id} className={`flex items-center gap-4 px-5 py-3 border-b border-brand-warm-gray last:border-0 ${i % 2 === 0 ? '' : 'bg-brand-parchment/40'}`}>
-                  <span className={`w-2 h-2 rounded-full shrink-0 ${dot}`} />
-                  <div className="flex-1 min-w-0">
-                    <span className="text-[11px] font-bold text-brand-ink">{job.name}</span>
-                    <span className="text-[9px] font-mono text-brand-medium-gray ml-2">{job.schedule}</span>
-                  </div>
-                  <div className="flex items-center gap-4 shrink-0">
-                    {job.lastRunAt ? (
-                      <span className="text-[9px] font-mono text-brand-medium-gray tabular-nums">
-                        {formatDistanceToNow(new Date(job.lastRunAt), { addSuffix: true })}
+          {/* Right pane — Live Agent Feed + Cron Health (40%) */}
+          <div className="lg:col-span-2 space-y-6">
+            <LiveAgentFeed />
+
+            {/* Cron health compact */}
+            {cronJobs.length > 0 && (
+              <div className="forge-panel !p-0 overflow-hidden">
+                <div className="flex items-center justify-between px-4 py-2.5 border-b border-brand-warm-gray">
+                  <span className="forge-label">Cron Health</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[8px] font-mono text-ab-green font-bold">{cronJobs.filter(j => j.stalenessStatus === 'ok').length} ok</span>
+                    {cronJobs.filter(j => j.stalenessStatus !== 'ok' && j.stalenessStatus !== 'disabled').length > 0 && (
+                      <span className="text-[8px] font-mono text-ab-red font-bold">
+                        {cronJobs.filter(j => j.stalenessStatus !== 'ok' && j.stalenessStatus !== 'disabled').length} issue
                       </span>
-                    ) : (
-                      <span className="text-[9px] font-mono text-brand-medium-gray">—</span>
                     )}
-                    <span className={`text-[9px] font-mono font-bold uppercase w-16 text-right ${statusColor}`}>
-                      {statusLabel}
-                    </span>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        </section>
-      )}
-
-      {/* ── ACTIVE PROJECTS ────────────────────────────────────── */}
-      {inProgressProjects.length > 0 && (
-        <section>
-          <div className="flex items-center justify-between mb-4">
-            <div className="forge-label">Active Projects</div>
-            <Link href="/projects" className="text-[9px] font-mono font-bold text-brand-gold uppercase tracking-widest hover:text-brand-ink transition-colors">
-              View All →
-            </Link>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {inProgressProjects.slice(0, 6).map((project: any) => (
-              <div key={project.id} className="forge-panel">
-                <div className="flex justify-between items-start gap-2 mb-2">
-                  <h3 className="forge-heading text-sm leading-tight">{project.name}</h3>
-                  <span className="text-[8px] font-bold uppercase px-2 py-0.5 border border-brand-gold text-brand-gold bg-brand-gold/5 rounded shrink-0">
-                    {project.status}
-                  </span>
-                </div>
-                {project.description && (
-                  <p className="text-[11px] text-brand-slate italic line-clamp-2 mb-3">{project.description}</p>
-                )}
-                <div className="flex items-center justify-between pt-3 border-t border-brand-warm-gray">
-                  <span className="text-[9px] font-mono text-brand-medium-gray uppercase">{project.client ?? 'Internal'}</span>
-                  {project.deadline && (
-                    <span className="text-[9px] font-mono text-brand-medium-gray">Due {project.deadline}</span>
-                  )}
-                </div>
+                {cronJobs.slice(0, 8).map((job) => {
+                  const dot =
+                    job.stalenessStatus === 'ok'       ? 'bg-ab-green' :
+                    job.stalenessStatus === 'stale'    ? 'bg-ab-gold' :
+                    job.stalenessStatus === 'critical' ? 'bg-ab-red animate-pulse' :
+                    job.stalenessStatus === 'never'    ? 'bg-ab-gold' :
+                                                         'bg-brand-warm-gray';
+                  return (
+                    <div key={job.id} className="flex items-center gap-3 px-4 py-2 border-b border-brand-warm-gray last:border-0">
+                      <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${dot}`} />
+                      <span className="text-[10px] font-mono text-brand-ink flex-1 truncate">{job.name}</span>
+                      {job.lastRunAt && (
+                        <span className="text-[8px] font-mono text-brand-medium-gray tabular-nums shrink-0">
+                          {formatDistanceToNow(new Date(job.lastRunAt), { addSuffix: true })}
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
-            ))}
-          </div>
-        </section>
-      )}
+            )}
 
-
-      {/* ── RECENT EXECUTION ───────────────────────────────────── */}
-      {(agentLogs as any[]).length > 0 && (
-        <section>
-          <div className="flex items-center justify-between mb-4">
-            <div className="forge-label">Recent Execution</div>
-            <Link href="/agents" className="text-[9px] font-mono font-bold text-brand-gold uppercase tracking-widest hover:text-brand-ink transition-colors">
-              View All →
-            </Link>
-          </div>
-          <div className="forge-panel !p-0 overflow-hidden">
-            {(agentLogs as any[]).map((log: any, i: number) => (
-              <div
-                key={log.id ?? i}
-                className="flex items-start gap-4 px-5 py-3 border-b border-brand-warm-gray last:border-0 hover:bg-brand-parchment transition-colors"
-              >
-                <div className="text-[9px] font-mono text-brand-medium-gray shrink-0 w-16 pt-0.5 tabular-nums">
-                  {formatDistanceToNow(new Date(log.created_at), { addSuffix: true })}
+            {/* Active Projects compact */}
+            {inProgressProjects.length > 0 && (
+              <div className="forge-panel !p-0 overflow-hidden">
+                <div className="flex items-center justify-between px-4 py-2.5 border-b border-brand-warm-gray">
+                  <span className="forge-label">Active Projects</span>
+                  <Link href="/projects" className="text-[8px] font-mono font-bold text-brand-gold uppercase tracking-widest hover:text-brand-ink transition-colors">All →</Link>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <span className="text-[9px] font-mono font-bold text-brand-gold uppercase mr-1.5">{log.agent_name}</span>
-                  <span className="text-[11px] text-brand-slate">
-                    {[log.action, log.path].filter(Boolean).join(' — ')}
-                  </span>
-                </div>
-                {Number(log.cost) > 0 && (
-                  <div className="text-[9px] font-mono text-brand-medium-gray shrink-0 tabular-nums">
-                    ${Number(log.cost).toFixed(4)}
+                {inProgressProjects.slice(0, 5).map((project: any) => (
+                  <div key={project.id} className="flex items-center gap-3 px-4 py-2.5 border-b border-brand-warm-gray last:border-0">
+                    <span className="w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0" />
+                    <span className="text-[10px] font-mono text-brand-ink flex-1 truncate">{project.name}</span>
+                    <span className="text-[8px] font-mono text-brand-medium-gray shrink-0">{project.client ?? 'Internal'}</span>
                   </div>
-                )}
+                ))}
               </div>
-            ))}
+            )}
           </div>
-        </section>
-      )}
+        </div>
+      </section>
 
     </div>
   );

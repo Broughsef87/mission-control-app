@@ -22,38 +22,56 @@ function tryWriteToDisk(date: string, content: string) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { date, priorities, blocker, numbers, notes } = body as {
+    const { date, priorities: rawPriorities, blocker, numbers, notes, content: rawContent, source } = body as {
       date: string;
-      priorities: string[];
+      priorities?: string[];
       blocker?: string;
       numbers?: Record<string, string>;
       notes?: string;
+      content?: string;
+      source?: string;
     };
 
-    if (!date || !priorities?.length) {
-      return NextResponse.json({ error: 'date and priorities are required' }, { status: 400 });
+    if (!date) {
+      return NextResponse.json({ error: 'date is required' }, { status: 400 });
     }
 
-    // Build markdown in the EOD format OpenClaw agents understand
-    const lines: string[] = [`# Check-in: ${date}`, '', `## 4. First Move Tomorrow`];
-    priorities.filter(Boolean).forEach(p => lines.push(`- ${p}`));
+    // Cron sends { date, notes, source } with raw markdown in notes — no priorities array.
+    // Structured form sends { date, priorities[], blocker?, numbers?, notes? }.
+    let priorities = rawPriorities ?? [];
+    let storedContent = rawContent ?? '';
 
-    if (blocker) {
-      lines.push('', '## 2. Blocked / Unfinished', `- ${blocker}`);
+    if (!priorities.length && (notes || rawContent)) {
+      const raw = notes ?? rawContent ?? '';
+      console.log('RAW:', typeof raw, Array.isArray(raw), raw);
+      const parsed = parseCheckinContent(raw, date);
+      if (parsed.priorities.length) priorities = parsed.priorities;
+      storedContent = raw;
     }
 
-    if (numbers && Object.keys(numbers).length > 0) {
-      lines.push('', '## 5. Numbers / Updates');
-      for (const [key, val] of Object.entries(numbers)) {
-        if (val) lines.push(`- **${key}:** ${val}`);
+    // Still no priorities — store raw notes as a single priority so the record isn't empty
+    if (!priorities.length && notes) {
+      priorities = [notes.slice(0, 200)];
+    }
+
+    if (!priorities.length) {
+      return NextResponse.json({ error: 'date and priorities (or notes) are required' }, { status: 400 });
+    }
+
+    // If we received structured data (not raw markdown), build the markdown
+    if (!storedContent) {
+      const lines: string[] = [`# Check-in: ${date}`, '', `## 4. First Move Tomorrow`];
+      priorities.filter(Boolean).forEach(p => lines.push(`- ${p}`));
+      if (blocker) lines.push('', '## 2. Blocked / Unfinished', `- ${blocker}`);
+      if (numbers && Object.keys(numbers).length > 0) {
+        lines.push('', '## 5. Numbers / Updates');
+        for (const [key, val] of Object.entries(numbers)) {
+          if (val) lines.push(`- **${key}:** ${val}`);
+        }
       }
+      if (notes) lines.push('', '## Notes', notes);
+      storedContent = lines.join('\n') + '\n';
     }
-
-    if (notes) {
-      lines.push('', '## Notes', notes);
-    }
-
-    const content = lines.join('\n') + '\n';
 
     // Primary store: Supabase
     const row = await upsertCheckin({
@@ -62,11 +80,11 @@ export async function POST(req: NextRequest) {
       blocker: blocker || undefined,
       numbers: numbers ?? {},
       notes: notes || undefined,
-      content,
+      content: storedContent,
     });
 
     // Side-effect: also write to local disk if accessible
-    tryWriteToDisk(date, content);
+    tryWriteToDisk(date, storedContent);
 
     return NextResponse.json({ ok: true, date, id: row.id });
   } catch (e: any) {

@@ -20,8 +20,8 @@ interface MTDSummary {
 
 const CATEGORY_COLORS: Record<string, string> = {
   agency: 'text-brand-gold border-brand-gold/40 bg-brand-gold/5',
-  app: 'text-blue-600 border-blue-300 bg-blue-50',
-  community: 'text-green-600 border-green-300 bg-green-50',
+  app: 'text-ab-blue border-ab-blue bg-blue-50',
+  community: 'text-ab-green border-ab-green bg-green-50',
   other: 'text-brand-medium-gray border-brand-warm-gray',
 };
 
@@ -71,7 +71,7 @@ export default function RevenuePage() {
 
       {/* KPI Cards */}
       <div data-reveal="1" className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="forge-panel !rounded-2xl bg-brand-charcoal border-brand-charcoal text-white">
+        <div className="forge-panel !rounded-2xl bg-brand-charcoal border-brand-charcoal text-ab-body">
           <div className="text-xs font-bold uppercase tracking-widest mb-1 opacity-60">MTD Revenue</div>
           <div className="text-3xl font-black font-mono italic">${mtd.total.toLocaleString()}</div>
         </div>
@@ -121,7 +121,7 @@ export default function RevenuePage() {
                     <div className="text-brand-gold font-bold font-mono">+${Number(item.amount).toLocaleString()}</div>
                     <button
                       onClick={() => deleteEntry(item.id)}
-                      className="opacity-0 group-hover:opacity-100 p-1.5 text-brand-medium-gray hover:text-red-500 transition-all"
+                      className="opacity-0 group-hover:opacity-100 p-1.5 text-brand-medium-gray hover:text-ab-red transition-all"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>

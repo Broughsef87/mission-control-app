@@ -24,11 +24,11 @@ const STAGE_LABELS: Record<string, string> = {
   completed: 'Completed',
 };
 const STAGE_STYLES: Record<string, { card: string; badge: string }> = {
-  lead:      { card: 'border-brand-warm-gray',  badge: 'bg-brand-parchment text-brand-medium-gray border-brand-warm-gray' },
-  proposal:  { card: 'border-blue-200',          badge: 'bg-blue-50 text-blue-600 border-blue-200' },
-  active:    { card: 'border-brand-gold/40',     badge: 'bg-brand-gold/10 text-brand-gold border-brand-gold/40' },
-  invoiced:  { card: 'border-amber-300',         badge: 'bg-amber-50 text-amber-600 border-amber-300' },
-  completed: { card: 'border-green-300',         badge: 'bg-green-50 text-green-600 border-green-300' },
+  lead:      { card: 'border-ab-border',        badge: 'bg-ab-surface-2 text-ab-muted border-ab-border' },
+  proposal:  { card: 'border-ab-blue/25',       badge: 'bg-[rgba(30,111,255,0.08)] text-ab-blue border-ab-blue/25' },
+  active:    { card: 'border-ab-gold/40',       badge: 'bg-ab-gold/10 text-ab-gold border-ab-gold/40' },
+  invoiced:  { card: 'border-ab-gold/30',       badge: 'bg-[rgba(232,163,32,0.08)] text-ab-gold border-ab-gold/30' },
+  completed: { card: 'border-ab-green/25',      badge: 'bg-[rgba(40,205,65,0.08)] text-ab-green border-ab-green/25' },
 };
 
 export default function CRMPage() {
@@ -128,7 +128,7 @@ export default function CRMPage() {
         </div>
         <button
           onClick={() => { resetForm(); setShowForm(true); }}
-          className="bg-brand-charcoal hover:bg-brand-ink text-white font-black uppercase text-[10px] px-6 py-2 rounded-lg tracking-widest transition-all italic flex items-center gap-2"
+          className="bg-brand-charcoal hover:bg-brand-ink text-ab-body font-black uppercase text-[10px] px-6 py-2 rounded-lg tracking-widest transition-all italic flex items-center gap-2"
         >
           <Plus className="w-3 h-3" /> Add Client
         </button>
@@ -231,7 +231,7 @@ export default function CRMPage() {
           const stageIdx = STAGES.indexOf(client.pipeline_stage);
           const nextStage = STAGES[stageIdx + 1];
           return (
-            <div key={client.id} className={`bg-white border ${styles.card} rounded-2xl p-5 group hover:shadow-md transition-all relative overflow-hidden`}>
+            <div key={client.id} className={`bg-ab-surface border ${styles.card} rounded-2xl p-5 group transition-all relative overflow-hidden`}>
               {/* Progress dots */}
               <div className="flex gap-1 mb-4">
                 {STAGES.map((s, i) => (
@@ -284,7 +284,7 @@ export default function CRMPage() {
                   <Edit3 className="w-3.5 h-3.5" />
                 </button>
                 <button onClick={() => deleteClient(client.id)}
-                  className="p-2 border border-brand-warm-gray rounded-lg hover:border-red-300 text-brand-medium-gray hover:text-red-500 transition-all">
+                  className="p-2 border border-brand-warm-gray rounded-lg hover:border-ab-red text-brand-medium-gray hover:text-ab-red transition-all">
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>
               </div>
@@ -295,3 +295,5 @@ export default function CRMPage() {
     </div>
   );
 }
+
+

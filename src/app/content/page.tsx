@@ -15,18 +15,18 @@ interface ContentItem {
 }
 
 const CHANNELS = [
-  { name: 'YouTube',       icon: Youtube,       colorClass: 'text-red-500',    bg: 'bg-red-50' },
+  { name: 'YouTube',       icon: Youtube,       colorClass: 'text-ab-red',    bg: 'bg-red-50' },
   { name: 'Forge OS Blog', icon: Layout,         colorClass: 'text-brand-gold', bg: 'bg-brand-gold/10' },
-  { name: 'X/Twitter',     icon: MessageSquare,  colorClass: 'text-blue-500',   bg: 'bg-blue-50' },
-  { name: 'Skool',         icon: List,           colorClass: 'text-green-600',  bg: 'bg-green-50' },
+  { name: 'X/Twitter',     icon: MessageSquare,  colorClass: 'text-ab-blue',   bg: 'bg-blue-50' },
+  { name: 'Skool',         icon: List,           colorClass: 'text-ab-green',  bg: 'bg-green-50' },
 ];
 
 const COLUMNS = ['backlog', 'scripting', 'production', 'published'];
 const COLUMN_LABELS: Record<string, string> = { backlog: 'Backlog', scripting: 'Scripting', production: 'Production', published: 'Published' };
 const PRIORITY_STYLES: Record<string, string> = {
-  Critical: 'border-red-300 text-red-600 bg-red-50',
+  Critical: 'border-ab-red text-ab-red bg-red-50',
   High:     'border-brand-gold/40 text-brand-gold bg-brand-gold/5',
-  Medium:   'border-blue-300 text-blue-600 bg-blue-50',
+  Medium:   'border-ab-blue text-ab-blue bg-blue-50',
   Low:      'border-brand-warm-gray text-brand-medium-gray',
 };
 
@@ -90,7 +90,7 @@ export default function ContentPage() {
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="bg-brand-charcoal hover:bg-brand-ink text-white font-black uppercase text-[10px] px-6 py-2 rounded-lg tracking-widest transition-all italic flex items-center gap-2"
+          className="bg-brand-charcoal hover:bg-brand-ink text-ab-body font-black uppercase text-[10px] px-6 py-2 rounded-lg tracking-widest transition-all italic flex items-center gap-2"
         >
           <Plus className="w-3 h-3" /> New Item
         </button>
@@ -138,7 +138,7 @@ export default function ContentPage() {
         {byChannel.map((ch) => {
           const Icon = ch.icon;
           return (
-            <div key={ch.name} className="bg-white border border-brand-warm-gray rounded-2xl p-4 hover:border-brand-gold/40 transition-all cursor-pointer group relative overflow-hidden" style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+            <div key={ch.name} className="bg-ab-surface border border-ab-border rounded-2xl p-4 hover:border-ab-gold/40 transition-all cursor-pointer group relative overflow-hidden">
               <div className="absolute top-0 right-0 p-2 opacity-5 group-hover:opacity-10 transition-opacity">
                 <Icon className="w-12 h-12 text-brand-ink" />
               </div>
@@ -178,14 +178,14 @@ export default function ContentPage() {
                     <span className="text-[9px] font-mono text-brand-medium-gray uppercase">Empty</span>
                   </div>
                 ) : colItems.map((item) => (
-                  <div key={item.id} className="bg-white border border-brand-warm-gray rounded-xl p-4 hover:border-brand-gold/50 transition-all cursor-move group relative" style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.05)' }}>
+                  <div key={item.id} className="forge-panel hover:border-ab-gold/50 transition-all cursor-move group relative">
                     <div className="absolute top-0 left-0 w-[2px] h-0 group-hover:h-full bg-brand-gold transition-all duration-300 rounded-l-xl" />
                     <div className="flex justify-between items-start mb-2">
                       <span className={`text-[8px] font-mono uppercase px-1.5 py-0.5 border rounded-full ${PRIORITY_STYLES[item.priority] ?? PRIORITY_STYLES.Low}`}>
                         {item.priority}
                       </span>
                       <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button onClick={() => deleteItem(item.id)} className="text-brand-medium-gray hover:text-red-500">
+                        <button onClick={() => deleteItem(item.id)} className="text-brand-medium-gray hover:text-ab-red">
                           <Trash2 className="w-3 h-3" />
                         </button>
                       </div>
@@ -220,3 +220,5 @@ export default function ContentPage() {
     </div>
   );
 }
+
+

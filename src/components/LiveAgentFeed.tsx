@@ -92,7 +92,7 @@ export default function LiveAgentFeed() {
           <h2 className="forge-heading text-lg">Live Agent Feed</h2>
         </div>
         <div className="flex items-center gap-2">
-          <div className={`w-2 h-2 rounded-full ${connected ? 'bg-green-500 animate-pulse' : 'bg-brand-warm-gray'}`} />
+          <div className={`w-2 h-2 rounded-full ${connected ? 'bg-ab-green animate-pulse' : 'bg-brand-warm-gray'}`} />
           <span className="text-[9px] font-mono text-brand-medium-gray uppercase tracking-widest">
             {connected ? `${activeCount} Active` : 'Connecting...'}
           </span>
@@ -104,7 +104,7 @@ export default function LiveAgentFeed() {
         <div className="flex flex-wrap gap-2">
           {statuses.map(agent => (
             <div key={agent.agent_name} className="flex items-center gap-1.5 px-2.5 py-1 bg-brand-parchment border border-brand-warm-gray rounded-full">
-              <div className={`w-1.5 h-1.5 rounded-full ${agent.status === 'Working' ? 'bg-green-500' : agent.status === 'Error' ? 'bg-red-500' : 'bg-brand-warm-gray'}`} />
+              <div className={`w-1.5 h-1.5 rounded-full ${agent.status === 'Working' ? 'bg-ab-green' : agent.status === 'Error' ? 'bg-ab-red' : 'bg-brand-warm-gray'}`} />
               <span className="text-[9px] font-mono font-bold text-brand-slate uppercase tracking-wide">{agent.agent_name}</span>
             </div>
           ))}

@@ -32,16 +32,16 @@ export default function Scratchpad() {
   };
 
   return (
-    <div className="bg-[#14161b] border border-[#282a36] rounded-lg p-6 relative hover:border-gray-700 transition-colors h-full flex flex-col">
+    <div className="bg-ab-surface-2 border border-ab-border rounded-lg p-6 relative hover:border-gray-700 transition-colors h-full flex flex-col">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-widest flex items-center gap-2">
           <PencilLine size={14} className="text-purple-400" />
           Neural Scratchpad
         </h3>
         {saving ? (
-          <span className="text-[10px] text-yellow-500 animate-pulse">Saving...</span>
+          <span className="text-[10px] text-ab-gold animate-pulse">Saving...</span>
         ) : (
-          <span className="text-[10px] text-green-500 flex items-center gap-1">
+          <span className="text-[10px] text-ab-green flex items-center gap-1">
              <Check size={10} /> Saved
           </span>
         )}

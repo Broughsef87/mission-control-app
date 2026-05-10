@@ -14,9 +14,9 @@ interface Project {
 }
 
 const priorityColorMap = {
-  HIGH: 'border-red-500',
-  MEDIUM: 'border-yellow-500',
-  LOW: 'border-green-500',
+  HIGH: 'border-ab-red',
+  MEDIUM: 'border-ab-gold',
+  LOW: 'border-ab-green',
 };
 
 export default function ProjectTracker() {
@@ -28,18 +28,18 @@ export default function ProjectTracker() {
   }, []);
 
   return (
-    <div className="bg-gray-900/50 rounded-lg p-4">
-      <h2 className="text-lg font-semibold text-white mb-4">Project Tracker</h2>
+    <div className="bg-ab-surface rounded-lg p-4">
+      <h2 className="text-lg font-semibold text-ab-text mb-4">Project Tracker</h2>
       <div className="space-y-4">
         {projects.map((project) => (
           <div key={project.id} className={`bg-black/30 p-4 rounded-md border-l-4 ${priorityColorMap[project.priority]}`}>
             <div className="flex justify-between items-center mb-1">
-              <h3 className="font-bold text-indigo-400">{project.name}</h3>
-              <span className="text-xs font-mono bg-gray-700 px-2 py-1 rounded">{project.status}</span>
+              <h3 className="font-bold text-ab-blue">{project.name}</h3>
+              <span className="text-xs font-mono bg-ab-border px-2 py-1 rounded">{project.status}</span>
             </div>
-            <p className="text-sm text-gray-400 mb-2">{project.description}</p>
-            <div className="w-full bg-gray-700 rounded-full h-2.5">
-              <div className="bg-green-600 h-2.5 rounded-full" style={{ width: `${project.progress}%` }}></div>
+            <p className="text-sm text-ab-body mb-2">{project.description}</p>
+            <div className="w-full bg-ab-border rounded-full h-2.5">
+              <div className="bg-ab-green h-2.5 rounded-full" style={{ width: `${project.progress}%` }}></div>
             </div>
           </div>
         ))}

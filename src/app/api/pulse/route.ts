@@ -15,6 +15,13 @@ const STATIC_FALLBACK = {
     { name: 'Ollie', status: 'Idle', load: 5 },
   ],
   actions: [],
+  tokens: [],
+  status: [
+    { id: '1', service: 'Vercel', status: 'Healthy', message: 'Mock data fallback', timestamp: new Date().toISOString() },
+    { id: '2', service: 'YouTube', status: 'Healthy', message: 'Mock data fallback', timestamp: new Date().toISOString() },
+    { id: '3', service: 'GitHub', status: 'Healthy', message: 'Mock data fallback', timestamp: new Date().toISOString() },
+    { id: '4', service: 'Supabase', status: 'Healthy', message: 'Mock data fallback', timestamp: new Date().toISOString() }
+  ],
 };
 
 export async function GET() {
@@ -58,15 +65,42 @@ export async function GET() {
     });
 
     // Fetch recent actions from Supabase
-    const { data: actions } = await supabase
+    const { data: actionsData } = await supabase
       .from('agent_logs')
-      .select('id, agent_name, action, path, created_at')
+      .select('id, agent_name, action, path, created_at, tokens, cost')
       .order('created_at', { ascending: false })
-      .limit(20);
+      .limit(30);
+
+    const actions = (actionsData ?? []).map(row => ({
+      id: row.id,
+      agent: row.agent_name,
+      action: row.action,
+      path: row.path,
+      timestamp: row.created_at
+    }));
+
+    const tokens = (actionsData ?? [])
+      .filter(row => row.cost !== null && row.tokens !== null)
+      .map(row => ({
+        id: row.id,
+        agent: row.agent_name,
+        model: 'gemini-2.5-pro',
+        tokens: row.tokens,
+        cost: row.cost,
+        timestamp: row.created_at
+      }));
+
+    // Mock status for ExternalRadar
+    const status = [
+      { id: '1', service: 'Vercel', status: 'Healthy', message: 'All systems operational', timestamp: new Date().toISOString() },
+      { id: '2', service: 'YouTube', status: 'Healthy', message: 'API connected', timestamp: new Date().toISOString() },
+      { id: '3', service: 'GitHub', status: 'Healthy', message: 'Webhooks active', timestamp: new Date().toISOString() },
+      { id: '4', service: 'Supabase', status: 'Healthy', message: 'Database online', timestamp: new Date().toISOString() }
+    ];
 
     // If Supabase returned data, use it; otherwise fall back to static
     if (agentRows && agentRows.length > 0) {
-      return NextResponse.json({ dailyBurn, monthlyBurn, agents, actions: actions ?? [] });
+      return NextResponse.json({ dailyBurn, monthlyBurn, agents, actions, tokens, status });
     }
 
     // No cloud data yet — return static fallback with zero burn

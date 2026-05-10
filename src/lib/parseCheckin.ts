@@ -42,6 +42,8 @@ const CHECKINS_DIR =
   path.join('C:', 'Users', 'broug', '.openclaw', 'workspace', 'memory', 'checkins');
 
 export function parseCheckinContent(content: string, date: string): Checkin {
+  if (typeof content !== 'string') content = JSON.stringify(content);
+  if (!content) content = '';
   const lines = content.split('\n');
 
   // Detect format

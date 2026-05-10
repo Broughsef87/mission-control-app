@@ -18,7 +18,7 @@ const TeamRoster = () => {
                   {agent.name.substring(0, 2)}
                 </div>
                 <div className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white ${
-                  agent.status === 'Working' ? 'bg-green-500' : 'bg-brand-gold'
+                  agent.status === 'Working' ? 'bg-ab-green' : 'bg-brand-gold'
                 }`}></div>
               </div>
               <div>
@@ -29,7 +29,7 @@ const TeamRoster = () => {
             <div className="text-right">
               <div className="text-[9px] font-bold text-brand-medium-gray uppercase mb-1">Status</div>
               <div className={`text-[10px] font-bold uppercase italic ${
-                agent.status === 'Working' ? 'text-green-600' : 'text-brand-gold'
+                agent.status === 'Working' ? 'text-ab-green' : 'text-brand-gold'
               }`}>
                 {agent.status}
               </div>

@@ -22,8 +22,8 @@ export default function TaskInput({ onAdd }: { onAdd: () => void }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-[#14161b] border border-[#282a36] rounded-lg p-4 flex gap-3 shadow-lg">
-      <div className="w-10 h-10 bg-indigo-500/10 rounded-lg flex items-center justify-center text-indigo-400 shrink-0">
+    <form onSubmit={handleSubmit} className="bg-ab-surface-2 border border-ab-border rounded-lg p-4 flex gap-3 shadow-lg">
+      <div className="w-10 h-10 bg-ab-blue/10 rounded-lg flex items-center justify-center text-ab-blue shrink-0">
         <Command size={18} />
       </div>
       <div className="flex-1">
@@ -38,7 +38,7 @@ export default function TaskInput({ onAdd }: { onAdd: () => void }) {
       <button 
         type="submit" 
         disabled={sending || !text.trim()}
-        className="w-10 h-10 bg-[#1f2128] hover:bg-indigo-600 hover:text-white text-gray-400 rounded-lg flex items-center justify-center transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-10 h-10 bg-ab-surface-2 hover:bg-ab-blue hover:text-ab-body text-gray-400 rounded-lg flex items-center justify-center transition-all disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <Send size={16} />
       </button>

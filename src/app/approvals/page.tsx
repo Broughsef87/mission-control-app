@@ -20,9 +20,9 @@ interface Approval {
 }
 
 const STATUS_PILL: Record<string, string> = {
-  pending:  'text-amber-700 bg-amber-50 border-amber-200',
-  approved: 'text-green-700 bg-green-50 border-green-200',
-  denied:   'text-red-600 bg-red-50 border-red-200',
+  pending:  'text-ab-gold bg-amber-50 border-ab-gold',
+  approved: 'text-ab-green bg-green-50 border-ab-green',
+  denied:   'text-ab-red bg-red-50 border-ab-red',
 };
 
 export default function ApprovalsPage() {
@@ -86,7 +86,7 @@ export default function ApprovalsPage() {
         </div>
         <button
           onClick={() => setShowCreate(v => !v)}
-          className="flex items-center gap-2 bg-brand-charcoal text-white text-[10px] font-mono font-bold uppercase tracking-widest px-4 py-2 rounded-lg hover:opacity-90 transition-opacity self-start"
+          className="flex items-center gap-2 bg-brand-charcoal text-ab-body text-[10px] font-mono font-bold uppercase tracking-widest px-4 py-2 rounded-lg hover:opacity-90 transition-opacity self-start"
         >
           <Plus className="w-3 h-3" /> New Approval
         </button>
@@ -166,13 +166,13 @@ export default function ApprovalsPage() {
             onClick={() => setFilter(s)}
             className={`text-[9px] font-mono font-bold uppercase tracking-widest px-3 py-1.5 rounded-full border transition-all ${
               filter === s
-                ? 'bg-brand-ink text-white border-brand-ink'
+                ? 'bg-brand-ink text-ab-body border-brand-ink'
                 : 'text-brand-medium-gray border-brand-warm-gray hover:border-brand-slate hover:text-brand-ink'
             }`}
           >
             {s}
             {s === 'pending' && pendingCount > 0 && (
-              <span className="ml-1.5 bg-brand-gold text-white text-[8px] px-1.5 py-0.5 rounded-full">
+              <span className="ml-1.5 bg-brand-gold text-ab-body text-[8px] px-1.5 py-0.5 rounded-full">
                 {pendingCount}
               </span>
             )}
@@ -231,13 +231,13 @@ export default function ApprovalsPage() {
                 <div className="flex gap-2 mt-4 pt-4 border-t border-brand-warm-gray">
                   <button
                     onClick={() => resolve(a.id, 'approved')}
-                    className="flex-1 flex items-center justify-center gap-1.5 text-[9px] font-mono font-bold uppercase tracking-widest bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors"
+                    className="flex-1 flex items-center justify-center gap-1.5 text-[9px] font-mono font-bold uppercase tracking-widest bg-ab-green text-ab-body py-2 rounded-lg hover:bg-ab-green transition-colors"
                   >
                     <CheckCircle2 className="w-3 h-3" /> Approve
                   </button>
                   <button
                     onClick={() => resolve(a.id, 'denied')}
-                    className="flex-1 flex items-center justify-center gap-1.5 text-[9px] font-mono font-bold uppercase tracking-widest border border-red-200 text-red-500 py-2 rounded-lg hover:bg-red-50 transition-colors"
+                    className="flex-1 flex items-center justify-center gap-1.5 text-[9px] font-mono font-bold uppercase tracking-widest border border-ab-red text-ab-red py-2 rounded-lg hover:bg-red-50 transition-colors"
                   >
                     <XCircle className="w-3 h-3" /> Deny
                   </button>

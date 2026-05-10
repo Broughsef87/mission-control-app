@@ -43,13 +43,13 @@ export default function ApprovalsPanel() {
       <div className="flex items-center gap-2">
         <ShieldCheck className="w-4 h-4 text-brand-gold animate-pulse" />
         <h2 className="forge-heading text-base">Pending Approvals</h2>
-        <span className="ml-auto text-[9px] font-mono font-bold bg-brand-gold text-white px-2 py-0.5 rounded-full">
+        <span className="ml-auto text-[9px] font-mono font-bold bg-brand-gold text-ab-body px-2 py-0.5 rounded-full">
           {approvals.length}
         </span>
       </div>
       <div className="space-y-3">
         {approvals.map(a => (
-          <div key={a.id} className="bg-white border border-brand-warm-gray rounded-xl p-4 space-y-3">
+          <div key={a.id} className="forge-panel space-y-3">
             <div className="flex items-start gap-3">
               <Clock className="w-4 h-4 text-brand-gold shrink-0 mt-0.5" />
               <div className="flex-1 min-w-0">
@@ -67,13 +67,13 @@ export default function ApprovalsPanel() {
             <div className="flex gap-2">
               <button
                 onClick={() => resolve(a.id, 'approved')}
-                className="flex-1 flex items-center justify-center gap-1.5 text-[9px] font-mono font-bold uppercase tracking-widest bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors"
+                className="flex-1 flex items-center justify-center gap-1.5 text-[9px] font-mono font-bold uppercase tracking-widest bg-ab-green text-ab-body py-2 rounded-lg hover:bg-ab-green transition-colors"
               >
                 <CheckCircle2 className="w-3 h-3" /> Approve
               </button>
               <button
                 onClick={() => resolve(a.id, 'denied')}
-                className="flex-1 flex items-center justify-center gap-1.5 text-[9px] font-mono font-bold uppercase tracking-widest border border-red-200 text-red-500 py-2 rounded-lg hover:bg-red-50 transition-colors"
+                className="flex-1 flex items-center justify-center gap-1.5 text-[9px] font-mono font-bold uppercase tracking-widest border border-ab-red text-ab-red py-2 rounded-lg hover:bg-red-50 transition-colors"
               >
                 <XCircle className="w-3 h-3" /> Deny
               </button>
@@ -84,3 +84,5 @@ export default function ApprovalsPanel() {
     </div>
   );
 }
+
+

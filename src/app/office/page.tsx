@@ -29,16 +29,16 @@ interface CheckinPriority {
 }
 
 const TYPE_STYLES: Record<string, string> = {
-  success: 'bg-green-50 border-green-200',
-  error: 'bg-red-50 border-red-200',
-  warning: 'bg-amber-50 border-amber-200',
-  info: 'bg-white border-brand-warm-gray',
+  success: 'bg-[rgba(40,205,65,0.08)] border-ab-green/25',
+  error: 'bg-[rgba(220,38,38,0.08)] border-ab-red/25',
+  warning: 'bg-[rgba(232,163,32,0.08)] border-ab-gold/25',
+  info: 'bg-ab-surface border-ab-border',
 };
 
 const TYPE_DOTS: Record<string, string> = {
-  success: 'bg-green-500',
-  error: 'bg-red-500',
-  warning: 'bg-amber-500',
+  success: 'bg-ab-green',
+  error: 'bg-ab-red',
+  warning: 'bg-ab-gold',
   info: 'bg-brand-gold',
 };
 
@@ -124,7 +124,7 @@ export default function OfficePage() {
           <Search className="w-3 h-3 absolute left-3 top-1/2 -translate-y-1/2 text-brand-medium-gray" />
           <input type="text" value={search} onChange={e => setSearch(e.target.value)}
             placeholder="Search..."
-            className="bg-white border border-brand-warm-gray rounded-lg pl-9 pr-4 py-2 text-[10px] focus:outline-none focus:border-brand-gold w-48 uppercase tracking-tighter text-brand-ink" />
+            className="bg-ab-surface border border-ab-border rounded-lg pl-9 pr-4 py-2 text-[10px] focus:outline-none focus:border-ab-gold w-48 uppercase tracking-tighter text-ab-body" />
         </div>
       </div>
 
@@ -135,7 +135,7 @@ export default function OfficePage() {
             <h2 className="text-xs font-black uppercase tracking-[0.3em] text-brand-slate flex items-center gap-3">
               <Mail className="w-3 h-3 text-brand-gold" /> Neural Inbox
               {unreadCount > 0 && (
-                <span className="px-2 py-0.5 bg-brand-gold text-white text-[8px] font-black rounded-full">{unreadCount}</span>
+                <span className="px-2 py-0.5 bg-brand-gold text-ab-body text-[8px] font-black rounded-full">{unreadCount}</span>
               )}
             </h2>
             <button onClick={markAllRead} className="flex items-center gap-1 text-[8px] font-mono text-brand-medium-gray uppercase hover:text-brand-ink transition-colors tracking-widest">
@@ -157,7 +157,7 @@ export default function OfficePage() {
               <div
                 key={msg.id}
                 onClick={() => !msg.read && markRead(msg.id)}
-                className={`p-4 border rounded-xl flex items-center justify-between hover:border-brand-gold/40 transition-all cursor-pointer group ${msg.read ? 'bg-white border-brand-warm-gray opacity-70' : TYPE_STYLES[msg.type] ?? TYPE_STYLES.info}`}
+                className={`p-4 border rounded-xl flex items-center justify-between hover:border-ab-gold/40 transition-all cursor-pointer group ${msg.read ? 'bg-ab-surface border-ab-border opacity-70' : TYPE_STYLES[msg.type] ?? TYPE_STYLES.info}`}
               >
                 <div className="flex items-center gap-4">
                   <div className={`w-1 h-8 rounded-full ${msg.read ? 'bg-brand-warm-gray' : TYPE_DOTS[msg.type] ?? 'bg-brand-gold'}`} />
@@ -182,7 +182,7 @@ export default function OfficePage() {
             <h2 className="text-xs font-black uppercase tracking-[0.3em] text-brand-slate flex items-center gap-3">
               <CheckSquare className="w-3 h-3 text-brand-gold" /> Pending Approvals
               {approvals.length > 0 && (
-                <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-[8px] font-black rounded-full">{approvals.length}</span>
+                <span className="px-2 py-0.5 bg-[rgba(232,163,32,0.12)] text-ab-gold text-[8px] font-black rounded-full">{approvals.length}</span>
               )}
             </h2>
             {loading ? (
@@ -197,8 +197,8 @@ export default function OfficePage() {
             ) : (
               <div className="grid grid-cols-1 gap-2">
                 {approvals.map((approval) => (
-                  <div key={approval.id} className="flex items-center gap-4 p-4 bg-white border border-brand-warm-gray rounded-xl group hover:border-brand-gold/40 transition-all">
-                    <div className={`text-[8px] font-black uppercase px-2 py-1 rounded-lg italic tracking-widest ${approval.priority === 'high' ? 'bg-brand-gold text-white' : 'border border-brand-warm-gray text-brand-medium-gray'}`}>
+                  <div key={approval.id} className="flex items-center gap-4 p-4 bg-ab-surface border border-ab-border rounded-xl group hover:border-ab-gold/40 transition-all">
+                    <div className={`text-[8px] font-black uppercase px-2 py-1 rounded-lg italic tracking-widest ${approval.priority === 'high' ? 'bg-brand-gold text-ab-body' : 'border border-brand-warm-gray text-brand-medium-gray'}`}>
                       {approval.priority ?? 'Review'}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -213,13 +213,13 @@ export default function OfficePage() {
                     <div className="flex items-center gap-2 shrink-0">
                       <button
                         onClick={() => resolveApproval(approval.id, 'approved')}
-                        className="flex items-center gap-1 text-[8px] font-mono font-black text-green-600 uppercase tracking-widest hover:text-green-700 transition-colors"
+                        className="flex items-center gap-1 text-[8px] font-mono font-black text-ab-green uppercase tracking-widest hover:text-ab-green transition-colors"
                       >
                         <CheckCircle2 className="w-3.5 h-3.5" /> Approve
                       </button>
                       <button
                         onClick={() => resolveApproval(approval.id, 'denied')}
-                        className="flex items-center gap-1 text-[8px] font-mono font-black text-red-500 uppercase tracking-widest hover:text-red-600 transition-colors"
+                        className="flex items-center gap-1 text-[8px] font-mono font-black text-ab-red uppercase tracking-widest hover:text-ab-red transition-colors"
                       >
                         <XCircle className="w-3.5 h-3.5" /> Deny
                       </button>
@@ -233,7 +233,7 @@ export default function OfficePage() {
 
         {/* Schedule / Priorities */}
         <div data-reveal="2" className="space-y-6">
-          <div className="bg-white border border-brand-warm-gray rounded-2xl p-6 space-y-6 relative overflow-hidden" style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+          <div className="bg-ab-surface border border-ab-border rounded-2xl p-6 space-y-6 relative overflow-hidden">
             <h2 className="text-xs font-black uppercase tracking-[0.3em] text-brand-slate flex items-center gap-3">
               <Calendar className="w-3 h-3 text-brand-gold" /> Today's Focus
             </h2>
@@ -274,7 +274,7 @@ export default function OfficePage() {
             </div>
           </div>
 
-          <div className="bg-white border border-brand-warm-gray rounded-2xl p-6 flex items-center justify-between group cursor-pointer hover:border-brand-gold/40 transition-all" style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+          <div className="bg-ab-surface border border-ab-border rounded-2xl p-6 flex items-center justify-between group cursor-pointer hover:border-ab-gold/40 transition-all">
             <div className="flex items-center gap-4">
               <div className="p-2 bg-brand-parchment border border-brand-warm-gray rounded-xl text-brand-gold">
                 <FileText className="w-4 h-4" />
@@ -291,3 +291,5 @@ export default function OfficePage() {
     </div>
   );
 }
+
+

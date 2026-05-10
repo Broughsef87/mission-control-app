@@ -1,92 +1,31 @@
 "use client";
 
-import React, { useState, Suspense } from 'react';
-import { createBrowserClient } from '@supabase/ssr';
+import React, { Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import ForgeLogo from '@/components/ForgeLogo';
 
 function LoginForm() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const params = useSearchParams();
 
-  // createBrowserClient from @supabase/ssr stores session in cookies
-  // so the server-side middleware can read it
-  const sb = createBrowserClient(
-    'https://qegyqvyxzvaiulshgbsh.supabase.co',
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
-  );
-
-  async function handleLogin(e: React.FormEvent) {
+  function handleEnter(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
-    setError('');
-
-    try {
-      const { error: err } = await sb.auth.signInWithPassword({ email, password });
-      if (err) {
-        setError(err.message);
-        setLoading(false);
-        return;
-      }
-      const redirect = params.get('redirect');
-      const dest = redirect && !redirect.startsWith('/api') ? redirect : '/';
-      router.push(dest);
-      router.refresh();
-    } catch (ex: any) {
-      setError(ex.message ?? 'Login failed');
-      setLoading(false);
-    }
+    const redirect = params.get('redirect');
+    const dest = redirect && !redirect.startsWith('/api') ? redirect : '/';
+    router.push(dest);
   }
 
   return (
-    <form onSubmit={handleLogin} className="space-y-4">
-      <div className="space-y-1.5">
-        <label className="text-[10px] font-mono uppercase tracking-widest" style={{ color: '#7A7870' }}>
-          Email
-        </label>
-        <input
-          type="email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          required
-          placeholder="you@forge.com"
-          style={{ backgroundColor: '#2C2A26', color: '#E8E4DC', borderColor: '#3E3C38', caretColor: '#D4D0C8' }}
-          className="w-full border rounded-lg p-3 text-sm focus:outline-none transition-colors font-mono tracking-tight placeholder:text-[#5A5850]"
-        />
-      </div>
-
-      <div className="space-y-1.5">
-        <label className="text-[10px] font-mono uppercase tracking-widest" style={{ color: '#7A7870' }}>
-          Password
-        </label>
-        <input
-          type="password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          required
-          placeholder="••••••••"
-          style={{ backgroundColor: '#2C2A26', color: '#E8E4DC', borderColor: '#3E3C38', caretColor: '#D4D0C8' }}
-          className="w-full border rounded-lg p-3 text-sm focus:outline-none transition-colors font-mono placeholder:text-[#5A5850]"
-        />
-      </div>
-
-      {error && (
-        <div className="p-3 rounded-lg text-[11px] font-mono uppercase" style={{ backgroundColor: '#2A1A18', border: '1px solid #8A4A42', color: '#A86058' }}>
-          {error}
-        </div>
-      )}
-
+    <form onSubmit={handleEnter} className="space-y-4">
       <button
         type="submit"
-        disabled={loading}
-        className="forge-button disabled:opacity-50 disabled:cursor-not-allowed"
+        className="forge-button"
       >
-        {loading ? 'Authenticating...' : 'Enter Mission Control →'}
+        Enter The Foundry →
       </button>
+      <p className="text-center text-[9px] font-mono uppercase tracking-widest" style={{ color: '#4A4840' }}>
+        Local access — no credentials required
+      </p>
     </form>
   );
 }
@@ -100,7 +39,7 @@ export default function LoginPage() {
           <div>
             <div className="forge-heading text-2xl" style={{ color: '#E8E4DC' }}>Forge OS</div>
             <div className="text-[10px] font-mono uppercase tracking-[0.25em]" style={{ color: '#7A7870' }}>
-              Mission Control
+              The Foundry
             </div>
           </div>
         </div>

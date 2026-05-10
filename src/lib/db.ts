@@ -1,5 +1,5 @@
 /**
- * db.ts — centralized Supabase query functions for Mission Control
+ * db.ts — centralized Supabase query functions for The Foundry
  * All pages and API routes import from here instead of calling supabase directly.
  */
 
@@ -299,14 +299,54 @@ export async function getLatestBriefing() {
   return data;
 }
 
-export async function createBriefing(content: string, metrics_snapshot: Record<string, unknown>) {
+export async function createBriefing(content: string, metrics_snapshot: Record<string, unknown>, title?: string, type?: string) {
   const { data, error } = await db()
     .from('daily_briefings')
-    .insert({ content, metrics_snapshot })
+    .insert({ content, metrics_snapshot, title, type: type ?? 'morning_brief' })
     .select()
     .single();
   if (error) throw error;
   return data;
+}
+
+export async function getBriefingFeed(limit = 20) {
+  const { data, error } = await db()
+    .from('daily_briefings')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(limit);
+  if (error) throw error;
+  return data ?? [];
+}
+
+// ── ALERTS ────────────────────────────────────────────────────
+
+export async function getUnresolvedAlerts() {
+  const { data, error } = await db()
+    .from('alerts')
+    .select('*')
+    .eq('resolved', false)
+    .order('created_at', { ascending: false });
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function createAlert(payload: { severity: 'critical' | 'warning' | 'info'; source: string; message: string }) {
+  const { data, error } = await db()
+    .from('alerts')
+    .insert(payload)
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+export async function resolveAlert(id: string) {
+  const { error } = await db()
+    .from('alerts')
+    .update({ resolved: true, resolved_at: new Date().toISOString() })
+    .eq('id', id);
+  if (error) throw error;
 }
 
 // ── CHECKINS ─────────────────────────────────────────────────

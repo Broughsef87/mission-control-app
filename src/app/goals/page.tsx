@@ -12,7 +12,7 @@ interface Goal {
 
 const STATUS_STYLES: Record<string, string> = {
   Active:   'text-brand-gold border-brand-gold/40 bg-brand-gold/5',
-  Achieved: 'text-green-600 border-green-300 bg-green-50',
+  Achieved: 'text-ab-green border-ab-green bg-green-50',
   Paused:   'text-brand-medium-gray border-brand-warm-gray',
 };
 
@@ -95,7 +95,7 @@ export default function GoalsPage() {
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="bg-brand-charcoal hover:bg-brand-ink text-white font-black uppercase text-[10px] px-5 py-2 rounded-lg tracking-widest transition-all italic flex items-center gap-2"
+          className="bg-brand-charcoal hover:bg-brand-ink text-ab-body font-black uppercase text-[10px] px-5 py-2 rounded-lg tracking-widest transition-all italic flex items-center gap-2"
         >
           <Plus className="w-3 h-3" /> New Goal
         </button>
@@ -177,7 +177,7 @@ export default function GoalsPage() {
                   )}
                   <button
                     onClick={() => deleteGoal(goal.id)}
-                    className="opacity-0 group-hover:opacity-100 p-1 text-brand-medium-gray hover:text-red-500 transition-all"
+                    className="opacity-0 group-hover:opacity-100 p-1 text-brand-medium-gray hover:text-ab-red transition-all"
                   >
                     <Trash2 className="w-3 h-3" />
                   </button>

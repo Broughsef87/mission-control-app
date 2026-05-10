@@ -62,7 +62,7 @@ export default function PlatformMetrics() {
         <div className="forge-card p-4 rounded-2xl">
           <div className="flex items-center gap-2 mb-3">
             <div className="p-2 bg-red-50 rounded-xl">
-              <Youtube className="w-4 h-4 text-red-500" />
+              <Youtube className="w-4 h-4 text-ab-red" />
             </div>
             <span className="text-[10px] font-black uppercase tracking-widest text-brand-slate">YouTube</span>
           </div>
@@ -114,7 +114,7 @@ export default function PlatformMetrics() {
                   <div className="text-[8px] font-mono text-brand-medium-gray uppercase">Active Subs</div>
                 </div>
                 <div>
-                  <div className="text-sm font-bold text-green-600">+{stripe?.newSubscriptionsThisMonth ?? '—'}</div>
+                  <div className="text-sm font-bold text-ab-green">+{stripe?.newSubscriptionsThisMonth ?? '—'}</div>
                   <div className="text-[8px] font-mono text-brand-medium-gray uppercase">New MTD</div>
                 </div>
               </div>
@@ -126,7 +126,7 @@ export default function PlatformMetrics() {
         <div className="forge-card p-4 rounded-2xl">
           <div className="flex items-center gap-2 mb-3">
             <div className="p-2 bg-green-50 rounded-xl">
-              <Users className="w-4 h-4 text-green-600" />
+              <Users className="w-4 h-4 text-ab-green" />
             </div>
             <span className="text-[10px] font-black uppercase tracking-widest text-brand-slate">Skool</span>
           </div>
@@ -139,7 +139,7 @@ export default function PlatformMetrics() {
             </div>
             <div className="flex gap-4 pt-1 border-t border-brand-warm-gray">
               <div>
-                <div className="text-sm font-bold text-green-600">+{skool.newThisWeek}</div>
+                <div className="text-sm font-bold text-ab-green">+{skool.newThisWeek}</div>
                 <div className="text-[8px] font-mono text-brand-medium-gray uppercase">This Week</div>
               </div>
             </div>

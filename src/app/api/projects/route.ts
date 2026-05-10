@@ -1,16 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getProjects, createProject, updateProject, deleteProject } from '@/lib/db';
-import projectsJson from '@/lib/projects.json';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
     const data = await getProjects();
-    if (!data || data.length === 0) return NextResponse.json(projectsJson);
-    return NextResponse.json(data);
-  } catch {
-    return NextResponse.json(projectsJson);
+    return NextResponse.json(data ?? []);
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
 

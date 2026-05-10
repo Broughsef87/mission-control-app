@@ -54,7 +54,7 @@ export default function RevenueEntryForm({ onAdded }: Props) {
       {!open ? (
         <button
           onClick={() => setOpen(true)}
-          className="flex items-center gap-2 bg-brand-charcoal hover:bg-brand-ink text-white font-black uppercase text-[10px] px-5 py-2.5 rounded-lg tracking-widest transition-all italic"
+          className="flex items-center gap-2 bg-brand-charcoal hover:bg-brand-ink text-ab-body font-black uppercase text-[10px] px-5 py-2.5 rounded-lg tracking-widest transition-all italic"
         >
           <Plus className="w-3 h-3" /> Log Revenue
         </button>
@@ -128,7 +128,7 @@ export default function RevenueEntryForm({ onAdded }: Props) {
               />
             </div>
 
-            {error && <p className="text-[10px] text-red-500 font-mono uppercase">{error}</p>}
+            {error && <p className="text-[10px] text-ab-red font-mono uppercase">{error}</p>}
 
             <button
               type="submit"

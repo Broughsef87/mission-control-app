@@ -1,0 +1,26 @@
+You are Archon (Claude Code), implementing the Foundry Morning-Desk Dashboard in this repository.
+
+Read this handoff file first:
+- C:\Users\broug\.openclaw\workspace\handoffs\foundry-morning-desk-build.md
+
+Context & Directives (Approved by Andrew):
+1. **Infrastructure:** Local-only. DO NOT deploy to Vercel. This is for the local desktop monitor only.
+2. **Responsive Design:** Strictly designed for a right-hand desktop monitor. Prioritize dense, glanceable typography and a multi-panel grid layout. Mobile responsiveness is non-priority.
+3. **Authentication:** The dashboard will be secured behind Tailscale, no explicit login flow.
+4. **Naming:** Ensure all references match "The Foundry" (or "foundry").
+
+Specific Panel Wiring Requirements:
+1. **Money Panel:** Coffer's daily Stripe + Bill.com summary.
+2. **Calendar Panel:** Implement a dual-token merge. You must pull from both GOOGLE_CALENDAR_REFRESH_TOKEN_PERSONAL and GOOGLE_CALENDAR_REFRESH_TOKEN_WORKSPACE to populate the single unified view.
+3. **Live Work Status Panel:** Implement Linear MCP wiring. Do NOT use the internal-table fallback. Pull live from Linear: in-progress count, blocked, overdue, shipped yesterday.
+4. **Inbox Panel:** Leave this scaffolded only. It is blocked by the FOR-40 dependency, so do not attempt to populate real data.
+5. **Agent Overnight Log:** Read from `agent_logs`.
+6. **Morning Brief:** Render the daily brief.
+
+Task Execution:
+1. Implement the UI per the Grid layout for the 6 panels (dark mode, high contrast, semantic red/green alerts).
+2. Wire the backend adapters as described above.
+3. Add SWR/react-query polling hooks.
+4. Create a PR for Codex to review when complete.
+
+Work ONLY inside C:\Users\broug\.openclaw\workspace\production\the-foundry.

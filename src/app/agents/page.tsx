@@ -67,23 +67,23 @@ export default async function AgentsPage() {
           <div className="forge-panel">
             <div className="flex items-center justify-between mb-4">
               <h2 className="forge-heading text-lg">Active Now</h2>
-              <span className="text-[9px] font-mono text-green-600 animate-pulse uppercase tracking-widest font-bold">{active.length} Live</span>
+              <span className="text-[9px] font-mono text-ab-green animate-pulse uppercase tracking-widest font-bold">{active.length} Live</span>
             </div>
             <div className="space-y-3">
               {active.length === 0 ? (
                 <p className="text-[10px] font-mono text-brand-medium-gray uppercase tracking-widest text-center py-4">No agents active</p>
               ) : (active as any[]).map((agent: any) => (
-                <div key={agent.id} className="p-3 border border-green-200 bg-green-50 rounded-xl">
+                <div key={agent.id} className="p-3 border border-ab-green/30 bg-brand-parchment rounded-xl">
                   <div className="flex items-center gap-3">
                     <div className="relative">
-                      <div className="w-9 h-9 bg-green-100 border border-green-200 rounded-xl flex items-center justify-center text-xs font-bold text-green-700 uppercase italic">
+                      <div className="w-9 h-9 bg-brand-ivory border border-ab-green/50 rounded-xl flex items-center justify-center text-xs font-bold text-ab-green uppercase italic">
                         {agent.agent_name.substring(0, 2)}
                       </div>
-                      <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white bg-green-500" />
+                      <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white bg-ab-green" />
                     </div>
                     <div>
                       <div className="text-xs font-bold text-brand-ink uppercase tracking-wider">{agent.agent_name}</div>
-                      <div className="text-[9px] font-mono text-green-600 uppercase">{agent.task ?? agent.location}</div>
+                      <div className="text-[9px] font-mono text-ab-green uppercase">{agent.task ?? agent.location}</div>
                     </div>
                     <div className="ml-auto text-[8px] font-mono text-brand-medium-gray">
                       {agent.last_seen ? formatDistanceToNow(new Date(agent.last_seen), { addSuffix: true }) : ''}
@@ -105,14 +105,14 @@ export default async function AgentsPage() {
                       <div className="w-9 h-9 bg-brand-ivory border border-brand-warm-gray rounded-xl flex items-center justify-center text-xs font-bold text-brand-charcoal uppercase italic group-hover:border-brand-gold transition-colors">
                         {agent.agent_name.substring(0, 2)}
                       </div>
-                      <div className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white ${agent.status === 'Working' ? 'bg-green-500' : 'bg-brand-warm-gray'}`} />
+                      <div className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white ${agent.status === 'Working' ? 'bg-ab-green' : 'bg-brand-warm-gray'}`} />
                     </div>
                     <div>
                       <div className="text-[11px] font-bold text-brand-ink uppercase tracking-wider">{agent.agent_name}</div>
                       <div className="text-[9px] font-mono text-brand-medium-gray uppercase">{agent.location ?? '—'}</div>
                     </div>
                   </div>
-                  <div className={`text-[9px] font-bold uppercase italic ${agent.status === 'Working' ? 'text-green-600' : 'text-brand-medium-gray'}`}>
+                  <div className={`text-[9px] font-bold uppercase italic ${agent.status === 'Working' ? 'text-ab-green' : 'text-brand-medium-gray'}`}>
                     {agent.status}
                   </div>
                 </div>

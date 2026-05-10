@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import { getSupabaseAdmin } from '@/lib/supabase';
 
 export const dynamic = 'force-dynamic';
 
@@ -74,5 +75,37 @@ export async function GET() {
   } catch (error) {
     console.error('API Error:', error);
     return NextResponse.json({ error: 'Failed to fetch activity', details: String(error) }, { status: 500 });
+  }
+}
+
+export async function POST(req: Request) {
+  try {
+    const body = await req.json();
+    const { agent, task, outcome, summary, metadata } = body as {
+      agent: string;
+      task: string;
+      outcome: 'success' | 'failure' | 'partial';
+      summary?: string;
+      metadata?: Record<string, unknown>;
+    };
+
+    if (!agent || !task || !outcome) {
+      return NextResponse.json({ error: 'agent, task, and outcome are required' }, { status: 400 });
+    }
+
+    const supabase = getSupabaseAdmin();
+    const actionLabel = summary ? `${task} [${outcome}]: ${summary}` : `${task} [${outcome}]`;
+    const { data, error } = await supabase
+      .from('agent_logs')
+      .insert({ agent_name: agent, action: actionLabel })
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    return NextResponse.json({ ok: true, id: data.id });
+  } catch (e: any) {
+    console.error('[activity POST]', e);
+    return NextResponse.json({ error: e.message }, { status: 500 });
   }
 }

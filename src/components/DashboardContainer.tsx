@@ -19,8 +19,8 @@ export default function DashboardContainer() {
   const fetchData = async () => {
     try {
       const [projectsRes, pulseRes] = await Promise.all([
-        fetch('/api/projects'),
-        fetch('/api/pulse')
+        fetch('/api/projects', { cache: 'no-store' }),
+        fetch('/api/pulse', { cache: 'no-store' })
       ]);
       const projects = await projectsRes.json();
       const pulse = await pulseRes.json();
@@ -65,7 +65,7 @@ export default function DashboardContainer() {
               Active <span className="text-forge-orange">Projects</span>
             </h2>
             <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+              <span className="w-1.5 h-1.5 rounded-full bg-ab-green animate-pulse"></span>
               <span className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Live Pulse Active</span>
             </div>
           </div>
@@ -83,7 +83,7 @@ export default function DashboardContainer() {
                 <p className="text-gray-500 text-sm mb-6 line-clamp-2">{project.description}</p>
                 <div className="flex items-center justify-between pt-4 border-t border-white/5">
                   <span className="text-[9px] text-gray-600 font-mono uppercase tracking-widest">Updated {new Date(project.updatedAt).toLocaleDateString()}</span>
-                  <button className="text-[9px] font-bold text-white uppercase tracking-widest hover:text-forge-orange transition-colors">Details →</button>
+                  <button className="text-[9px] font-bold text-ab-text uppercase tracking-widest hover:text-forge-orange transition-colors">Details →</button>
                 </div>
               </div>
             ))}

@@ -86,9 +86,9 @@ export default function CheckinPage() {
   if (done) {
     return (
       <div className="max-w-2xl mx-auto flex flex-col items-center justify-center min-h-[60vh] gap-4">
-        <CheckCircle2 className="w-12 h-12 text-green-500" />
+        <CheckCircle2 className="w-12 h-12 text-ab-green" />
         <div className="forge-heading text-2xl text-brand-ink">Check-in saved</div>
-        <p className="text-xs font-mono text-brand-medium-gray uppercase tracking-widest">Redirecting to Mission Control…</p>
+        <p className="text-xs font-mono text-brand-medium-gray uppercase tracking-widest">Redirecting to The Foundry…</p>
       </div>
     );
   }
@@ -106,8 +106,8 @@ export default function CheckinPage() {
           <p className="text-brand-medium-gray font-mono text-xs uppercase tracking-[0.25em] mt-0.5">{dateLabel}</p>
         </div>
         {existingContent && (
-          <span className="ml-auto flex items-center gap-1.5 text-[9px] font-mono font-bold text-amber-600 uppercase tracking-widest">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 inline-block" />
+          <span className="ml-auto flex items-center gap-1.5 text-[9px] font-mono font-bold text-ab-gold uppercase tracking-widest">
+            <span className="w-1.5 h-1.5 rounded-full bg-ab-gold inline-block" />
             Overwriting existing
           </span>
         )}
@@ -219,7 +219,7 @@ export default function CheckinPage() {
           <button
             type="submit"
             disabled={submitting || !priorities[0]}
-            className="flex items-center gap-2 bg-brand-gold text-white text-[9px] font-mono font-bold uppercase tracking-widest px-6 py-3 rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50"
+            className="flex items-center gap-2 bg-brand-gold text-ab-body text-[9px] font-mono font-bold uppercase tracking-widest px-6 py-3 rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50"
           >
             {submitting ? <Loader2 className="w-3 h-3 animate-spin" /> : <CheckCircle2 className="w-3 h-3" />}
             Save Check-in

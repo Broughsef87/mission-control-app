@@ -15,13 +15,13 @@ interface Message { id: string; role: string; content: string; created_at: strin
 const PRIORITY_STYLES: Record<string, string> = {
   low:    'text-brand-medium-gray',
   normal: 'text-brand-gold',
-  high:   'text-red-500',
+  high:   'text-ab-red',
 };
 
 const STATUS_ICON: Record<string, React.ReactNode> = {
   open:        <Clock className="w-3 h-3 text-brand-gold" />,
-  in_progress: <AlertCircle className="w-3 h-3 text-blue-500" />,
-  resolved:    <CheckCircle2 className="w-3 h-3 text-green-500" />,
+  in_progress: <AlertCircle className="w-3 h-3 text-ab-blue" />,
+  resolved:    <CheckCircle2 className="w-3 h-3 text-ab-green" />,
 };
 
 export default function TicketsPage() {
@@ -103,7 +103,7 @@ export default function TicketsPage() {
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="bg-brand-charcoal hover:bg-brand-ink text-white font-black uppercase text-[10px] px-5 py-2 rounded-lg tracking-widest transition-all italic flex items-center gap-2"
+          className="bg-brand-charcoal hover:bg-brand-ink text-ab-body font-black uppercase text-[10px] px-5 py-2 rounded-lg tracking-widest transition-all italic flex items-center gap-2"
         >
           <Plus className="w-3 h-3" /> New Ticket
         </button>
@@ -209,7 +209,7 @@ export default function TicketsPage() {
                 {activeTicket.status !== 'resolved' && (
                   <button
                     onClick={() => resolveTicket(activeTicket.id)}
-                    className="text-[9px] font-mono font-bold uppercase tracking-widest text-green-600 border border-green-300 px-3 py-1.5 rounded-lg hover:bg-green-50 transition-all"
+                    className="text-[9px] font-mono font-bold uppercase tracking-widest text-ab-green border border-ab-green px-3 py-1.5 rounded-lg hover:bg-green-50 transition-all"
                   >
                     Resolve
                   </button>
@@ -222,7 +222,7 @@ export default function TicketsPage() {
                   <p className="text-[10px] font-mono text-brand-medium-gray text-center py-8 uppercase tracking-widest">No messages yet</p>
                 ) : messages.map(m => (
                   <div key={m.id} className={`flex ${m.role === 'human' ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`max-w-[80%] rounded-xl px-3 py-2 ${m.role === 'human' ? 'bg-brand-charcoal text-white' : m.role === 'system' ? 'bg-brand-warm-gray text-brand-medium-gray italic' : 'bg-brand-parchment border border-brand-warm-gray text-brand-ink'}`}>
+                    <div className={`max-w-[80%] rounded-xl px-3 py-2 ${m.role === 'human' ? 'bg-brand-charcoal text-ab-body' : m.role === 'system' ? 'bg-brand-warm-gray text-brand-medium-gray italic' : 'bg-brand-parchment border border-brand-warm-gray text-brand-ink'}`}>
                       <div className="text-[9px] font-mono font-bold uppercase mb-1 opacity-60">{m.role}</div>
                       <div className="text-xs whitespace-pre-wrap">{m.content}</div>
                       <div className="text-[7px] font-mono opacity-40 mt-1">{formatDistanceToNow(new Date(m.created_at), { addSuffix: true })}</div>

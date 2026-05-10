@@ -1,9 +1,12 @@
 {
-  "devroux": { "status": "active", "task": "Coordinating Mission Control update", "location": "Command Center" },
-  "isaac": { "status": "active", "task": "Analyzing market trends", "location": "Archives" },
-  "charles": { "status": "idle", "task": "Awaiting new script", "location": "Studio" },
-  "max": { "status": "active", "task": "Developing UI components", "location": "Workbench" },
-  "gabriel": { "status": "active", "task": "Monitoring system vitals", "location": "Server Room" },
-  "ollie": { "status": "idle", "task": "Awaiting content for distribution", "location": "Comms Hub" },
-  "silas": { "status": "active", "task": "Drafting articles on AI", "location": "Library" }
+  "devroux": { "status": "active", "task": "Coordinating The Foundry", "location": "Command Center" },
+  "isaac": { "status": "idle", "task": "Awaiting research request", "location": "Ready Room" },
+  "charles": { "status": "idle", "task": "Awaiting new script", "location": "Ready Room" },
+  "grace": { "status": "active", "task": "Building artifacts", "location": "Build Lab" },
+  "codex": { "status": "idle", "task": "Awaiting PR", "location": "Ready Room" },
+  "ledger": { "status": "idle", "task": "Organizing Vault", "location": "Ready Room" },
+  "coffer": { "status": "idle", "task": "Monitoring Treasury", "location": "Treasury Desk" },
+  "forge-foreman": { "status": "idle", "task": "Reviewing backlog", "location": "Ready Room" },
+  "antigravity": { "status": "active", "task": "Orchestrating workflows", "location": "Control Room" },
+  "scribe": { "status": "active", "task": "Ingesting knowledge captures", "location": "Ingestion Desk" }
 }

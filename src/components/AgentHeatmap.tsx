@@ -25,7 +25,7 @@ export default function AgentHeatmap({ actions }: { actions: Action[] }) {
             <div key={action.id} className="flex items-start gap-3 border-l border-white/5 pl-3 py-1 hover:border-forge-orange/50 transition-colors">
               <div className="font-mono text-[10px] font-bold text-forge-orange min-w-[50px] uppercase">{action.agent}</div>
               <div className="flex-1">
-                <div className="text-[10px] text-white/90 font-medium">
+                <div className="text-[10px] text-ab-body/90 font-medium">
                   {action.action} <span className="text-gray-500 font-normal">{action.path}</span>
                 </div>
                 <div className="text-[8px] text-gray-700 uppercase tracking-tighter">

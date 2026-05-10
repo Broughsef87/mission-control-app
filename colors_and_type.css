@@ -1,0 +1,190 @@
+/* ============================================================
+   Andrew Brough / Forge OS — Colors & Type
+   Source of truth: andrew-brough/app/globals.css
+   ============================================================ */
+
+/* Font: Inter (loaded via next/font in production).
+   For static HTML, use the Google Fonts link in <head>:
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+*/
+
+:root {
+  /* ── CORE SURFACES (near-black, cool) ───────────── */
+  --ab-base:           #05070C;  /* page background — deepest */
+  --ab-surface:        #0A0D14;  /* cards, panels */
+  --ab-surface-2:      #0F1520;  /* nested surfaces, chip bg, terminal header */
+  --ab-border:         #1A2130;  /* default borders */
+  --ab-border-bright:  #2A3545;  /* elevated/interactive borders */
+
+  /* ── SIGNAL COLORS ──────────────────────────────── */
+  --ab-red:            #DC2626;  /* Primary accent. CTAs, rail-accents, "SYSTEM ONLINE", headings punch */
+  --ab-red-dim:        rgba(220, 38, 38, 0.12);
+  --ab-red-glow:       rgba(220, 38, 38, 0.25);
+  --ab-red-hover:      #B91C1C;  /* primary button hover */
+
+  --ab-gold:           #E8A320;  /* Hero word highlight, "autonomous" state, tagline color */
+  --ab-gold-dim:       rgba(232, 163, 32, 0.15);
+
+  --ab-green:          #28CD41;  /* Status: live, online, complete */
+  --ab-blue:           #1E6FFF;  /* Status: scheduled / info (rare) */
+  --ab-blue-chip:      #4D8FFF;  /* Blog category: Dad Life */
+
+  /* ── TEXT ────────────────────────────────────────── */
+  --ab-text:           #EAEAEA;  /* primary text */
+  --ab-body-text:      #B8C0CC;  /* body copy */
+  --ab-muted:          #6A7888;  /* meta, labels, mono overline */
+
+  /* ── TYPE FAMILIES ───────────────────────────────── */
+  --ab-font-sans:      'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --ab-font-mono:      'Courier New', 'Courier', ui-monospace, monospace;
+
+  /* ── SEMANTIC TYPE TOKENS ────────────────────────── */
+  /* Display — hero headlines. Fluid, near-black weight, tight tracking. */
+  --ab-display-size:     clamp(4rem, 11vw, 9.5rem);
+  --ab-display-weight:   900;
+  --ab-display-leading:  0.92;
+  --ab-display-tracking: -0.04em;
+
+  /* H1 — page titles */
+  --ab-h1-size:     clamp(2.5rem, 6vw, 5rem);
+  --ab-h1-weight:   900;
+  --ab-h1-leading:  0.95;
+  --ab-h1-tracking: -0.04em;
+
+  /* H2 — section heads */
+  --ab-h2-size:     clamp(2.25rem, 4vw, 3.25rem);
+  --ab-h2-weight:   800;
+  --ab-h2-leading:  1.1;
+  --ab-h2-tracking: -0.03em;
+
+  /* H3 — card titles */
+  --ab-h3-size:     1.375rem;
+  --ab-h3-weight:   700;
+  --ab-h3-tracking: -0.02em;
+
+  /* Body */
+  --ab-body-size:    0.9375rem;   /* 15px */
+  --ab-body-leading: 1.8;
+  --ab-body-lg-size: 1.0625rem;   /* 17px — lede paragraphs */
+
+  /* Mono — telemetry / overline / kicker / chip labels */
+  --ab-mono-overline-size:    0.6875rem; /* 11px */
+  --ab-mono-overline-tracking: 0.14em;
+  --ab-mono-micro-size:       0.5625rem; /* 9px — ticker, footer col title */
+  --ab-mono-micro-tracking:   0.18em;
+  --ab-mono-chip-size:        0.625rem;  /* 10px — stack chips */
+  --ab-mono-chip-tracking:    0.08em;
+
+  /* ── RADII ───────────────────────────────────────── */
+  --ab-radius-xs:   2px;       /* chips, buttons */
+  --ab-radius-sm:   0.125rem;  /* primary/ghost buttons */
+  --ab-radius-md:   0.375rem;  /* stat strip, small panels */
+  --ab-radius-lg:   0.5rem;    /* cards, terminal, CTA */
+
+  /* ── SHADOWS / GLOWS ─────────────────────────────── */
+  --ab-glow-red:    0 0 32px rgba(220, 38, 38, 0.25), 0 4px 16px rgba(220, 38, 38, 0.2);
+  --ab-glow-gold:   0 0 40px rgba(232, 163, 32, 0.10), 0 8px 32px rgba(0, 0, 0, 0.4);
+  --ab-glow-green:  0 0 40px rgba(40, 205, 65, 0.08), 0 8px 32px rgba(0, 0, 0, 0.4);
+  --ab-shadow-card: 0 0 40px rgba(232, 163, 32, 0.06), 0 8px 32px rgba(0, 0, 0, 0.4);
+
+  /* ── ANIMATION CURVES ────────────────────────────── */
+  --ab-ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);  /* fade-up, blog-row accent */
+  --ab-ease-quick:  cubic-bezier(0.25, 0.1, 0.25, 1); /* hover transitions */
+}
+
+/* ============================================================
+   SEMANTIC ELEMENT STYLES
+   Use these in static HTML cards / slides.
+   ============================================================ */
+
+body {
+  background: var(--ab-base);
+  color: var(--ab-text);
+  font-family: var(--ab-font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.ab-display {
+  font-size: var(--ab-display-size);
+  font-weight: var(--ab-display-weight);
+  line-height: var(--ab-display-leading);
+  letter-spacing: var(--ab-display-tracking);
+  color: var(--ab-text);
+}
+.ab-display--gold { color: var(--ab-gold); text-shadow: 0 0 80px rgba(232,163,32,0.25); }
+
+h1, .ab-h1 {
+  font-size: var(--ab-h1-size);
+  font-weight: var(--ab-h1-weight);
+  line-height: var(--ab-h1-leading);
+  letter-spacing: var(--ab-h1-tracking);
+  color: var(--ab-text);
+}
+
+h2, .ab-h2 {
+  font-size: var(--ab-h2-size);
+  font-weight: var(--ab-h2-weight);
+  line-height: var(--ab-h2-leading);
+  letter-spacing: var(--ab-h2-tracking);
+  color: var(--ab-text);
+}
+
+h3, .ab-h3 {
+  font-size: var(--ab-h3-size);
+  font-weight: var(--ab-h3-weight);
+  letter-spacing: var(--ab-h3-tracking);
+  color: var(--ab-text);
+}
+
+p, .ab-body {
+  font-size: var(--ab-body-size);
+  line-height: var(--ab-body-leading);
+  color: var(--ab-body-text);
+}
+
+.ab-lede {
+  font-size: var(--ab-body-lg-size);
+  line-height: var(--ab-body-leading);
+  color: var(--ab-body-text);
+  border-left: 2px solid var(--ab-red);
+  padding-left: 1.25rem;
+}
+
+/* Mono overline — the red "01 / WHO I AM" kicker */
+.ab-overline {
+  font-family: var(--ab-font-mono);
+  font-size: var(--ab-mono-overline-size);
+  letter-spacing: var(--ab-mono-overline-tracking);
+  text-transform: uppercase;
+  color: var(--ab-red);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.ab-overline::before {
+  content: '';
+  width: 24px; height: 1px;
+  background: var(--ab-red);
+  display: inline-block;
+}
+
+/* Mono micro — ticker, footer labels, side-rail */
+.ab-micro {
+  font-family: var(--ab-font-mono);
+  font-size: var(--ab-mono-micro-size);
+  letter-spacing: var(--ab-mono-micro-tracking);
+  text-transform: uppercase;
+  color: var(--ab-muted);
+}
+
+/* Mono inline — code/command prompts, file labels */
+.ab-mono   { font-family: var(--ab-font-mono); }
+
+/* Color helpers (matches source) */
+.ab-text-gold  { color: var(--ab-gold); }
+.ab-text-red   { color: var(--ab-red); }
+.ab-text-green { color: var(--ab-green); }
+.ab-text-muted { color: var(--ab-muted); }
+.ab-text-body  { color: var(--ab-body-text); }

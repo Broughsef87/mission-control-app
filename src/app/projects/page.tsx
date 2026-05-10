@@ -15,17 +15,17 @@ interface Project {
 }
 
 const STATUS_STYLES: Record<string, string> = {
-  'In Progress': 'text-brand-gold border-brand-gold/40 bg-brand-gold/5',
-  'Completed':   'text-green-600 border-green-300 bg-green-50',
-  'In Review':   'text-blue-600 border-blue-300 bg-blue-50',
-  'Paused':      'text-brand-medium-gray border-brand-warm-gray',
+  'In Progress': 'text-ab-gold border-ab-gold/40 bg-ab-gold/5',
+  'Completed':   'text-ab-green border-ab-green/25 bg-[rgba(40,205,65,0.08)]',
+  'In Review':   'text-ab-blue border-ab-blue/25 bg-[rgba(30,111,255,0.08)]',
+  'Paused':      'text-ab-muted border-ab-border',
 };
 
 const ACCENT: Record<string, string> = {
-  'In Progress': 'bg-brand-gold',
-  'Completed':   'bg-green-500',
-  'In Review':   'bg-blue-400',
-  'Paused':      'bg-brand-medium-gray',
+  'In Progress': 'bg-ab-gold',
+  'Completed':   'bg-ab-green',
+  'In Review':   'bg-ab-blue',
+  'Paused':      'bg-ab-muted',
 };
 
 const STATUSES = ['In Progress', 'In Review', 'Completed', 'Paused'];
@@ -80,7 +80,7 @@ export default function ProjectsPage() {
         <div className="flex gap-2">
           <button
             onClick={() => setShowForm(!showForm)}
-            className="bg-brand-charcoal hover:bg-brand-ink text-white font-black uppercase text-[10px] px-6 py-2 rounded-lg tracking-widest transition-all italic flex items-center gap-2"
+            className="bg-brand-charcoal hover:bg-brand-ink text-ab-body font-black uppercase text-[10px] px-6 py-2 rounded-lg tracking-widest transition-all italic flex items-center gap-2"
           >
             <Plus className="w-3 h-3" /> New Project
           </button>
@@ -149,7 +149,7 @@ export default function ProjectsPage() {
           <Search className="w-3 h-3 absolute left-3 top-1/2 -translate-y-1/2 text-brand-medium-gray" />
           <input type="text" value={search} onChange={e => setSearch(e.target.value)}
             placeholder="Search Projects..."
-            className="bg-white border border-brand-warm-gray rounded-lg pl-9 pr-4 py-2 text-[10px] focus:outline-none focus:border-brand-gold w-64 uppercase tracking-tighter text-brand-ink" />
+            className="bg-ab-surface border border-ab-border rounded-lg pl-9 pr-4 py-2 text-[10px] focus:outline-none focus:border-ab-gold w-64 uppercase tracking-tighter text-ab-body" />
         </div>
       </div>
 
@@ -157,14 +157,14 @@ export default function ProjectsPage() {
       <div data-reveal="2" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
         {loading ? (
           Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="bg-white border border-brand-warm-gray rounded-2xl p-6 h-48 animate-pulse" />
+            <div key={i} className="bg-ab-surface border border-ab-border rounded-2xl p-6 h-48 animate-pulse" />
           ))
         ) : filtered.length === 0 ? (
           <div className="md:col-span-3 text-center py-16 text-[11px] font-mono text-brand-medium-gray uppercase tracking-widest">
             No projects found.
           </div>
         ) : filtered.map((project) => (
-          <div key={project.id} className="bg-white border border-brand-warm-gray rounded-2xl p-6 hover:border-brand-gold/60 transition-all group cursor-pointer relative overflow-hidden" style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+          <div key={project.id} className="bg-ab-surface border border-ab-border rounded-2xl p-6 hover:border-ab-gold/60 transition-all group cursor-pointer relative overflow-hidden">
             <div className={`absolute top-0 right-0 w-2 h-full ${ACCENT[project.status] ?? 'bg-brand-medium-gray'}`} />
             <div className="flex justify-between items-start mb-4">
               <div>
@@ -189,7 +189,7 @@ export default function ProjectsPage() {
             </div>
             <div className="flex justify-between items-center">
               <div className="text-base font-black text-brand-ink italic">{project.budget ?? 'N/A'}</div>
-              <button className="p-2 border border-brand-warm-gray rounded-lg hover:bg-brand-gold hover:text-white hover:border-brand-gold transition-all">
+              <button className="p-2 border border-brand-warm-gray rounded-lg hover:bg-brand-gold hover:text-ab-body hover:border-brand-gold transition-all">
                 <ExternalLink className="w-4 h-4" />
               </button>
             </div>
@@ -199,3 +199,5 @@ export default function ProjectsPage() {
     </div>
   );
 }
+
+

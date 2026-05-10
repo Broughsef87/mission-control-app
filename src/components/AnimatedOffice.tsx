@@ -6,9 +6,11 @@ const initialStatus = initialStatusRaw as Record<string, { location: string; sta
 
 const stationMap: Record<string, { top: string; left: string; name: string }> = {
   'Command Center': { top: '20%', left: '50%', name: 'Command Center' },
-  'Engineering Bay': { top: '60%', left: '20%', name: 'Engineering Bay' },
+  'Build Lab': { top: '60%', left: '20%', name: 'Build Lab' },
   'Content Studio': { top: '60%', left: '80%', name: 'Content Studio' },
   'Ready Room': { top: '85%', left: '50%', name: 'Ready Room' },
+  'Control Room': { top: '40%', left: '20%', name: 'Control Room' },
+  'Treasury Desk': { top: '40%', left: '80%', name: 'Treasury Desk' },
 };
 
 export default function AnimatedOffice() {
@@ -25,7 +27,7 @@ export default function AnimatedOffice() {
         <div key={station.name}
              className="absolute -translate-x-1/2 -translate-y-1/2"
              style={{ top: station.top, left: station.left }}>
-          <div className="relative px-3 py-1 bg-white border border-brand-warm-gray rounded shadow-sm">
+          <div className="relative px-3 py-1 bg-ab-surface-2 border border-ab-border rounded">
             <span className="font-display text-xs uppercase text-brand-slate">{station.name}</span>
           </div>
         </div>
@@ -61,3 +63,5 @@ export default function AnimatedOffice() {
     </div>
   );
 }
+
+

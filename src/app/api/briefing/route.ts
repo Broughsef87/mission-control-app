@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getLatestBriefing, createBriefing, getRevenueMTD, getAgentStatuses, getAgentLogs } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
@@ -16,7 +16,7 @@ export async function GET() {
     ]);
 
     const activeAgents = agentStatuses.filter(a => a.status === 'Working').map(a => a.agent_name);
-    const content = `Good morning. Mission Control is online.\n\n` +
+    const content = `Good morning. The Foundry is online.\n\n` +
       `Revenue MTD: $${revenueMTD.total.toLocaleString()}. ` +
       `${activeAgents.length} agents currently active: ${activeAgents.join(', ')}. ` +
       `${recentLogs.length} actions logged in the last session. ` +
@@ -30,9 +30,18 @@ export async function GET() {
   }
 }
 
-export async function POST() {
-  // Force regenerate briefing
+export async function POST(req: NextRequest) {
   try {
+    let body: { title?: string; content?: string; type?: string } = {};
+    try { body = await (req as any).json(); } catch { /* no body */ }
+
+    // Cron POST: { title, content, type } — store directly
+    if (body.content) {
+      const briefing = await createBriefing(body.content, {}, body.title, body.type);
+      return NextResponse.json(briefing, { status: 201 });
+    }
+
+    // Legacy: auto-generate from DB
     const [revenueMTD, agentStatuses, recentLogs] = await Promise.all([
       getRevenueMTD(),
       getAgentStatuses(),
@@ -48,7 +57,7 @@ export async function POST() {
       `Systems nominal — proceed with sprint.`;
 
     const snapshot = { revenueMTD, agentStatuses };
-    const briefing = await createBriefing(content, snapshot);
+    const briefing = await createBriefing(content, snapshot, date, 'morning_brief');
     return NextResponse.json(briefing, { status: 201 });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });

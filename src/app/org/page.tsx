@@ -28,7 +28,7 @@ const ANDREW: OrgNode = {
 
 const ANTIGRAVITY: OrgNode = {
   id: 'antigravity',
-  name: 'Antigravity',
+  name: 'Grav',
   role: 'Orchestration',
   responsibilities: [
     'Dispatches and monitors active agent workflows',
@@ -76,6 +76,17 @@ const WORKERS: OrgNode[] = [
     routeWhen: 'Code review needed, scoped technical work, debugging',
   },
   {
+    id: 'claude-code',
+    name: 'Claude Code',
+    role: 'Terminal Ops & Coordination',
+    responsibilities: [
+      'Executing terminal commands and scripts',
+      'Running background ops and dev tools',
+      'Coordinating shell-level workflows',
+    ],
+    routeWhen: 'Terminal operations, running scripts, devops and server management',
+  },
+  {
     id: 'isaac',
     name: 'Isaac',
     role: 'Research',
@@ -119,14 +130,25 @@ const WORKERS: OrgNode[] = [
     ],
     routeWhen: 'Project status, QA review, delivery tracking',
   },
+  {
+    id: 'scribe',
+    name: 'Scribe',
+    role: 'Data Ingestion & Capture',
+    responsibilities: [
+      'Granola meeting capture',
+      'Discord drop-inbox sweeps',
+      'Weekly client thread digester',
+    ],
+    routeWhen: 'Meeting notes, dropped screenshots or thoughts, weekly client communications rollup',
+  },
 ];
 
-// Color palette per node type
+// Color palette per node type using design system signal colors
 const nodeStyle = {
-  human:        { border: '#E07A5F', bg: '#FFF8F6', dot: '#E07A5F', label: 'text-brand-gold' },
-  orchestrator: { border: '#3A6A9A', bg: '#EEF3FA', dot: '#3A6A9A', label: 'text-blue-700' },
-  chiefOfStaff: { border: '#9A7A30', bg: '#FBF5E8', dot: '#9A7A30', label: 'text-amber-700' },
-  worker:       { border: '#E4E0DA', bg: '#FAFAF8', dot: '#9B9894', label: 'text-brand-medium-gray' },
+  human:        { border: 'rgba(232,163,32,0.3)', dot: 'var(--ab-gold)', label: 'text-ab-gold' },
+  orchestrator: { border: 'rgba(30,111,255,0.3)', dot: 'var(--ab-blue)', label: 'text-ab-blue' },
+  chiefOfStaff: { border: 'rgba(220,38,38,0.3)', dot: 'var(--ab-red)', label: 'text-ab-red' },
+  worker:       { border: 'var(--ab-border)', dot: 'var(--ab-muted)', label: 'text-ab-muted' },
 };
 
 function NodeCard({ node }: { node: OrgNode }) {
@@ -137,32 +159,32 @@ function NodeCard({ node }: { node: OrgNode }) {
 
   return (
     <div
-      className="rounded-2xl p-5 transition-shadow hover:shadow-md"
-      style={{ background: s.bg, border: `1px solid ${s.border}` }}
+      className="forge-card"
+      style={{ borderColor: s.border }}
     >
       {/* Name + Role */}
       <div className="flex items-start gap-2.5 mb-3">
-        <span className="w-2 h-2 rounded-full shrink-0 mt-1.5" style={{ background: s.dot }} />
+        <span className="w-2 h-2 rounded-full shrink-0 mt-1.5" style={{ background: s.dot, boxShadow: `0 0 6px ${s.dot}` }} />
         <div>
-          <div className="forge-heading text-base leading-tight">{node.name}</div>
-          <div className={`text-[9px] font-mono font-bold uppercase tracking-[0.15em] mt-0.5 ${s.label}`}>{node.role}</div>
+          <div className="text-ab-body font-bold text-lg leading-tight">{node.name}</div>
+          <div className={`font-mono text-[10px] tracking-[0.12em] uppercase mt-0.5 ${s.label}`}>{node.role}</div>
         </div>
       </div>
 
       {/* Responsibilities */}
-      <ul className="space-y-1 mb-3">
+      <ul className="space-y-1 mb-4">
         {node.responsibilities.map((r, i) => (
-          <li key={i} className="flex items-start gap-1.5 text-[10px] text-brand-slate">
-            <span className="text-brand-medium-gray shrink-0 mt-0.5">—</span>
+          <li key={i} className="flex items-start gap-1.5 text-xs text-ab-body">
+            <span className="text-ab-muted shrink-0 mt-0.5">—</span>
             {r}
           </li>
         ))}
       </ul>
 
       {/* Route when */}
-      <div className="pt-3 border-t border-brand-warm-gray">
-        <span className="text-[8px] font-mono font-bold uppercase tracking-widest text-brand-medium-gray">Route when: </span>
-        <span className="text-[9px] font-mono text-brand-slate italic">{node.routeWhen}</span>
+      <div className="pt-3 border-t border-ab-border">
+        <span className="font-mono text-[9px] tracking-[0.12em] uppercase text-ab-muted">Route when: </span>
+        <span className="text-xs text-ab-body italic">{node.routeWhen}</span>
       </div>
     </div>
   );
@@ -171,9 +193,9 @@ function NodeCard({ node }: { node: OrgNode }) {
 function Connector() {
   return (
     <div className="flex flex-col items-center py-1">
-      <div className="w-px h-6 bg-brand-warm-gray" />
-      <div className="w-1.5 h-1.5 rounded-full bg-brand-warm-gray" />
-      <div className="w-px h-6 bg-brand-warm-gray" />
+      <div className="w-px h-6 bg-ab-border" />
+      <div className="w-1.5 h-1.5 rounded-full bg-ab-border" />
+      <div className="w-px h-6 bg-ab-border" />
     </div>
   );
 }
@@ -187,11 +209,14 @@ export default function OrgPage() {
     <div className="max-w-5xl mx-auto space-y-10">
 
       {/* Header */}
-      <header className="border-b border-brand-warm-gray pb-6">
-        <h1 className="forge-heading text-4xl sm:text-5xl mb-1">
-          Org <span className="text-brand-gold">Chart</span>
-        </h1>
-        <p className="text-brand-medium-gray font-mono text-xs uppercase tracking-[0.25em]">{dateLabel}</p>
+      <header className="border-b border-ab-border pb-6">
+        <div className="flex items-center gap-3 mb-1">
+          <h1 className="text-4xl sm:text-5xl font-bold text-ab-text">
+            Org <span className="text-ab-gold">Chart</span>
+          </h1>
+          <span className="chip chip-quarters">WIP</span>
+        </div>
+        <p className="font-mono text-[11px] tracking-[0.12em] uppercase text-ab-muted">{dateLabel}</p>
       </header>
 
       {/* Tree */}
@@ -218,20 +243,20 @@ export default function OrgPage() {
 
         {/* Branch line to workers */}
         <div className="flex flex-col items-center py-1">
-          <div className="w-px h-6 bg-brand-warm-gray" />
-          <div className="w-1.5 h-1.5 rounded-full bg-brand-warm-gray" />
+          <div className="w-px h-6 bg-ab-border" />
+          <div className="w-1.5 h-1.5 rounded-full bg-ab-border" />
         </div>
 
         {/* Horizontal span */}
         <div className="w-full relative">
           {/* Top horizontal bar */}
-          <div className="absolute top-0 left-[8.333%] right-[8.333%] h-px bg-brand-warm-gray" />
+          <div className="absolute top-0 left-[8.333%] right-[8.333%] h-px bg-ab-border" />
 
           {/* Worker columns */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 pt-6">
             {WORKERS.map(worker => (
               <div key={worker.id} className="flex flex-col items-center">
-                <div className="w-px h-6 bg-brand-warm-gray mb-0" />
+                <div className="w-px h-6 bg-ab-border mb-0" />
                 <NodeCard node={worker} />
               </div>
             ))}
@@ -241,8 +266,8 @@ export default function OrgPage() {
       </div>
 
       {/* Legend */}
-      <div className="forge-panel">
-        <div className="forge-label mb-4">Legend</div>
+      <div className="forge-card">
+        <div className="ab-overline">Legend</div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
             { color: nodeStyle.human.dot, label: 'Human (Andrew)' },
@@ -251,21 +276,21 @@ export default function OrgPage() {
             { color: nodeStyle.worker.dot, label: 'Specialist Agent' },
           ].map(item => (
             <div key={item.label} className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: item.color }} />
-              <span className="text-[10px] font-mono text-brand-slate">{item.label}</span>
+              <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: item.color, boxShadow: `0 0 6px ${item.color}` }} />
+              <span className="font-mono text-[10px] text-ab-muted">{item.label}</span>
             </div>
           ))}
         </div>
       </div>
 
       {/* Routing guide */}
-      <div className="forge-panel">
-        <div className="forge-label mb-4">Routing Quick Reference</div>
+      <div className="forge-card">
+        <div className="ab-overline">Routing Quick Reference</div>
         <div className="space-y-2">
           {[ANTIGRAVITY, DEVROUX, ...WORKERS].map(node => (
-            <div key={node.id} className="flex items-start gap-3 py-1.5 border-b border-brand-warm-gray last:border-0">
-              <span className="text-[10px] font-mono font-bold text-brand-ink w-32 shrink-0">{node.name}</span>
-              <span className="text-[10px] font-mono text-brand-slate italic">{node.routeWhen}</span>
+            <div key={node.id} className="flex items-start gap-3 py-1.5 border-b border-ab-border last:border-0">
+              <span className="font-mono text-[11px] text-ab-body w-32 shrink-0">{node.name}</span>
+              <span className="text-xs text-ab-body italic">{node.routeWhen}</span>
             </div>
           ))}
         </div>

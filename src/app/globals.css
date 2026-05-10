@@ -2,160 +2,289 @@
 
 @theme {
   --font-sans:    var(--font-inter), "Inter", system-ui, sans-serif;
-  --font-display: var(--font-chivo), "Chivo", system-ui, sans-serif;
-  --font-mono:    var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, monospace;
-
-  /* ── Forge OS Light Theme ────────────────────────────────────
-     Warm cream surfaces, coral accent, black contrast.
-     Inspired by forge-os-website.vercel.app
-  ─────────────────────────────────────────────────────────── */
-
-  /* Surfaces — warm cream */
-  --color-base:        #F2EFEA;   /* main background — warm parchment */
-  --color-surface:     #FAFAF8;   /* panel base — near white */
-  --color-surface-2:   #F5F2EE;   /* card surface — slightly warmer */
-  --color-surface-3:   #EDE9E4;   /* hover / active states */
-
-  /* Borders — barely-there */
-  --color-border:      #E4E0DA;   /* primary border */
-  --color-border-2:    #D8D4CE;   /* slightly more visible */
-  --color-border-chrome: #C8C4BE; /* stronger border for accents */
-
-  /* Accent — coral/salmon (the Forge signature color) */
-  --color-accent:      #E07A5F;   /* coral — primary accent */
-  --color-accent-2:    #C86048;   /* darker coral */
-  --color-accent-light: #F5EBE8;  /* very pale coral tint */
-
-  /* Typography */
-  --color-text:        #1A1917;   /* near-black, warm */
-  --color-text-2:      #6B6862;   /* secondary — warm grey */
-  --color-text-muted:  #9B9894;   /* muted — labels, captions */
-
-  /* Black — for buttons and contrast sections */
-  --color-black:       #0D0D0C;
-  --color-black-2:     #1A1917;
-
-  /* Status colors — muted, for light backgrounds */
-  --color-green:       #3D7A52;
-  --color-green-2:     #52A06C;
-  --color-green-bg:    #EDF5F0;
-  --color-amber:       #9A7A30;
-  --color-amber-2:     #C49A40;
-  --color-amber-bg:    #FBF5E8;
-  --color-red:         #C0483A;
-  --color-red-2:       #E06050;
-  --color-red-bg:      #FEF0EE;
-  --color-blue:        #3A6A9A;
-  --color-blue-bg:     #EEF3FA;
-
-  /* Chrome / Silver — kept for legacy compat */
-  --color-chrome:        #9B9894;
-  --color-chrome-2:      #6B6862;
-  --color-chrome-muted:  #B8B4AE;
-
-  /* Legacy aliases — backward compat */
-  --color-brand-parchment:   #F2EFEA;
-  --color-brand-ivory:       #FAFAF8;
-  --color-brand-warm-gray:   #E4E0DA;
-  --color-brand-medium-gray: #9B9894;
-  --color-brand-slate:       #6B6862;
-  --color-brand-charcoal:    #1A1917;
-  --color-brand-ink:         #1A1917;
-  --color-brand-gold:        #E07A5F;
-  --color-brand-gold-light:  #F5A080;
-  --color-brand-orange:      #E07A5F;
-  --color-brand-light-slate: #9B9894;
-  --color-forge-dark:        #0D0D0C;
-  --color-forge-panel:       #FAFAF8;
-  --color-forge-border:      #E4E0DA;
-  --color-forge-orange:      #E07A5F;
-  --color-forge-text:        #1A1917;
-  --color-forge-muted:       #9B9894;
+  --font-display: var(--font-inter), "Inter", system-ui, sans-serif;
+  --font-mono:    var(--font-jetbrains-mono), "Courier New", "Courier", ui-monospace, monospace;
 }
 
-* {
-  box-sizing: border-box;
+/* ── Andrew Brough / Forge OS — Design System ─────────────────────
+   Source: andrew-brough/app/globals.css + The Foundry Build Spec v3.0
+────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* SURFACES */
+  --ab-base:          #05070C;
+  --ab-surface:       #0A0D14;
+  --ab-surface-2:     #0F1520;
+  --ab-border:        #1A2130;
+  --ab-border-bright: #2A3545;
+
+  /* SIGNAL COLORS */
+  --ab-red:         #DC2626;
+  --ab-red-dim:     rgba(220,38,38,0.12);
+  --ab-red-glow:    rgba(220,38,38,0.25);
+  --ab-red-hover:   #B91C1C;
+  --ab-gold:        #E8A320;
+  --ab-gold-dim:    rgba(232,163,32,0.15);
+  --ab-green:       #28CD41;
+  --ab-blue:        #1E6FFF;
+
+  /* TEXT */
+  --ab-text:      #EAEAEA;
+  --ab-body-text: #B8C0CC;
+  --ab-muted:     #6A7888;
+
+  /* FONTS */
+  --ab-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --ab-font-mono: 'Courier New', 'Courier', ui-monospace, monospace;
+
+  /* RADII */
+  --ab-radius-xs: 2px;
+  --ab-radius-sm: 0.125rem;
+  --ab-radius-md: 0.375rem;
+  --ab-radius-lg: 0.5rem;
+
+  /* SHADOWS */
+  --ab-glow-red:    0 0 32px rgba(220,38,38,0.25), 0 4px 16px rgba(220,38,38,0.2);
+  --ab-glow-gold:   0 0 40px rgba(232,163,32,0.10), 0 8px 32px rgba(0,0,0,0.4);
+  --ab-shadow-card: 0 0 40px rgba(232,163,32,0.06), 0 8px 32px rgba(0,0,0,0.4);
+
+  /* ANIMATION */
+  --ab-ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+  --ab-ease-quick:  cubic-bezier(0.25, 0.1, 0.25, 1);
+
+  /* ── Legacy brand tokens (keep for components not yet migrated) */
+  --color-brand-parchment:   #0A0D14;
+  --color-brand-ivory:       #0F1520;
+  --color-brand-warm-gray:   #1A2130;
+  --color-brand-medium-gray: #6A7888;
+  --color-brand-slate:       #B8C0CC;
+  --color-brand-charcoal:    #EAEAEA;
+  --color-brand-ink:         #EAEAEA;
+  --color-brand-gold:        #E8A320;
+  --color-brand-gold-light:  #F5C040;
+  --color-brand-orange:      #E8A320;
+  --color-brand-light-slate: #6A7888;
+  --color-forge-dark:        #05070C;
+  --color-forge-panel:       #0A0D14;
+  --color-forge-border:      #1A2130;
+  --color-forge-orange:      #E8A320;
+  --color-forge-text:        #EAEAEA;
+  --color-forge-muted:       #6A7888;
+  --color-base:              #05070C;
+  --color-surface:           #0A0D14;
+  --color-surface-2:         #0F1520;
+  --color-surface-3:         #1A2130;
+  --color-border:            #1A2130;
+  --color-border-2:          #2A3545;
+  --color-border-chrome:     #2A3545;
+  --color-text:              #EAEAEA;
+  --color-text-2:            #B8C0CC;
+  --color-text-muted:        #6A7888;
+  --color-accent:            #E8A320;
+  --color-green:             #28CD41;
+  --color-green-2:           #22a835;
+  --color-green-bg:          rgba(40,205,65,0.08);
+  --color-amber:             #E8A320;
+  --color-amber-2:           #c48a1a;
+  --color-amber-bg:          rgba(232,163,32,0.08);
+  --color-red:               #DC2626;
+  --color-red-2:             #B91C1C;
+  --color-red-bg:            rgba(220,38,38,0.08);
+  --color-blue:              #1E6FFF;
+  --color-blue-bg:           rgba(30,111,255,0.08);
+  --color-chrome:            #6A7888;
+  --color-chrome-2:          #B8C0CC;
+  --color-chrome-muted:      #2A3545;
+  --color-black:             #05070C;
+  --color-black-2:           #0A0D14;
 }
 
-html {
-  scroll-behavior: smooth;
-}
+* { box-sizing: border-box; }
 
-body {
-  background-color: var(--color-base);
-  color: var(--color-text);
-  font-family: var(--font-sans);
+html { scroll-behavior: smooth; }
+
+html, body {
+  background: var(--ab-base);
+  color: var(--ab-text);
+  font-family: var(--ab-font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ── Scrollbar ─────────────────────────────────────────────── */
+/* ── Scrollbar ────────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 3px; height: 3px; }
-::-webkit-scrollbar-track { background: var(--color-surface-2); }
-::-webkit-scrollbar-thumb { background: var(--color-border-2); border-radius: 2px; }
-::-webkit-scrollbar-thumb:hover { background: var(--color-chrome-muted); }
+::-webkit-scrollbar-track { background: var(--ab-surface-2); }
+::-webkit-scrollbar-thumb { background: var(--ab-border-bright); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--ab-muted); }
 
-/* ── Background — warm cream with barely-visible grid ──────── */
-.bg-forge-grid {
-  background-color: var(--color-base);
-  background-image:
-    linear-gradient(rgba(26, 25, 23, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(26, 25, 23, 0.025) 1px, transparent 1px);
-  background-size: 48px 48px;
-}
+/* ── ANIMATIONS ───────────────────────────────────────────────── */
+@keyframes ticker         { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes pulse-glow     { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+@keyframes fadeUp         { to { opacity: 1; transform: none; } }
+@keyframes status-pulse   { 0% { box-shadow: 0 0 0 0 rgba(40,205,65,0.4); } 100% { box-shadow: 0 0 0 6px rgba(40,205,65,0); } }
+@keyframes flicker        { 0%, 3%, 6%, 100% { opacity: 1; } 1%, 4% { opacity: 0.3; } }
+@keyframes reveal-up      { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
-/* ── Panel — clean white card ──────────────────────────────── */
+/* ── PANEL / CARD SYSTEM ──────────────────────────────────────── */
+
+/* forge-panel — primary content container */
 .forge-panel {
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 1rem;
-  padding: 1.5rem;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
-  box-shadow: none;
+  background: var(--ab-surface);
+  border: 1px solid var(--ab-border);
+  border-radius: var(--ab-radius-lg);
+  padding: 1.25rem;
+  transition: border-color 0.25s ease;
 }
+.forge-panel:hover { border-color: var(--ab-border-bright); }
 
-.forge-panel:hover {
-  border-color: var(--color-border-chrome);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-}
-
-/* ── Forge card ─────────────────────────────────────────────── */
+/* forge-card — clickable / hoverable card with corner bracket */
 .forge-card {
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 1rem;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: none;
+  background: var(--ab-surface);
+  border: 1px solid var(--ab-border);
+  border-radius: var(--ab-radius-lg);
+  padding: 1.25rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.forge-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(220,38,38,0.5), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.forge-card::after {
+  content: '';
+  position: absolute; bottom: 0; right: 0; width: 40px; height: 40px;
+  border-bottom: 1px solid var(--ab-border-bright);
+  border-right: 1px solid var(--ab-border-bright);
+  border-bottom-right-radius: var(--ab-radius-lg);
+  transition: border-color 0.3s ease;
+}
+.forge-card:hover { transform: translateY(-2px); box-shadow: var(--ab-shadow-card); }
+.forge-card:hover::before { opacity: 1; }
+.card-accent-red:hover   { border-color: rgba(220,38,38,0.3); }
+.card-accent-red:hover::before   { background: linear-gradient(90deg, transparent, rgba(220,38,38,0.6), transparent); }
+.card-accent-red:hover::after    { border-color: rgba(220,38,38,0.4); }
+.card-accent-green:hover { border-color: rgba(40,205,65,0.3); }
+.card-accent-green:hover::before { background: linear-gradient(90deg, transparent, rgba(40,205,65,0.6), transparent); }
+.card-accent-green:hover::after  { border-color: rgba(40,205,65,0.4); }
+.card-accent-gold:hover  { border-color: rgba(232,163,32,0.3); }
+.card-accent-gold:hover::before  { background: linear-gradient(90deg, transparent, rgba(232,163,32,0.6), transparent); }
+.card-accent-gold:hover::after   { border-color: rgba(232,163,32,0.4); }
+
+/* ── ARTIFACT PANEL ───────────────────────────────────────────── */
+.artifact-panel {
+  background: var(--ab-surface);
+  border: 1px solid var(--ab-border);
+  border-radius: var(--ab-radius-lg);
+  overflow: hidden;
+}
+.artifact-header {
+  background: var(--ab-surface-2);
+  border-bottom: 1px solid var(--ab-border);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--ab-font-mono);
+  font-size: 10px;
+  color: var(--ab-muted);
+  letter-spacing: 0.08em;
+}
+.artifact-body {
+  padding: 14px 16px;
+  font-family: var(--ab-font-mono);
+  font-size: 12px;
+  line-height: 1.9;
+  color: var(--ab-body-text);
 }
 
-.forge-card:hover {
-  border-color: var(--color-border-chrome);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+/* ── OVERLINES / LABELS ───────────────────────────────────────── */
+.ab-overline {
+  font-family: var(--ab-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ab-red);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+.ab-overline::before {
+  content: '';
+  width: 24px; height: 1px;
+  background: var(--ab-red);
+  display: inline-block;
 }
 
-/* ── Heading ───────────────────────────────────────────────── */
-.forge-heading {
-  color: var(--color-text);
-  font-weight: 200;
-  letter-spacing: -0.02em;
-  font-family: var(--font-display);
-  line-height: 1.1;
-}
-
-/* ── Label — uppercase tracked ─────────────────────────────── */
 .forge-label {
-  font-family: var(--font-mono);
+  font-family: var(--ab-font-mono);
   font-size: 0.65rem;
   font-weight: 500;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--color-text-muted);
+  color: var(--ab-muted);
 }
 
-/* ── Button — black pill (primary) ─────────────────────────── */
+.forge-heading {
+  color: var(--ab-text);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+/* ── CHIPS ────────────────────────────────────────────────────── */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--ab-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 2px;
+  border: 1px solid;
+}
+.chip-live  { color: var(--ab-green); background: rgba(40,205,65,0.08);   border-color: rgba(40,205,65,0.25); }
+.chip-build { color: var(--ab-red);   background: rgba(220,38,38,0.08);   border-color: rgba(220,38,38,0.25); }
+.chip-auto  { color: var(--ab-gold);  background: rgba(232,163,32,0.06);  border-color: rgba(232,163,32,0.25); }
+.chip-sched { color: var(--ab-blue);  background: rgba(30,111,255,0.08);  border-color: rgba(30,111,255,0.25); }
+
+/* ── STATUS DOTS ──────────────────────────────────────────────── */
+.dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+.dot-red   { background: var(--ab-red);   box-shadow: 0 0 8px var(--ab-red); }
+.dot-green { background: var(--ab-green); box-shadow: 0 0 6px var(--ab-green); animation: pulse-glow 2.5s ease-in-out infinite; }
+.dot-gold  { background: var(--ab-gold);  box-shadow: 0 0 6px var(--ab-gold); }
+
+/* ── BUTTONS ──────────────────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.625rem 1.5rem;
+  background: var(--ab-red); color: var(--ab-text);
+  font-weight: 700; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+  border: none; border-radius: var(--ab-radius-sm); cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-primary:hover { background: var(--ab-red-hover); box-shadow: var(--ab-glow-red); transform: translateY(-1px); }
+
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.625rem 1.5rem;
+  background: transparent; color: var(--ab-text);
+  font-weight: 600; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+  border: 1px solid var(--ab-border-bright); border-radius: var(--ab-radius-sm);
+  cursor: pointer; transition: all 0.2s ease;
+}
+.btn-ghost:hover { border-color: var(--ab-gold); color: var(--ab-gold); box-shadow: inset 0 0 16px rgba(232,163,32,0.06), 0 0 12px rgba(232,163,32,0.08); }
+
+/* Legacy button shapes */
 .forge-button {
-  background-color: var(--color-black);
-  color: #FAFAF8;
+  background: var(--ab-border-bright);
+  color: var(--ab-text);
   font-weight: 500;
   padding: 0.625rem 1.75rem;
   border-radius: 9999px;
@@ -166,65 +295,100 @@ body {
   transition: background-color 0.2s ease, opacity 0.2s ease;
   width: 100%;
 }
+.forge-button:hover { background: var(--ab-border); opacity: 0.9; }
 
-.forge-button:hover {
-  background-color: var(--color-black-2);
-  opacity: 0.9;
-}
-
-/* ── Button outline — white pill (secondary) ────────────────── */
 .forge-button-outline {
-  background-color: transparent;
-  color: var(--color-text);
+  background: transparent;
+  color: var(--ab-text);
   font-weight: 500;
   padding: 0.625rem 1.75rem;
   border-radius: 9999px;
   font-size: 0.8rem;
-  border: 1px solid var(--color-border-chrome);
+  border: 1px solid var(--ab-border-bright);
   cursor: pointer;
   letter-spacing: 0.01em;
   transition: border-color 0.2s ease, background-color 0.2s ease;
 }
+.forge-button-outline:hover { border-color: var(--ab-muted); background: var(--ab-surface-2); }
 
-.forge-button-outline:hover {
-  border-color: var(--color-text-2);
-  background-color: var(--color-surface-3);
+/* ── INPUT ────────────────────────────────────────────────────── */
+.forge-input {
+  background: var(--ab-surface-2);
+  border: 1px solid var(--ab-border-bright);
+  border-radius: var(--ab-radius-md);
+  padding: 0.5rem 0.75rem;
+  color: var(--ab-text);
+  font-family: var(--ab-font-sans);
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  width: 100%;
 }
+.forge-input:focus { border-color: var(--ab-gold); box-shadow: 0 0 0 2px rgba(232,163,32,0.12); }
+.forge-input::placeholder { color: var(--ab-muted); }
 
-/* ── Coral accent line — section labels ─────────────────────── */
+/* ── FORGE ACCENT LABEL ───────────────────────────────────────── */
 .forge-accent-label {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-family: var(--font-mono);
+  font-family: var(--ab-font-mono);
   font-size: 0.65rem;
   font-weight: 500;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--color-text-muted);
+  color: var(--ab-muted);
 }
-
 .forge-accent-label::before {
   content: '';
   display: block;
-  width: 1.5rem;
-  height: 2px;
-  background-color: var(--color-accent);
+  width: 1.5rem; height: 2px;
+  background: var(--ab-gold);
   border-radius: 1px;
   flex-shrink: 0;
 }
 
-/* ── Staggered reveal animations ───────────────────────────── */
-@keyframes reveal-up {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* ── STATUS INDICATORS ────────────────────────────────────────── */
+.status-active  { color: var(--ab-green); }
+.status-idle    { color: var(--ab-muted); }
+.status-error   { color: var(--ab-red); }
+.status-warning { color: var(--ab-gold); }
+
+/* ── CHROME BADGE ─────────────────────────────────────────────── */
+.chrome-badge {
+  background: var(--ab-surface-2);
+  color: var(--ab-body-text);
+  font-family: var(--ab-font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--ab-radius-md);
+  border: 1px solid var(--ab-border-bright);
 }
 
+/* ── DIVIDER ──────────────────────────────────────────────────── */
+.forge-divider {
+  height: 1px;
+  background: var(--ab-border);
+  margin: 1.5rem 0;
+}
+
+/* ── BACKGROUND GRID ──────────────────────────────────────────── */
+.bg-forge-grid {
+  background-color: var(--ab-base);
+  background-image:
+    linear-gradient(rgba(232,163,32,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232,163,32,0.025) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* ── REVEAL ANIMATIONS ────────────────────────────────────────── */
 [data-reveal] {
   opacity: 0;
   animation: reveal-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
-
 [data-reveal="0"] { animation-delay: 0ms; }
 [data-reveal="1"] { animation-delay: 80ms; }
 [data-reveal="2"] { animation-delay: 160ms; }
@@ -233,73 +397,19 @@ body {
 [data-reveal="5"] { animation-delay: 400ms; }
 [data-reveal="6"] { animation-delay: 480ms; }
 
-/* ── Input ──────────────────────────────────────────────────── */
-.forge-input {
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border-2);
-  border-radius: 0.5rem;
-  padding: 0.5rem 0.75rem;
-  color: var(--color-text);
-  font-family: var(--font-sans);
-  font-size: 0.875rem;
-  outline: none;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
-  width: 100%;
-}
-
-.forge-input:focus {
-  border-color: var(--color-accent);
-  box-shadow: 0 0 0 2px rgba(224, 122, 95, 0.12);
-}
-
-.forge-input::placeholder {
-  color: var(--color-text-muted);
-}
-
-/* ── Divider ────────────────────────────────────────────────── */
-.forge-divider {
-  height: 1px;
-  background: var(--color-border);
-  margin: 1.5rem 0;
-}
-
-/* ── Status indicators ──────────────────────────────────────── */
-.status-active  { color: var(--color-green); }
-.status-idle    { color: var(--color-text-muted); }
-.status-error   { color: var(--color-red); }
-.status-warning { color: var(--color-amber); }
-
-/* ── Chrome shimmer badge — adapted for light ───────────────── */
-.chrome-badge {
-  background-color: var(--color-surface-3);
-  color: var(--color-text-2);
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 0.2rem 0.6rem;
-  border-radius: 0.375rem;
-  border: 1px solid var(--color-border-2);
-}
-
-/* ── Glow border (kept for compat, now subtle) ──────────────── */
-.glow-border {
-  position: relative;
-  overflow: hidden;
-}
-
+/* ── GLOW BORDER ──────────────────────────────────────────────── */
+.glow-border { position: relative; overflow: hidden; }
 .glow-border::after {
   content: '';
-  position: absolute;
-  bottom: 0;
-  left: -100%;
-  width: 100%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+  position: absolute; bottom: 0; left: -100%;
+  width: 100%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ab-gold), transparent);
   transition: left 0.4s ease;
 }
+.glow-border:hover::after { left: 100%; }
 
-.glow-border:hover::after {
-  left: 100%;
-}
+/* ── TEXT HELPERS ─────────────────────────────────────────────── */
+.text-brand-gold    { color: var(--ab-gold); }
+.text-brand-ink     { color: var(--ab-text); }
+.text-brand-slate   { color: var(--ab-body-text); }
+.text-brand-medium-gray { color: var(--ab-muted); }
