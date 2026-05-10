@@ -52,10 +52,10 @@ async function fetchTodayEvents(accessToken: string, source: 'personal' | 'works
 }
 
 export async function GET() {
-  const personalRefresh  = process.env.GOOGLE_CALENDAR_REFRESH_TOKEN_PERSONAL;
-  const workspaceRefresh = process.env.GOOGLE_CALENDAR_REFRESH_TOKEN_WORKSPACE;
-  const clientId         = process.env.GOOGLE_CLIENT_ID;
-  const clientSecret     = process.env.GOOGLE_CLIENT_SECRET;
+  const personalRefresh  = process.env.GOOGLE_CALENDAR_REFRESH_TOKEN_PERSONAL?.trim();
+  const workspaceRefresh = process.env.GOOGLE_CALENDAR_REFRESH_TOKEN_WORKSPACE?.trim();
+  const clientId         = process.env.GOOGLE_CLIENT_ID?.trim();
+  const clientSecret     = process.env.GOOGLE_CLIENT_SECRET?.trim();
 
   if (!personalRefresh && !workspaceRefresh) {
     return NextResponse.json({
