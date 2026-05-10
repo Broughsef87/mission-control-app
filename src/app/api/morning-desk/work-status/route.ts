@@ -24,7 +24,7 @@ async function linearQuery(query: string, variables?: Record<string, unknown>) {
 }
 
 const WORK_STATUS_QUERY = `
-  query FoundryWorkStatus($yesterday: DateTimeComparatorInput) {
+  query FoundryWorkStatus($yesterday: DateComparator) {
     inProgress: issues(
       filter: { state: { type: { in: ["started"] } } }
       first: 50
