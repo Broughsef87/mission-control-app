@@ -71,7 +71,7 @@ export default function WorkStatusPanel() {
           )}
 
           {/* Shipped yesterday */}
-          {data.linear_connected && data.shipped_yesterday?.length > 0 && (
+          {data.linear_connected && (data.shipped_yesterday?.length || 0) > 0 && (
             <div className="mb-2">
               <div className="forge-label mb-1" style={{ color: 'var(--ab-green)' }}>Shipped yesterday</div>
               {data.shipped_yesterday.slice(0, 4).map(item => (
@@ -86,7 +86,7 @@ export default function WorkStatusPanel() {
 
           {/* Project list */}
           <div className="flex flex-col gap-0.5 overflow-y-auto flex-1">
-            {data.by_project.length === 0 && (
+            {(!data.by_project || data.by_project.length === 0) && (
               <p className="text-[10px] font-mono py-4 text-center" style={{ color: 'var(--ab-muted)' }}>No active projects</p>
             )}
             {data.by_project.map(p => {

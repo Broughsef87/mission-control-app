@@ -61,7 +61,7 @@ export default function AgentLogPanel() {
             </div>
             <div style={{ width: 1, height: 28, background: 'var(--ab-border)' }} />
             <div className="flex flex-col">
-              <span className="text-lg font-mono font-black tabular-nums leading-none" style={{ color: 'var(--ab-text)' }}>{data.agents.length}</span>
+              <span className="text-lg font-mono font-black tabular-nums leading-none" style={{ color: 'var(--ab-text)' }}>{data.agents?.length || 0}</span>
               <span className="text-[8px] font-mono uppercase" style={{ color: 'var(--ab-muted)' }}>agents</span>
             </div>
             <Link href="/logs" className="ml-auto text-[8px] font-mono font-bold uppercase tracking-widest hover:opacity-70 transition-opacity" style={{ color: 'var(--ab-gold)' }}>
