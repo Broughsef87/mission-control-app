@@ -2,7 +2,6 @@
 
 import useSWR from 'swr';
 import { formatDistanceToNow } from 'date-fns';
-import Link from 'next/link';
 
 const fetcher = (url: string) => fetch(url).then(r => r.json());
 const REFRESH = 30 * 60 * 1000;
@@ -64,9 +63,6 @@ export default function AgentLogPanel() {
               <span className="text-lg font-mono font-black tabular-nums leading-none" style={{ color: 'var(--ab-text)' }}>{data.agents?.length || 0}</span>
               <span className="text-[8px] font-mono uppercase" style={{ color: 'var(--ab-muted)' }}>agents</span>
             </div>
-            <Link href="/logs" className="ml-auto text-[8px] font-mono font-bold uppercase tracking-widest hover:opacity-70 transition-opacity" style={{ color: 'var(--ab-gold)' }}>
-              Raw →
-            </Link>
           </div>
 
           {/* 5 summary bullets */}

@@ -5,7 +5,6 @@ import ApprovalsPanel from '@/components/ApprovalsPanel';
 import AlertBanner from '@/components/AlertBanner';
 import EventFeed from '@/components/EventFeed';
 import LiveAgentFeed from '@/components/LiveAgentFeed';
-import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
 
 export const dynamic = 'force-dynamic';
@@ -115,19 +114,10 @@ export default async function Home() {
               No check-in today
             </span>
           )}
-          <Link
-            href="/checkin"
-            className="flex items-center gap-1.5 border border-brand-warm-gray text-brand-slate text-[9px] font-mono font-bold uppercase tracking-widest px-3 py-1.5 rounded-full hover:border-brand-gold hover:text-brand-gold transition-colors"
-          >
-            + Check-in
-          </Link>
           {(approvals as any[]).length > 0 && (
-            <Link
-              href="/approvals"
-              className="flex items-center gap-1.5 bg-brand-gold text-ab-body text-[9px] font-mono font-bold uppercase tracking-widest px-3 py-1.5 rounded-full hover:opacity-90 transition-opacity"
-            >
+            <span className="flex items-center gap-1.5 bg-brand-gold text-ab-body text-[9px] font-mono font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
               {(approvals as any[]).length} approval{(approvals as any[]).length !== 1 ? 's' : ''} pending
-            </Link>
+            </span>
           )}
         </div>
       </header>
@@ -306,7 +296,6 @@ export default async function Home() {
               <div className="forge-panel !p-0 overflow-hidden">
                 <div className="flex items-center justify-between px-4 py-2.5 border-b border-brand-warm-gray">
                   <span className="forge-label">Active Projects</span>
-                  <Link href="/projects" className="text-[8px] font-mono font-bold text-brand-gold uppercase tracking-widest hover:text-brand-ink transition-colors">All →</Link>
                 </div>
                 {inProgressProjects.slice(0, 5).map((project: any) => (
                   <div key={project.id} className="flex items-center gap-3 px-4 py-2.5 border-b border-brand-warm-gray last:border-0">
