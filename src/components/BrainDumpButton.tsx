@@ -15,15 +15,18 @@ export default function BrainDumpButton() {
   const chunksRef = React.useRef<Blob[]>([]);
   const timerRef = React.useRef<ReturnType<typeof setInterval> | null>(null);
   const elapsedRef = React.useRef(0);
+  const isStartingRef = React.useRef(false);  // guard against double-click during getUserMedia
+  const shouldSubmitRef = React.useRef(true);  // false when stopping due to unmount/navigation
 
   function clearTimer() {
     if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
   }
 
-  // Release mic and timer if user navigates away mid-recording
+  // Release mic and timer if user navigates away mid-recording — but don't upload partial audio
   React.useEffect(() => {
     return () => {
       clearTimer();
+      shouldSubmitRef.current = false;
       if (mediaRef.current && mediaRef.current.state !== 'inactive') {
         mediaRef.current.stop();
       }
@@ -31,11 +34,15 @@ export default function BrainDumpButton() {
   }, []);
 
   async function startRecording() {
+    if (isStartingRef.current) return;
+    isStartingRef.current = true;
     elapsedRef.current = 0;
+    shouldSubmitRef.current = true;
     setElapsed(0);
     setErrorMsg('');
+    let stream: MediaStream | null = null;
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
         ? 'audio/webm;codecs=opus'
         : MediaRecorder.isTypeSupported('audio/webm')
@@ -46,7 +53,8 @@ export default function BrainDumpButton() {
       chunksRef.current = [];
       recorder.ondataavailable = (e) => { if (e.data.size > 0) chunksRef.current.push(e.data); };
       recorder.onstop = () => {
-        stream.getTracks().forEach(t => t.stop());
+        stream!.getTracks().forEach(t => t.stop());
+        if (!shouldSubmitRef.current) return;
         const blob = new Blob(chunksRef.current, { type: recorder.mimeType || 'audio/webm' });
         submitDump(blob, recorder.mimeType);
       };
@@ -60,9 +68,13 @@ export default function BrainDumpButton() {
         if (elapsedRef.current >= MAX_SECONDS) stopRecording();
       }, 1000);
     } catch (err: any) {
+      // Stop any tracks acquired before the MediaRecorder constructor threw
+      stream?.getTracks().forEach(t => t.stop());
       setErrorMsg(err.message ?? 'Microphone access denied');
       setState('error');
       setTimeout(() => setState('idle'), 3000);
+    } finally {
+      isStartingRef.current = false;
     }
   }
 
