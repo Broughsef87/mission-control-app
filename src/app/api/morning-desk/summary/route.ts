@@ -222,11 +222,11 @@ async function fetchYesterdayCheckin() {
   const yd = new Date(Date.now() - 86_400_000).toISOString().split('T')[0];
   const { data, error } = await db
     .from('checkins')
-    .select('commitments, priorities, date')
+    .select('priorities, notes, date')
     .eq('date', yd)
     .maybeSingle();
   if (error) throw error;
-  return data as { commitments?: string[]; priorities?: string[]; date: string } | null;
+  return data as { priorities?: string[]; notes?: string; date: string } | null;
 }
 
 // ── Haiku synthesis (best-effort; raw labels used on failure) ──────────────────
@@ -393,10 +393,8 @@ export async function GET() {
     (linear?.completedYesterday.nodes ?? []).map((i: any) => i.id as string)
   );
 
-  const checkinCommitments: any[] = [
-    ...(checkin?.commitments ?? []),
-    ...(checkin?.priorities ?? []),
-  ].map((c, idx) => ({ id: `checkin-${idx}`, label: c, source: 'checkin', status: 'unknown' }));
+  const checkinCommitments: any[] = (checkin?.priorities ?? [])
+    .map((c, idx) => ({ id: `checkin-${idx}`, label: c, source: 'checkin', status: 'unknown' }));
 
   const accountability =
     startedYesterday.length > 0 || checkinCommitments.length > 0

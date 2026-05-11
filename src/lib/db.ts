@@ -300,9 +300,10 @@ export async function getLatestBriefing() {
 }
 
 export async function createBriefing(content: string, metrics_snapshot: Record<string, unknown>, title?: string, type?: string) {
+  const snapshot = { ...metrics_snapshot, ...(title ? { title } : {}), type: type ?? 'morning_brief' };
   const { data, error } = await db()
     .from('daily_briefings')
-    .insert({ content, metrics_snapshot, title, type: type ?? 'morning_brief' })
+    .insert({ content, metrics_snapshot: snapshot })
     .select()
     .single();
   if (error) throw error;

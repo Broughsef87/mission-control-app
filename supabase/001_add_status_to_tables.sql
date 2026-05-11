@@ -1,15 +1,12 @@
--- Migration: Add status column to projects, content, and goals
+-- Migration: Add visibility column to projects, content_items, and goals
+-- Uses a separate `visibility` column (not `status`) to avoid conflicting with
+-- existing workflow status columns and app values like 'In Progress'/'backlog'.
 
--- Add status column to projects
-ALTER TABLE projects ADD COLUMN status TEXT DEFAULT 'active' CHECK (status IN ('active', 'parked', 'archived'));
+ALTER TABLE projects    ADD COLUMN IF NOT EXISTS visibility TEXT DEFAULT 'active' CHECK (visibility IN ('active', 'parked', 'archived'));
+ALTER TABLE content_items ADD COLUMN IF NOT EXISTS visibility TEXT DEFAULT 'active' CHECK (visibility IN ('active', 'parked', 'archived'));
+ALTER TABLE goals       ADD COLUMN IF NOT EXISTS visibility TEXT DEFAULT 'active' CHECK (visibility IN ('active', 'parked', 'archived'));
 
--- Add status column to content
-ALTER TABLE content ADD COLUMN status TEXT DEFAULT 'active' CHECK (status IN ('active', 'parked', 'archived'));
-
--- Add status column to goals
-ALTER TABLE goals ADD COLUMN status TEXT DEFAULT 'active' CHECK (status IN ('active', 'parked', 'archived'));
-
--- Migrate existing DS rows to parked (Dad Strength App)
-UPDATE projects SET status = 'parked' WHERE name ILIKE '%Dad Strength%';
-UPDATE content SET status = 'parked' WHERE title ILIKE '%Dad Strength%' OR title ILIKE '%Nap-Squeeze%';
-UPDATE goals SET status = 'parked' WHERE title ILIKE '%Dad Strength%';
+-- Migrate existing Dad Strength rows to parked
+UPDATE projects       SET visibility = 'parked' WHERE name  ILIKE '%Dad Strength%';
+UPDATE content_items  SET visibility = 'parked' WHERE title ILIKE '%Dad Strength%' OR title ILIKE '%Nap-Squeeze%';
+UPDATE goals          SET visibility = 'parked' WHERE title ILIKE '%Dad Strength%';

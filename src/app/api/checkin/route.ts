@@ -43,10 +43,11 @@ export async function POST(req: NextRequest) {
 
     if (!priorities.length && (notes || rawContent)) {
       const raw = notes ?? rawContent ?? '';
-      console.log('RAW:', typeof raw, Array.isArray(raw), raw);
       const parsed = parseCheckinContent(raw, date);
-      if (parsed.priorities.length) priorities = parsed.priorities;
-      storedContent = raw;
+      if (parsed.priorities.length) {
+        priorities = parsed.priorities;
+        storedContent = raw;
+      }
     }
 
     // Still no priorities — store raw notes as a single priority so the record isn't empty

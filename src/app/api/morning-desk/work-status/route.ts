@@ -24,7 +24,7 @@ async function linearQuery(query: string, variables?: Record<string, unknown>) {
 }
 
 const WORK_STATUS_QUERY = `
-  query FoundryWorkStatus($yesterday: DateComparator) {
+  query FoundryWorkStatus($yesterday: NullableDateComparator) {
     inProgress: issues(
       filter: { state: { type: { in: ["started"] } } }
       first: 50
@@ -92,9 +92,10 @@ export async function GET() {
     const shipped          = data.shippedYesterday?.nodes ?? [];
 
     const now = new Date();
+    const todayStr = now.toISOString().split('T')[0];
     const overdue = inProgressIssues.filter((i: any) => {
       if (!i.dueDate) return false;
-      return new Date(i.dueDate) < now;
+      return i.dueDate < todayStr;
     });
 
     const stale = inProgressIssues.filter((i: any) => {
