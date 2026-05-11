@@ -8,6 +8,7 @@ import AgentLogPanel from '@/components/desk/AgentLogPanel';
 import AgentCostPanel from '@/components/desk/AgentCostPanel';
 import MorningBriefPanel from '@/components/desk/MorningBriefPanel';
 import SynthesisPanel from '@/components/desk/SynthesisPanel';
+import BrainDumpButton from '@/components/BrainDumpButton';
 import { format } from 'date-fns';
 
 export default function MorningDesk() {
@@ -26,9 +27,12 @@ export default function MorningDesk() {
             {dateLabel}
           </span>
         </div>
-        <span style={{ fontFamily: 'var(--ab-font-mono)', fontSize: '8px', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--ab-border-bright)' }}>
-          autorefresh · no interaction needed
-        </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <span style={{ fontFamily: 'var(--ab-font-mono)', fontSize: '8px', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--ab-border-bright)' }}>
+            autorefresh · no interaction needed
+          </span>
+          <BrainDumpButton />
+        </div>
       </div>
 
       {/* Synthesis Engine — above the fold */}

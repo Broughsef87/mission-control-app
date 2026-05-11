@@ -1,6 +1,7 @@
 "use client";
 
 import useSWR from 'swr';
+import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
 
 const fetcher = (url: string) => fetch(url).then(r => r.json());
@@ -95,6 +96,12 @@ export default function InboxPanel() {
           ))}
         </div>
       )}
+
+      <div className="flex items-center justify-end mt-2 pt-2" style={{ borderTop: '1px solid var(--ab-border)' }}>
+        <Link href="/leads" style={{ fontFamily: 'var(--ab-font-mono)', fontSize: '8px', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--ab-gold)', textDecoration: 'none', opacity: 0.8 }}>
+          Lead Pipeline →
+        </Link>
+      </div>
     </div>
   );
 }

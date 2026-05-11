@@ -6,13 +6,14 @@ import { usePathname, useRouter } from 'next/navigation';
 import { createClient } from '@supabase/supabase-js';
 import ForgeLogo from '../ForgeLogo';
 import {
-  Users, DollarSign, Settings, ChevronLeft, ChevronRight, LogOut, Monitor, BookOpen
+  Users, DollarSign, Settings, ChevronLeft, ChevronRight, LogOut, Monitor, BookOpen, Flame
 } from 'lucide-react';
 
 const navItems = [
   { name: 'Morning Desk', path: '/',         icon: Monitor    },
   { name: 'Agents',       path: '/agents',   icon: Users      },
   { name: 'Review',       path: '/review',   icon: BookOpen   },
+  { name: 'Leads',        path: '/leads',    icon: Flame      },
   { name: 'Revenue',      path: '/revenue',  icon: DollarSign },
   { name: 'Settings',     path: '/settings', icon: Settings   },
 ];
