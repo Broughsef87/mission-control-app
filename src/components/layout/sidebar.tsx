@@ -6,16 +6,15 @@ import { usePathname, useRouter } from 'next/navigation';
 import { createClient } from '@supabase/supabase-js';
 import ForgeLogo from '../ForgeLogo';
 import {
-  LayoutDashboard, Users, DollarSign,
-  Settings, ChevronLeft, ChevronRight, LogOut, Monitor
+  Users, DollarSign, Settings, ChevronLeft, ChevronRight, LogOut, Monitor, BookOpen
 } from 'lucide-react';
 
 const navItems = [
-  { name: 'The Foundry',  path: '/',             icon: LayoutDashboard },
-  { name: 'Morning Desk', path: '/morning-desk', icon: Monitor         },
-  { name: 'Agents',       path: '/agents',       icon: Users           },
-  { name: 'Revenue',      path: '/revenue',      icon: DollarSign      },
-  { name: 'Settings',     path: '/settings',     icon: Settings        },
+  { name: 'Morning Desk', path: '/',         icon: Monitor    },
+  { name: 'Agents',       path: '/agents',   icon: Users      },
+  { name: 'Review',       path: '/review',   icon: BookOpen   },
+  { name: 'Revenue',      path: '/revenue',  icon: DollarSign },
+  { name: 'Settings',     path: '/settings', icon: Settings   },
 ];
 
 // ── Design tokens (Forge OS light)

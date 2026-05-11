@@ -1,13 +1,13 @@
-import { getAgentStatuses, getAgentLogs } from '@/lib/db';
+import { getAgentStatuses } from '@/lib/db';
 import AnimatedOffice from '@/components/AnimatedOffice';
+import AgentLogsSection from '@/components/AgentLogsSection';
 import { formatDistanceToNow } from 'date-fns';
 
 export const dynamic = 'force-dynamic';
 
 export default async function AgentsPage() {
-  const [statuses, logs] = await Promise.all([
+  const [statuses] = await Promise.all([
     getAgentStatuses().catch(() => []),
-    getAgentLogs(30).catch(() => []),
   ]);
 
   const active = statuses.filter((a: any) => a.status === 'Working');
@@ -31,34 +31,7 @@ export default async function AgentsPage() {
             <AnimatedOffice />
           </section>
 
-          {/* Recent Agent Activity */}
-          <div className="forge-panel">
-            <h2 className="forge-heading text-lg mb-4">Recent Activity</h2>
-            {logs.length === 0 ? (
-              <p className="text-[10px] font-mono text-brand-medium-gray uppercase tracking-widest text-center py-8">
-                No agent activity logged yet. Agents write here automatically via OpenClaw.
-              </p>
-            ) : (
-              <div className="space-y-1 max-h-72 overflow-y-auto">
-                {(logs as any[]).map((log: any) => (
-                  <div key={log.id} className="flex items-start gap-3 py-2 border-b border-brand-warm-gray/50">
-                    <div className="w-1.5 h-1.5 rounded-full bg-brand-gold mt-1.5 shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <span className="text-[9px] font-mono font-bold text-brand-gold uppercase mr-2">{log.agent_name}</span>
-                      <span className="text-[10px] text-brand-slate">{log.action}</span>
-                      {log.path && <span className="text-[8px] font-mono text-brand-medium-gray ml-2 truncate">{log.path}</span>}
-                    </div>
-                    <div className="text-right shrink-0">
-                      {log.cost > 0 && <div className="text-[8px] font-mono text-brand-medium-gray">${Number(log.cost).toFixed(4)}</div>}
-                      <div className="text-[8px] font-mono text-brand-medium-gray opacity-60">
-                        {formatDistanceToNow(new Date(log.created_at), { addSuffix: true })}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          <AgentLogsSection />
         </div>
 
         {/* Right: Agent Roster */}

@@ -2,6 +2,7 @@
 
 import useSWR from 'swr';
 import { format } from 'date-fns';
+import Link from 'next/link';
 
 const fetcher = (url: string) => fetch(url).then(r => r.json());
 const REFRESH = 60 * 1000;
@@ -126,7 +127,14 @@ function CalEventRow({ event }: { event: CalEvent }) {
           </div>
         )}
       </div>
-      {isNow && <span className="text-[8px] font-mono font-bold shrink-0" style={{ color: 'var(--ab-gold)' }}>NOW</span>}
+      <div className="flex flex-col items-end gap-0.5 shrink-0">
+        {isNow && <span className="text-[8px] font-mono font-bold" style={{ color: 'var(--ab-gold)' }}>NOW</span>}
+        {(event.attendees?.length ?? 0) > 1 && (
+          <Link href={`/prep/${event.id}`} className="text-[8px] font-mono" style={{ color: 'var(--ab-gold)', opacity: 0.7, textDecoration: 'none' }}>
+            Prep →
+          </Link>
+        )}
+      </div>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import React from 'react';
 import useSWR from 'swr';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -117,7 +118,17 @@ function SkeletonRows({ count }: { count: number }) {
   );
 }
 
+async function submitFeedback(signal_label: string, source: string) {
+  await fetch('/api/morning-desk/feedback', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ signal_label, source }),
+  });
+}
+
 export default function SynthesisPanel() {
+  const [dismissed, setDismissed] = React.useState<Set<number>>(new Set());
+
   const { data, isValidating } = useSWR<SummaryData>('/api/morning-desk/summary', fetcher, {
     refreshInterval: 60_000,
     revalidateOnFocus: false,
@@ -170,7 +181,7 @@ export default function SynthesisPanel() {
       <div className="flex flex-col gap-1.5">
         <SectionLabel>TOP 3 TODAY</SectionLabel>
         {!data && <SkeletonRows count={3} />}
-        {data?.top3.map((item, i) => (
+        {data?.top3.map((item, i) => dismissed.has(i) ? null : (
           <div
             key={i}
             className="flex items-start gap-3 px-3 py-2.5 rounded"
@@ -189,17 +200,22 @@ export default function SynthesisPanel() {
                 <WeightBadge weight={item.weight} />
               </div>
             </div>
-            {item.link && (
-              <a
-                href={item.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[10px] font-mono shrink-0"
-                style={{ color: 'var(--ab-muted)' }}
+            <div className="flex items-center gap-1.5 shrink-0">
+              {item.link && (
+                <a href={item.link} target="_blank" rel="noopener noreferrer" className="text-[10px] font-mono" style={{ color: 'var(--ab-muted)' }}>↗</a>
+              )}
+              <button
+                title="Not relevant"
+                onClick={() => {
+                  setDismissed(prev => new Set([...prev, i]));
+                  submitFeedback(item.label, item.source);
+                }}
+                className="text-[10px] font-mono opacity-30 hover:opacity-80 transition-opacity"
+                style={{ color: 'var(--ab-muted)', background: 'none', border: 'none', cursor: 'pointer', padding: '2px 4px' }}
               >
-                ↗
-              </a>
-            )}
+                👎
+              </button>
+            </div>
           </div>
         ))}
         {data?.top3.length === 0 && (
