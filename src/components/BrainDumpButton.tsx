@@ -14,12 +14,24 @@ export default function BrainDumpButton() {
   const mediaRef = React.useRef<MediaRecorder | null>(null);
   const chunksRef = React.useRef<Blob[]>([]);
   const timerRef = React.useRef<ReturnType<typeof setInterval> | null>(null);
+  const elapsedRef = React.useRef(0);
 
   function clearTimer() {
     if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
   }
 
+  // Release mic and timer if user navigates away mid-recording
+  React.useEffect(() => {
+    return () => {
+      clearTimer();
+      if (mediaRef.current && mediaRef.current.state !== 'inactive') {
+        mediaRef.current.stop();
+      }
+    };
+  }, []);
+
   async function startRecording() {
+    elapsedRef.current = 0;
     setElapsed(0);
     setErrorMsg('');
     try {
@@ -43,10 +55,9 @@ export default function BrainDumpButton() {
       setState('recording');
 
       timerRef.current = setInterval(() => {
-        setElapsed(prev => {
-          if (prev + 1 >= MAX_SECONDS) { stopRecording(); return prev + 1; }
-          return prev + 1;
-        });
+        elapsedRef.current += 1;
+        setElapsed(elapsedRef.current);
+        if (elapsedRef.current >= MAX_SECONDS) stopRecording();
       }, 1000);
     } catch (err: any) {
       setErrorMsg(err.message ?? 'Microphone access denied');

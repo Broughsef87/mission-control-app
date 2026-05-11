@@ -1,6 +1,5 @@
 "use client";
 
-import Link from 'next/link';
 import { format, subDays } from 'date-fns';
 
 // Mock data — replaced by intake backend once FOR-40 ships
@@ -137,7 +136,7 @@ export default function LeadsPage() {
 
       {/* Lead rows */}
       <div className="flex flex-col gap-2 flex-1">
-        {sorted.map((lead, idx) => (
+        {sorted.map((lead) => (
           <div
             key={lead.id}
             className="rounded px-3 py-3"
