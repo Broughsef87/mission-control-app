@@ -36,8 +36,9 @@ export async function POST(req: Request) {
     }
 
     const mimeBase = file.type.split(';')[0].trim();
-    if (file.type && !ALLOWED_TYPES.has(file.type) && !ALLOWED_TYPES.has(mimeBase)) {
-      return NextResponse.json({ error: `Unsupported audio type: ${file.type}` }, { status: 415 });
+    // Always validate — empty type is not in the allow-list and must fail explicitly
+    if (!ALLOWED_TYPES.has(file.type) && !ALLOWED_TYPES.has(mimeBase)) {
+      return NextResponse.json({ error: `Unsupported audio type: ${file.type || '(empty)'}` }, { status: 415 });
     }
 
     // Determine a sensible filename extension for Whisper — it uses it to pick the decoder
