@@ -11,18 +11,41 @@ interface ExchangeResult {
   accounts: { name: string; mask: string | null; type: string; subtype: string | null }[];
 }
 
+const TOKEN_KEY = 'coffer_plaid_link_token';
+
 export default function CofferConnectPage() {
   const [linkToken, setLinkToken] = useState<string | null>(null);
+  const [receivedRedirectUri, setReceivedRedirectUri] = useState<string | undefined>(undefined);
   const [status, setStatus] = useState<'idle' | 'loading-token' | 'token-ready' | 'exchanging' | 'connected' | 'error'>('loading-token');
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<ExchangeResult | null>(null);
 
+  // OAuth resumption: if Chase redirected back, we need the ORIGINAL link_token
+  // from localStorage + window.location.href as receivedRedirectUri. Otherwise
+  // Plaid's onSuccess never fires after the OAuth handoff.
   useEffect(() => {
+    const url = new URL(window.location.href);
+    const isOAuthRedirect = url.searchParams.has('oauth_state_id');
+
+    if (isOAuthRedirect) {
+      const stored = window.localStorage.getItem(TOKEN_KEY);
+      if (!stored) {
+        setError('OAuth redirect detected but no stored link token. Start the connect flow again.');
+        setStatus('error');
+        return;
+      }
+      setLinkToken(stored);
+      setReceivedRedirectUri(window.location.href);
+      setStatus('token-ready');
+      return;
+    }
+
     setStatus('loading-token');
     fetch('/api/plaid/create-link-token', { method: 'POST' })
       .then(async (r) => {
         const data = await r.json();
         if (!r.ok) throw new Error(data.error || `HTTP ${r.status}`);
+        window.localStorage.setItem(TOKEN_KEY, data.link_token);
         setLinkToken(data.link_token);
         setStatus('token-ready');
       })
@@ -42,6 +65,7 @@ export default function CofferConnectPage() {
       });
       const data = await r.json();
       if (!r.ok) throw new Error(data.error || `HTTP ${r.status}`);
+      window.localStorage.removeItem(TOKEN_KEY);
       setResult(data);
       setStatus('connected');
     } catch (e: any) {
@@ -52,8 +76,15 @@ export default function CofferConnectPage() {
 
   const { open, ready } = usePlaidLink({
     token: linkToken,
+    receivedRedirectUri,
     onSuccess,
   });
+
+  // After OAuth redirect, Plaid Link auto-resumes once it's ready — open()
+  // surfaces any pending state to finish the flow.
+  useEffect(() => {
+    if (receivedRedirectUri && ready) open();
+  }, [receivedRedirectUri, ready, open]);
 
   return (
     <main style={{ padding: '2rem', maxWidth: '640px', margin: '0 auto', fontFamily: 'var(--font-sans, system-ui)' }}>
@@ -64,7 +95,7 @@ export default function CofferConnectPage() {
 
       {status === 'loading-token' && <p>Requesting Plaid link token…</p>}
 
-      {status === 'token-ready' && (
+      {status === 'token-ready' && !receivedRedirectUri && (
         <button
           onClick={() => open()}
           disabled={!ready}
@@ -82,6 +113,10 @@ export default function CofferConnectPage() {
         >
           Connect Chase
         </button>
+      )}
+
+      {status === 'token-ready' && receivedRedirectUri && (
+        <p>Resuming Plaid OAuth flow…</p>
       )}
 
       {status === 'exchanging' && <p>Exchanging public token + storing access credentials…</p>}

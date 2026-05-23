@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getPlaid } from '@/lib/plaid';
 import { getSupabaseAdmin } from '@/lib/supabase';
+import { requireAuth } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,6 +13,9 @@ interface ExchangeBody {
 }
 
 export async function POST(req: NextRequest) {
+  const unauth = await requireAuth();
+  if (unauth) return unauth;
+
   const plaid = getPlaid();
   if (!plaid) {
     return NextResponse.json(
