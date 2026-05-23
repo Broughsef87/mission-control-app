@@ -71,3 +71,15 @@ CREATE INDEX IF NOT EXISTS coffer_categorization_rules_lookup_idx
   ON coffer_categorization_rules (match_field, match_value);
 CREATE INDEX IF NOT EXISTS coffer_categorization_rules_client_id_idx
   ON coffer_categorization_rules (client_id) WHERE client_id IS NOT NULL;
+
+-- ---------------------------------------------------------------------------
+-- Row Level Security: service-role-only by design.
+-- Both tables hold live financial data (amounts, counterparties, receipt URLs,
+-- raw ingest payloads). RLS is enabled with NO policies, which denies all
+-- access via the anon key. The Coffer worker (coffer.js) and Mission Control
+-- server-side queries both use SUPABASE_SERVICE_ROLE_KEY, which bypasses RLS.
+-- Diverges from the permissive "USING (true)" pattern used by less-sensitive
+-- Foundry tables (agent_logs, monthly_report_runs) — intentional for finance.
+-- ---------------------------------------------------------------------------
+ALTER TABLE coffer_transactions         ENABLE ROW LEVEL SECURITY;
+ALTER TABLE coffer_categorization_rules ENABLE ROW LEVEL SECURITY;
