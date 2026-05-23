@@ -12,6 +12,7 @@ interface MoneyData {
   mrr_cents: number;
   active_subscriptions: number;
   cash_in_week: string;
+  pipeline_mtd: string;
   failed_payments: number;
   disputes: number;
   new_subs_mtd: number;
@@ -24,7 +25,7 @@ export default function MoneyPanel() {
   const { data, isValidating, error } = useSWR<MoneyData>(
     '/api/morning-desk/money',
     fetcher,
-    { refreshInterval: REFRESH, revalidateOnFocus: false }
+    { refreshInterval: REFRESH, refreshWhenHidden: true, revalidateOnFocus: true }
   );
 
   const isAlert = data && (data.failed_payments > 0 || data.disputes > 0);
@@ -45,6 +46,7 @@ export default function MoneyPanel() {
           <BigStat label="MRR" value={data.mrr} color="var(--ab-gold)" />
           <Divider />
           <SmallRow label="Cash in (7d)" value={data.cash_in_week} />
+          <SmallRow label="Pipeline (MTD)" value={data.pipeline_mtd} valueColor="var(--ab-blue)" />
           <SmallRow label="Active subs" value={String(data.active_subscriptions)} />
           <SmallRow label="New MTD" value={String(data.new_subs_mtd)} valueColor="var(--ab-green)" />
           <SmallRow label="Churned MTD" value={String(data.churned_mtd)} valueColor={data.churned_mtd > 0 ? 'var(--ab-gold)' : undefined} />

@@ -42,7 +42,7 @@ export default function InboxPanel() {
   const { data, isValidating } = useSWR<InboxData>(
     '/api/morning-desk/inbox',
     fetcher,
-    { refreshInterval: REFRESH, revalidateOnFocus: false }
+    { refreshInterval: REFRESH, refreshWhenHidden: true, revalidateOnFocus: true }
   );
 
   const hasItems = data && data.total > 0;

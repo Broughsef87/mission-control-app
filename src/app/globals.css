@@ -4,6 +4,30 @@
   --font-sans:    var(--font-inter), "Inter", system-ui, sans-serif;
   --font-display: var(--font-inter), "Inter", system-ui, sans-serif;
   --font-mono:    var(--font-jetbrains-mono), "Courier New", "Courier", ui-monospace, monospace;
+
+  --color-ab-base:          #05070C;
+  --color-ab-surface:       #0A0D14;
+  --color-ab-surface-2:     #0F1520;
+  --color-ab-border:        #1A2130;
+  --color-ab-border-bright: #2A3545;
+  --color-ab-red:           #DC2626;
+  --color-ab-red-hover:     #B91C1C;
+  --color-ab-gold:          #E8A320;
+  --color-ab-green:         #28CD41;
+  --color-ab-blue:          #1E6FFF;
+  --color-ab-text:          #EAEAEA;
+  --color-ab-body:          #B8C0CC;
+  --color-ab-muted:         #6A7888;
+  
+  --color-brand-parchment:   #0A0D14;
+  --color-brand-ivory:       #0F1520;
+  --color-brand-warm-gray:   #1A2130;
+  --color-brand-medium-gray: #6A7888;
+  --color-brand-slate:       #B8C0CC;
+  --color-brand-charcoal:    #EAEAEA;
+  --color-brand-ink:         #EAEAEA;
+  --color-brand-gold:        #E8A320;
+  --color-brand-gold-light:  #F5C040;
 }
 
 /* ── Andrew Brough / Forge OS — Design System ─────────────────────

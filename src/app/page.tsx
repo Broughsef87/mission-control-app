@@ -40,6 +40,11 @@ export default function MorningDesk() {
         <SynthesisPanel />
       </div>
 
+      {/* Morning Brief Feed — full width */}
+      <div style={{ flexShrink: 0 }}>
+        <MorningBriefPanel />
+      </div>
+
       {/* Raw panels — collapsible below the fold */}
       <details
         style={{ flexShrink: 0, border: '1px solid var(--ab-border)', borderRadius: '4px', overflow: 'hidden' }}
@@ -55,18 +60,17 @@ export default function MorningDesk() {
           }}
         >
           <span style={{ color: 'var(--ab-border-bright)' }}>▶</span>
-          RAW DATA PANELS — Calendar · Money · Work · Inbox · Agent Log · Brief · Burn
+          RAW DATA PANELS — Calendar · Money · Work · Inbox · Agent Log · Burn
         </summary>
 
         <div style={{
           display: 'grid',
           gridTemplateColumns: '1fr 2fr',
-          gridTemplateRows: 'auto auto auto auto',
+          gridTemplateRows: 'auto auto auto',
           gridTemplateAreas: `
             "money    calendar"
             "work     inbox"
-            "agentlog brief"
-            "agentcost ."
+            "agentlog agentcost"
           `,
           gap: '0.75rem',
           padding: '0.75rem',
@@ -76,7 +80,6 @@ export default function MorningDesk() {
           <div style={{ gridArea: 'work' }}><WorkStatusPanel /></div>
           <div style={{ gridArea: 'inbox' }}><InboxPanel /></div>
           <div style={{ gridArea: 'agentlog' }}><AgentLogPanel /></div>
-          <div style={{ gridArea: 'brief' }}><MorningBriefPanel /></div>
           <div style={{ gridArea: 'agentcost' }}><AgentCostPanel /></div>
         </div>
       </details>

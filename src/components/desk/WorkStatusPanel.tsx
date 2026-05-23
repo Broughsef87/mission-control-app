@@ -4,7 +4,7 @@ import useSWR from 'swr';
 import { formatDistanceToNow } from 'date-fns';
 
 const fetcher = (url: string) => fetch(url).then(r => r.json());
-const REFRESH = 10 * 60 * 1000;
+const REFRESH = 2 * 60 * 1000;
 
 interface Project {
   id: string;
@@ -38,7 +38,7 @@ export default function WorkStatusPanel() {
   const { data, isValidating } = useSWR<WorkData>(
     '/api/morning-desk/work-status',
     fetcher,
-    { refreshInterval: REFRESH, revalidateOnFocus: false }
+    { refreshInterval: REFRESH, refreshWhenHidden: true, revalidateOnFocus: true }
   );
 
   const hasIssues = data && (data.blocked_count > 0 || data.overdue_count > 0);

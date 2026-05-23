@@ -17,7 +17,7 @@ const TeamRoster = () => {
                 <div className="w-10 h-10 bg-brand-ivory border border-brand-warm-gray rounded-xl flex items-center justify-center text-xs font-bold text-brand-charcoal uppercase italic group-hover:border-brand-gold transition-colors">
                   {agent.name.substring(0, 2)}
                 </div>
-                <div className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white ${
+                <div className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-ab-surface ${
                   agent.status === 'Working' ? 'bg-ab-green' : 'bg-brand-gold'
                 }`}></div>
               </div>

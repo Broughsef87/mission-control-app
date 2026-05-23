@@ -124,8 +124,8 @@ export default function BrainDumpButton() {
           textTransform: 'uppercase',
           padding: '0.3rem 0.625rem',
           borderRadius: '4px',
-          border: '1px solid var(--ab-border)',
-          color: 'var(--ab-muted)',
+          border: '1px solid var(--ab-gold)',
+          color: 'var(--ab-gold)',
           background: 'transparent',
           cursor: 'pointer',
           display: 'flex',
@@ -133,11 +133,11 @@ export default function BrainDumpButton() {
           gap: '0.375rem',
           transition: 'all 0.15s ease',
         }}
-        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--ab-gold)'; (e.currentTarget as HTMLElement).style.color = 'var(--ab-gold)'; }}
-        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--ab-border)'; (e.currentTarget as HTMLElement).style.color = 'var(--ab-muted)'; }}
+        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255, 215, 0, 0.1)'; }}
+        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
         title="Record a brain dump"
       >
-        <div className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--ab-muted)' }} />
+        <div className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--ab-gold)' }} />
         Brain Dump
       </button>
     );

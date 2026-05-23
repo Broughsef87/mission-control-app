@@ -46,13 +46,13 @@ export default async function AgentsPage() {
               {active.length === 0 ? (
                 <p className="text-[10px] font-mono text-brand-medium-gray uppercase tracking-widest text-center py-4">No agents active</p>
               ) : (active as any[]).map((agent: any) => (
-                <div key={agent.id} className="p-3 border border-ab-green/30 bg-brand-parchment rounded-xl">
+                <div key={agent.id} className="forge-panel p-3 border-ab-green/30">
                   <div className="flex items-center gap-3">
                     <div className="relative">
-                      <div className="w-9 h-9 bg-brand-ivory border border-ab-green/50 rounded-xl flex items-center justify-center text-xs font-bold text-ab-green uppercase italic">
+                      <div className="w-9 h-9 bg-[#0F1520] border border-[#28CD41]/50 rounded-xl flex items-center justify-center text-xs font-bold text-[#28CD41] uppercase italic">
                         {agent.agent_name.substring(0, 2)}
                       </div>
-                      <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white bg-ab-green" />
+                      <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-[#0A0D14] bg-[#28CD41]" />
                     </div>
                     <div>
                       <div className="text-xs font-bold text-brand-ink uppercase tracking-wider">{agent.agent_name}</div>
@@ -72,13 +72,13 @@ export default async function AgentsPage() {
             <h2 className="forge-heading text-lg mb-4">Full Roster</h2>
             <div className="space-y-3">
               {(statuses as any[]).map((agent: any) => (
-                <div key={agent.id} className="flex items-center justify-between p-3 border border-brand-warm-gray bg-brand-parchment rounded-xl hover:border-brand-gold/40 transition-all group">
+                <div key={agent.id} className="forge-panel flex items-center justify-between p-3 hover:border-brand-gold/40 transition-all group">
                   <div className="flex items-center gap-3">
                     <div className="relative">
-                      <div className="w-9 h-9 bg-brand-ivory border border-brand-warm-gray rounded-xl flex items-center justify-center text-xs font-bold text-brand-charcoal uppercase italic group-hover:border-brand-gold transition-colors">
+                      <div className="w-9 h-9 bg-[#0F1520] border border-[#1A2130] rounded-xl flex items-center justify-center text-xs font-bold text-[#EAEAEA] uppercase italic group-hover:border-[#E8A320] transition-colors">
                         {agent.agent_name.substring(0, 2)}
                       </div>
-                      <div className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white ${agent.status === 'Working' ? 'bg-ab-green' : 'bg-brand-warm-gray'}`} />
+                      <div className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-[#0A0D14] ${agent.status === 'Working' ? 'bg-[#28CD41]' : 'bg-[#1A2130]'}`} />
                     </div>
                     <div>
                       <div className="text-[11px] font-bold text-brand-ink uppercase tracking-wider">{agent.agent_name}</div>

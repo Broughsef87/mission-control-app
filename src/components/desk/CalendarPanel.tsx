@@ -29,7 +29,7 @@ export default function CalendarPanel() {
   const { data, isValidating } = useSWR<CalData>(
     '/api/morning-desk/calendar',
     fetcher,
-    { refreshInterval: REFRESH, revalidateOnFocus: false }
+    { refreshInterval: REFRESH, refreshWhenHidden: true, revalidateOnFocus: true }
   );
 
   const todayLabel = format(new Date(), 'EEEE, MMMM d');

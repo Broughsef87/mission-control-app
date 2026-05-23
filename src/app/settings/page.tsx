@@ -28,7 +28,7 @@ const SettingsPage = () => {
             Global Configuration // The Foundry 2.0
           </p>
         </div>
-        <button className="bg-brand-charcoal hover:bg-brand-ink text-ab-body font-black uppercase text-[10px] px-8 py-2 rounded-lg tracking-widest transition-all italic flex items-center gap-2">
+        <button className="bg-brand-charcoal hover:bg-brand-ink text-ab-body font-black uppercase text-[10px] px-8 py-2 rounded-lg tracking-widest transition-all italic flex items-center gap-2 focus:outline-none">
           <Save className="w-3 h-3" /> Save Changes
         </button>
       </div>
@@ -39,10 +39,10 @@ const SettingsPage = () => {
           {sections.map((section) => (
             <button
               key={section.name}
-              className={`w-full flex items-center gap-4 px-4 py-3 border rounded-xl transition-all uppercase tracking-widest font-black text-[10px] ${
+              className={`w-full flex items-center gap-4 px-4 py-3 border rounded-xl transition-all uppercase tracking-widest font-black text-[10px] focus:outline-none ${
                 section.active
-                  ? 'bg-brand-gold/10 border-brand-gold/30 text-brand-ink italic'
-                  : 'bg-ab-surface border-ab-border text-ab-muted hover:text-ab-body hover:border-ab-muted'
+                  ? 'bg-[#E8A320]/10 border-[#E8A320]/30 text-[#EAEAEA] italic'
+                  : 'bg-[#0A0D14] border-[#1A2130] text-[#6A7888] hover:text-[#B8C0CC] hover:border-[#6A7888]'
               }`}
             >
               <section.icon className={`w-4 h-4 ${section.active ? 'text-brand-gold' : ''}`} />
@@ -53,31 +53,31 @@ const SettingsPage = () => {
 
         {/* Content */}
         <div className="flex-1 space-y-8 max-w-2xl">
-          <div className="bg-ab-surface border border-ab-border rounded-2xl p-8 space-y-8">
+          <div className="forge-panel p-8 space-y-8">
             <div className="space-y-6">
               <h2 className="text-xs font-black uppercase tracking-[0.3em] text-brand-medium-gray italic">User Profile</h2>
 
               <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="text-[10px] font-mono text-brand-medium-gray uppercase tracking-widest">Full Name</label>
-                  <input type="text" defaultValue="Andrew" className="w-full bg-brand-parchment border border-brand-warm-gray p-3 text-[11px] text-brand-ink focus:outline-none focus:border-brand-gold uppercase font-bold" />
+                  <input type="text" defaultValue="Andrew" className="forge-input uppercase font-bold text-[11px]" />
                 </div>
                 <div className="space-y-2">
                   <label className="text-[10px] font-mono text-brand-medium-gray uppercase tracking-widest">Callsign</label>
-                  <input type="text" defaultValue="" placeholder="Optional" className="w-full bg-brand-parchment border border-brand-warm-gray p-3 text-[11px] text-brand-ink focus:outline-none focus:border-brand-gold uppercase font-bold" />
+                  <input type="text" defaultValue="" placeholder="Optional" className="forge-input uppercase font-bold text-[11px]" />
                 </div>
               </div>
 
               <div className="space-y-2">
                 <label className="text-[10px] font-mono text-brand-medium-gray uppercase tracking-widest">Bio / Mission Statement</label>
-                <textarea rows={3} defaultValue="Producing value 24/7. Building the autonomous future." className="w-full bg-brand-parchment border border-brand-warm-gray p-3 text-[11px] text-brand-ink focus:outline-none focus:border-brand-gold uppercase font-bold resize-none" />
+                <textarea rows={3} defaultValue="Producing value 24/7. Building the autonomous future." className="forge-input uppercase font-bold text-[11px] resize-none" />
               </div>
             </div>
 
             <div className="pt-8 border-t border-brand-warm-gray space-y-6">
               <h2 className="text-xs font-black uppercase tracking-[0.3em] text-brand-medium-gray italic">System Vitals</h2>
 
-              <div className="flex items-center justify-between p-4 bg-brand-parchment border border-brand-warm-gray group hover:border-brand-gold/40 transition-all">
+              <div className="forge-panel flex items-center justify-between p-4 group hover:border-brand-gold/40 transition-all">
                 <div className="flex items-center gap-4">
                   <div className="p-2 bg-brand-gold/10 text-brand-gold border border-brand-gold/20">
                     <Database className="w-4 h-4" />
@@ -93,7 +93,7 @@ const SettingsPage = () => {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between p-4 bg-brand-parchment border border-brand-warm-gray group hover:border-brand-gold/40 transition-all">
+              <div className="forge-panel flex items-center justify-between p-4 group hover:border-brand-gold/40 transition-all">
                 <div className="flex items-center gap-4">
                   <div className="p-2 bg-brand-gold/10 text-brand-gold border border-brand-gold/20">
                     <Zap className="w-4 h-4" />
@@ -111,12 +111,12 @@ const SettingsPage = () => {
             </div>
           </div>
 
-          <div className="p-6 bg-ab-surface border border-ab-red/20 rounded-2xl flex justify-between items-center group hover:border-ab-red/40 transition-all">
+          <div className="forge-panel p-6 border-ab-red/20 flex justify-between items-center group hover:border-ab-red/40 transition-all">
             <div>
               <div className="text-[10px] font-black text-ab-red uppercase tracking-widest">Emergency Reset</div>
               <div className="text-[8px] font-mono text-ab-red uppercase mt-1">Wipe local cache and force re-authentication</div>
             </div>
-            <button className="bg-ab-surface-2 border border-ab-red/40 rounded-lg text-ab-red text-[10px] font-black uppercase px-6 py-2 tracking-widest hover:bg-ab-red hover:text-ab-body transition-all">
+            <button className="bg-[#0F1520] border border-[#DC2626]/40 rounded-lg text-[#DC2626] text-[10px] font-black uppercase px-6 py-2 tracking-widest hover:bg-[#DC2626] hover:text-[#0A0D14] transition-all focus:outline-none">
               Initiate
             </button>
           </div>

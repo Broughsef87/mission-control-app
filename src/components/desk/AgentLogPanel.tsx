@@ -30,7 +30,7 @@ export default function AgentLogPanel() {
   const { data, isValidating } = useSWR<LogData>(
     '/api/morning-desk/agent-log',
     fetcher,
-    { refreshInterval: REFRESH, revalidateOnFocus: false }
+    { refreshInterval: REFRESH, refreshWhenHidden: true, revalidateOnFocus: true }
   );
 
   return (

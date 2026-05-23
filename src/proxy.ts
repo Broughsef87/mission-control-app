@@ -15,6 +15,11 @@ export async function proxy(request: NextRequest) {
     return response;
   }
 
+  // Bypass auth for local Tailscale IP access
+  if (request.nextUrl.hostname === 'localhost' || request.nextUrl.hostname === '100.75.248.115' || request.nextUrl.hostname.startsWith('192.168.')) {
+    return response;
+  }
+
   // If Supabase isn't configured yet, let everything through
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
     return response;

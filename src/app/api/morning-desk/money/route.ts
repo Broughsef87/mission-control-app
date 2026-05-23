@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { getRevenueMTD } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 
@@ -23,10 +24,11 @@ export async function GET() {
     startOfMonth.setHours(0, 0, 0, 0);
     const monthTs = Math.floor(startOfMonth.getTime() / 1000);
 
-    const [activeSubs, recentCharges, disputes] = await Promise.all([
+    const [activeSubs, recentCharges, disputes, manualRev] = await Promise.all([
       stripe.subscriptions.list({ status: 'active', limit: 100 }),
       stripe.charges.list({ created: { gte: weekAgo }, limit: 100 }),
       stripe.disputes.list({ created: { gte: weekAgo }, limit: 50 }),
+      getRevenueMTD().catch(() => ({ total: 0, byCategory: {} }))
     ]);
 
     const mrr = activeSubs.data.reduce((sum, sub) => {
@@ -65,6 +67,7 @@ export async function GET() {
       active_subscriptions: activeSubs.data.length,
       cash_in_week_cents: cashInWeek,
       cash_in_week: `$${Math.round(cashInWeek / 100).toLocaleString()}`,
+      pipeline_mtd: `$${Math.round(manualRev.total).toLocaleString()}`,
       failed_payments: failedPayments,
       disputes: disputeCount,
       new_subs_mtd: newSubsMtd.data.length,
