@@ -6,7 +6,7 @@
 // Deploy steps:
 //   1. Copy this file to app/api/send-brief/route.ts in mission-control-app repo
 //   2. Add RESEND_API_KEY to Vercel env vars for mission-control-app project
-//      Value: re_H1JmiR8B_Bz7A2Ufcs1YScGvjfDhLcurY
+//      Value: <set in Vercel, never in the repo>
 //   3. Push and deploy — endpoint will be live at:
 //      https://mission-control-app.vercel.app/api/send-brief
 
